@@ -15,7 +15,28 @@ return {
                     "{C:attention}+#1# {}Hand size per hand played",
                     "{C:attention}-#1# {}Hand size per discard",
                     "this round",
-                    "{C:inactive}Currently {C:attention}+#2# {C:inactive}Hand Size"
+                    "{C:inactive}(Currently {C:attention}+#2# {C:inactive}Hand Size)"
+                },
+            },
+            j_grasslanders_molty = {
+                name = "Molty",
+                text = {
+                    "This Joker gains",
+                    "{C:mult}+#1# {}Mult if played",
+                    "hand is on {C:attention}fire",
+                    "{C:inactive}(When hand score",
+                    "{C:inactive}beats target score)",
+                    "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)"
+                },
+            },
+            j_grasslanders_volcarock = {
+                name = "Volcarock",
+                text = {
+                    "{C:attention}+#1# {}Heat per discard",
+                    "{C:attention}-#1# {}Heat per hand played",
+                    "If Heat exceeds {C:attention}#3#{}, grants",
+                    "{X:mult,C:white}X#4#{} Mult and resets Heat",
+                    "{C:inactive}(Currently {C:attention}#2# {C:inactive}Heat)"
                 },
             },
         }
@@ -39,6 +60,9 @@ return {
             a_sold_tally="#1#/#2# Sold",
             a_xmult="X#1# Mult",
             a_xmult_minus="-X#1# Mult",
+
+            k_heat_ex="Heat!",
+            k_cool_ex="Cool!",
         }
     }
 }
