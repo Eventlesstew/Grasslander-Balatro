@@ -32,7 +32,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "scorpibeat",                                  --name used by the joker.    
-    config = { extra = {mult = 15} },    --variables used for abilities and effects.
+    config = { extra = {mult = 18} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -63,7 +63,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "blowy",
-    path = "j_sample_wee.png",
+    path = "blowy.png",
     px = 71,
     py = 95
 })
@@ -85,7 +85,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
-            if context.before then
+            if context.after then
                 card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
                 G.hand:change_size(card.ability.extra.h_mod)
 
@@ -95,15 +95,13 @@ SMODS.Joker{
                 }
             end
             if context.discard and context.other_card == context.full_hand[#context.full_hand] then
-                if card.ability.extra.h_size > 0 then
-                    card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
-                    G.hand:change_size(-card.ability.extra.h_mod)
+                card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
+                G.hand:change_size(-card.ability.extra.h_mod)
 
-                    return {
-                        message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
-                        colour = G.C.FILTER
-                    }
-                end
+                return {
+                    message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
+                    colour = G.C.FILTER
+                }
             end
 
             if context.end_of_round and context.game_over == false and context.main_eval then
@@ -126,7 +124,11 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size}, key = self.key }
+        local operator = '+'
+        if card.ability.extra.h_size < 0 then
+            operator = ''
+        end
+        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size, operator}, key = self.key }
     end
 }
 
@@ -139,7 +141,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "molty",                                  --name used by the joker.    
-    config = { extra = {mult = 0, mult_mod = 5} },    --variables used for abilities and effects.
+    config = { extra = {mult = 0, mult_mod = 10} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.

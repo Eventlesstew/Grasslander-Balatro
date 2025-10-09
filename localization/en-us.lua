@@ -15,7 +15,7 @@ return {
                     "{C:attention}+#1# {}Hand size per hand played",
                     "{C:attention}-#1# {}Hand size per discard",
                     "this round",
-                    "{C:inactive}(Currently {C:attention}+#2# {C:inactive}Hand Size)"
+                    "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
             },
             j_grasslanders_molty = {
