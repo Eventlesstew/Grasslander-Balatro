@@ -18,6 +18,15 @@ return {
                     "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
             },
+            j_grasslanders_sprinkle = {
+                name = "Sprinkle",
+                text = {
+                    "Played non-face cards",
+                    "give {C:chips}+#1# {}Chips",
+                    "Played face cards",
+                    "take {C:chips}#2# {}Chips",
+                },
+            },
             j_grasslanders_molty = {
                 name = "Molty",
                 text = {

@@ -95,13 +95,15 @@ SMODS.Joker{
                 }
             end
             if context.discard and context.other_card == context.full_hand[#context.full_hand] then
-                card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
-                G.hand:change_size(-card.ability.extra.h_mod)
+                if G.hand.config.card_limit > 0 then
+                    card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
+                    G.hand:change_size(-card.ability.extra.h_mod)
 
-                return {
-                    message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
-                    colour = G.C.FILTER
-                }
+                    return {
+                        message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
+                        colour = G.C.FILTER
+                    }
+                end
             end
 
             if context.end_of_round and context.game_over == false and context.main_eval then
@@ -129,6 +131,54 @@ SMODS.Joker{
             operator = ''
         end
         return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size, operator}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "sprinkle",
+    path = "j_sample_hackerman.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "sprinkle",                                  --name used by the joker.    
+    config = { extra = {chips = 20, chips_penalty = -20} },    --variables used for abilities and effects.
+    pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
+    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    cost = 5,                                            --cost to buy the joker in shops.
+    blueprint_compat=true,                               --does joker work with blueprint.
+    eternal_compat=true,                                 --can joker be eternal.
+    perishable_compat=false,
+    unlocked = true,                                     --is joker unlocked by default.
+    discovered = true,                                   --is joker discovered by default.    
+    effect=nil,                                          --you can specify an effect here eg. 'Mult'
+    soul_pos=nil,                                        --pos of a soul sprite.
+    atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
+
+    calculate = function(self,card,context)              --define calculate functions here
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:is_face() then
+
+                local penalty = card.ability.extra.chips_penalty
+                if hand_chips + context.other_card.chips + card.ability.extra.chips_penalty < 0 then
+                    penalty = -(hand_chips + context.other_card.chips)
+                end
+                return {
+                    chips = penalty,
+                    colour = G.C.CHIPS
+                }
+            else
+                return {
+                    chips = card.ability.extra.chips,
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+        return { vars = {card.ability.extra.chips, card.ability.extra.chips_penalty}, key = self.key }
     end
 }
 
