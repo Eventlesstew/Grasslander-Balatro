@@ -1,6 +1,15 @@
 return {
     descriptions = {
         Joker = {
+            j_grasslanders_sprinkle = {
+                name = "Sprinkle",
+                text = {
+                    "Played non-face cards",
+                    "give {C:chips}+#1# {}Chips",
+                    "Played face cards",
+                    "take {C:chips}#2# {}Chips",
+                },
+            },
             j_grasslanders_scorpibeat = {
                 name = "Scorpibeat",
                 text = {
@@ -18,15 +27,6 @@ return {
                     "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
             },
-            j_grasslanders_sprinkle = {
-                name = "Sprinkle",
-                text = {
-                    "Played non-face cards",
-                    "give {C:chips}+#1# {}Chips",
-                    "Played face cards",
-                    "take {C:chips}#2# {}Chips",
-                },
-            },
             j_grasslanders_molty = {
                 name = "Molty",
                 text = {
@@ -38,6 +38,57 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)"
                 },
             },
+            j_grasslanders_trizap = {
+                name = "Trizap",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                    "Creates a negative copy",
+                    "of sold Joker",
+                    "1 in 4 chance to",
+                    "destroy itself"
+                },
+            },
+
+            j_grasslanders_frogobonk = {
+                name = "Frogobonk",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                    "All enhanced cards grant",
+                    "X1.5 mult",
+                },
+            },
+            j_grasslanders_lumobonk = {
+                name = "Lumobonk",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                    "Gains X0.5 mult for",
+                    "each Polychrome card",
+                },
+            },
+            j_grasslanders_reeflute = {
+                name = "Reeflute",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_concrab = {
+                name = "Concrab",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_anjellyze = {
+                name = "Anjellyze",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_logobreak = {
+                name = "Logobreak",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
             j_grasslanders_volcarock = {
                 name = "Volcarock",
                 text = {
@@ -46,6 +97,146 @@ return {
                     "If Heat exceeds {C:attention}#3#{}, grants",
                     "{X:mult,C:white}X#4#{} Mult and resets Heat",
                     "{C:inactive}(Currently {C:attention}#2# {C:inactive}Heat)"
+                },
+            },
+            j_grasslanders_junklake = {
+                name = "Junklake",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_pricklea = {
+                name = "Pricklea",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_hornetrix = {
+                name = "Hornetrix",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_chonkreep = {
+                name = "Chonkreep",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+
+            j_grasslanders_mossibug = {
+                name = "Mossibug",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_santile = {
+                name = "Santile",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_penny = {
+                name = "Penny",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },j_grasslanders_fortromtoise = {
+                name = "Fortromtoise",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_kracosteal = {
+                name = "Kracosteal",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_axonitta = {
+                name = "Axonitta",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_wisplasm = {
+                name = "Wisplasm",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_tickini = {
+                name = "Tickini",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_cocotom = {
+                name = "Cocotom",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+
+            j_grasslanders_litabelle = {
+                name = "Litabelle",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_erny = {
+                name = "Erny",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_emmie = {
+                name = "Emmie",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_edward = {
+                name = "Edward",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+
+            j_grasslanders_vegebonion = {
+                name = "Vegebonion",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_deespirr = {
+                name = "Deespirr",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_hyphilliacs = {
+                name = "Hyphilliacs",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+
+            j_grasslanders_sugamimi = {
+                name = "Sugamimi",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_vacomar = {
+                name = "Vacomar",
+                text = {
+                    "{C:red}+#4# {}discard if all", 
+                    "discarded cards match",
+                    "the {C:attention}suit {}or {C:attention}rank {}of",
+                    "first discarded card",
+                    "of round",
+                    "{C:inactive}(Currently {C:attention}#1#{C:inactive}#2#{V:1}#3#{C:inactive})"
                 },
             },
         }
@@ -69,6 +260,10 @@ return {
             a_sold_tally="#1#/#2# Sold",
             a_xmult="X#1# Mult",
             a_xmult_minus="-X#1# Mult",
+
+
+            a_discard_one="+1 Discard",
+            a_active='Active!',
 
             k_heat_ex="Heat!",
             k_cool_ex="Cool!",
