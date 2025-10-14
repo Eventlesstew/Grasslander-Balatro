@@ -150,7 +150,9 @@ return {
             j_grasslanders_kracosteal = {
                 name = "Kracosteal",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Each {C:attention}Steel Card",
+                    "held in hand gives {C:money}$#1#",
+                    "at end of round"
                 },
             },
             j_grasslanders_axonitta = {
@@ -162,7 +164,9 @@ return {
             j_grasslanders_wisplasm = {
                 name = "Wisplasm",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Each {C:attention}Gold Card",
+                    "held in hand gives {X:mult,C:white}X#1#{} Mult",
+                    "at end of round"
                 },
             },
             j_grasslanders_tickini = {
@@ -180,6 +184,12 @@ return {
 
             j_grasslanders_litabelle = {
                 name = "Litabelle",
+                text = {
+                    "{X:mult,C:white}INCOMPLETE",
+                },
+            },
+            j_grasslanders_harparachnids = {
+                name = "Harparachnids",
                 text = {
                     "{X:mult,C:white}INCOMPLETE",
                 },

@@ -25,7 +25,7 @@ end
 
 SMODS.Atlas({
     key = "scorpibeat",
-    path = "j_sample_wee.png",
+    path = "j_sample_baroness.png",
     px = 71,
     py = 95
 })
@@ -184,7 +184,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "molty",
-    path = "j_sample_money.png",
+    path = "j_sample_baroness.png",
     px = 71,
     py = 95
 })
@@ -724,20 +724,20 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "kracosteal",
-    path = "j_sample_wee.png",
+    path = "j_sample_baroness.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
     key = "kracosteal",
-    config = { extra = {}},
+    config = { extra = {dollars = 3}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -745,11 +745,25 @@ SMODS.Joker{
     atlas = 'kracosteal',
 
     calculate = function(self,card,context)
-
+        if context.individual and context.cardarea == G.hand and context.end_of_round then
+            if SMODS.has_enhancement(context.other_card, 'm_steel') then
+                if context.other_card.debuff then
+                    return {
+                        message = localize('k_debuffed'),
+                        colour = G.C.RED
+                    }
+                else
+                    return {
+                        dollars = card.ability.extra.dollars,
+                    }
+                end
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+        return { vars = {card.ability.extra.dollars}, key = self.key }
     end
 }
 
@@ -768,7 +782,7 @@ SMODS.Joker{
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -786,20 +800,20 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "wisplasm",
-    path = "j_sample_wee.png",
+    path = "j_sample_baroness.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
     key = "wisplasm",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1.5}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -807,11 +821,25 @@ SMODS.Joker{
     atlas = 'wisplasm',
 
     calculate = function(self,card,context)
-
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then
+            if SMODS.has_enhancement(context.other_card, 'm_gold') then
+                if context.other_card.debuff then
+                    return {
+                        message = localize('k_debuffed'),
+                        colour = G.C.RED
+                    }
+                else
+                    return {
+                        x_mult = card.ability.extra.x_mult
+                    }
+                end
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
+        return {vars = {card.ability.extra.x_mult}, key = self.key }
     end
 }
 
@@ -909,6 +937,38 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
+    key = "harparachnids",
+    path = "j_sample_wee.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "harparachnids",
+    config = { extra = {}},
+    pos = { x = 0, y = 0 },
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'harparachnids',
+
+    calculate = function(self,card,context)
+
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
+    end
+}
+
+
+SMODS.Atlas({
     key = "erny",
     path = "j_sample_wee.png",
     px = 71,
@@ -920,7 +980,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -951,7 +1011,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -982,7 +1042,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1013,10 +1073,10 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1043,11 +1103,11 @@ SMODS.Joker{
     key = "deespirr",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1074,11 +1134,11 @@ SMODS.Joker{
     key = "hyphilliacs",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1106,10 +1166,10 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 0, y = 0 },
     rarity = 4,
-    cost = 5,
+    cost = 20,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
