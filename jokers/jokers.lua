@@ -945,10 +945,10 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "erny",
-    config = { extra = {poker_hand = 'Straight Flush'}},
+    config = { extra = {repetitions = 1,poker_hand = 'Straight Flush'}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 6,
+    rarity = 3,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1051,8 +1051,8 @@ SMODS.Joker{
     key = "edward",
     config = { extra = {x_mult = 1.5, poker_hand = 'Straight Flush'}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 6,
+    rarity = 3,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1063,8 +1063,8 @@ SMODS.Joker{
     atlas = 'edward',
 
     calculate = function(self,card,context)
-        if next(context.poker_hands[card.ability.extra.poker_hand]) then
-            if context.individual and context.cardarea == G.play then
+        if context.individual and context.cardarea == G.play then
+            if next(context.poker_hands[card.ability.extra.poker_hand]) then
                 return {
                     x_mult = card.ability.extra.x_mult
                 }
