@@ -143,7 +143,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 20, chips_penalty = -20} },    --variables used for abilities and effects.
+    config = { extra = {chips = 20, chip_mod = -4, chip_reset = 20} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -158,27 +158,26 @@ SMODS.Joker{
 
     calculate = function(self,card,context)              --define calculate functions here
         if context.individual and context.cardarea == G.play then
-            if context.other_card:is_face() then
-
-                local penalty = card.ability.extra.chips_penalty
-                if hand_chips + context.other_card.chips + card.ability.extra.chips_penalty < 0 then
-                    penalty = -(hand_chips + context.other_card.chips)
-                end
-                return {
-                    chips = penalty,
-                    colour = G.C.CHIPS
-                }
-            else
+            if not context.other_card:is_face() then
                 return {
                     chips = card.ability.extra.chips,
                     colour = G.C.CHIPS
                 }
             end
         end
+
+        --[[
+        if card.ability.extra.chips - card.ability.extra.chip_mod > 0 then
+                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_mod
+                    return {
+
+                        colour = G.C.CHIPS
+                    }
+                end]]
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.chips, card.ability.extra.chips_penalty}, key = self.key }
+        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
     end
 }
 
@@ -936,37 +935,6 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "harparachnids",
-    path = "j_sample_wee.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "harparachnids",
-    config = { extra = {}},
-    pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'harparachnids',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
 
 SMODS.Atlas({
     key = "erny",
@@ -977,7 +945,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "erny",
-    config = { extra = {}},
+    config = { extra = {poker_hand = 'Straight Flush'}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 6,
@@ -991,11 +959,15 @@ SMODS.Joker{
     atlas = 'erny',
 
     calculate = function(self,card,context)
-
+        if context.repetition and context.cardarea == G.play and next(context.poker_hands[card.ability.extra.poker_hand]) then
+            return {
+                repetitions = card.ability.extra.repetitions
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 
@@ -1022,13 +994,51 @@ SMODS.Joker{
     atlas = 'emmie',
 
     calculate = function(self,card,context)
-
     end,
 
     loc_vars = function(self, info_queue, card)
         return { vars = {}, key = self.key }
     end
 }
+--[[
+local smods_emmie_ref = SMODS.grasslanders_emmie
+function SMODS.grasslanders_emmie()
+    if next(SMODS.find_card('j_grasslanders_emmie')) then
+        return true
+    end
+    return smods_emmie_ref()
+end
+
+[[patches
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = '''
+if skip and (wrap or not SMODS.Ranks[v].straight_edge) then
+    for _,w in ipairs(SMODS.Ranks[v].next) do
+        ret[#ret+1] = w
+    end
+end
+'''
+position = "at"
+payload = '''
+if type(skip) == 'number' and skip > 1 then
+    local function get_next_ranks(rank, skip, ret)
+        if skip > 0 and (wrap or not SMODS.Ranks[rank].straight_edge) then
+            for _,w in ipairs(SMODS.Ranks[rank].next) do
+                ret[#ret+1] = w
+                get_next_ranks(w, skip - 1, ret)
+            end
+        end
+    end
+    get_next_ranks(v, skip, ret)
+elseif skip and (wrap or not SMODS.Ranks[v].straight_edge) then
+    for _,w in ipairs(SMODS.Ranks[v].next) do
+        ret[#ret+1] = w
+    end
+end
+'''
+match_indent = true
+]]
 
 SMODS.Atlas({
     key = "edward",
@@ -1039,7 +1049,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1.5, poker_hand = 'Straight Flush'}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 6,
@@ -1053,11 +1063,17 @@ SMODS.Joker{
     atlas = 'edward',
 
     calculate = function(self,card,context)
-
+        if next(context.poker_hands[card.ability.extra.poker_hand]) then
+            if context.individual and context.cardarea == G.play then
+                return {
+                    x_mult = card.ability.extra.x_mult
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.x_mult, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 

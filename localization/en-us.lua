@@ -4,10 +4,7 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Played non-face cards",
-                    "give {C:chips}+#1# {}Chips",
-                    "Played face cards",
-                    "take {C:chips}#2# {}Chips",
+                    "{X:red,C:white}INCOMPLETE"
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -197,7 +194,9 @@ return {
             j_grasslanders_erny = {
                 name = "Erny",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Retrigger all played",
+                    "cards if played hand",
+                    "contains a {C:attention}Straight Flush",
                 },
             },
             j_grasslanders_emmie = {
@@ -209,7 +208,9 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Played cards each give",
+                    "{X:mult,C:white}X#1#{} Mult if played",
+                    "hand contains a {C:attention}#2#",
                 },
             },
 
