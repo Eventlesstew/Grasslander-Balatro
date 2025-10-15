@@ -4,7 +4,12 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "{X:red,C:white}INCOMPLETE"
+                    "Played {C:attention}non-face {}cards",
+                    "give {C:chips}+#1# {}Chips",
+                    "when scored",
+                    "{C:chips}-#2# {}Chips for each",
+                    "{C:attention}face {}card in",
+                    "played hand this round",
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -202,7 +207,10 @@ return {
             j_grasslanders_emmie = {
                 name = "Emmie",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Allows {C:attention}Straight Flushes{}",
+                    "to be made with gaps",
+                    "of {C:attention}2 ranks",
+                    "{C:inactive}(ex: {C:attention}10H 7H 6H 4H 2H{C:inactive})",
                 },
             },
             j_grasslanders_edward = {
@@ -275,6 +283,9 @@ return {
 
             a_discard_one="+1 Discard",
             a_active='Active!',
+
+            a_hand_chips = "+#1# Chips",
+            a_hand_chips_minus = "-#1# Chips",
 
             k_heat_ex="Heat!",
             k_cool_ex="Cool!",

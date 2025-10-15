@@ -143,9 +143,9 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 20, chip_mod = -4, chip_reset = 20} },    --variables used for abilities and effects.
+    config = { extra = {chips = 20, chip_mod = 4, chip_reset = 20} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
     blueprint_compat=true,                               --does joker work with blueprint.
     eternal_compat=true,                                 --can joker be eternal.
@@ -157,10 +157,41 @@ SMODS.Joker{
     atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
+
         if context.individual and context.cardarea == G.play then
             if not context.other_card:is_face() then
                 return {
                     chips = card.ability.extra.chips,
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            card.ability.extra.chips = card.ability.extra.chip_reset
+            return {
+                message = localize('k_reset'),
+                colour = G.C.RED
+            }
+        end
+        if context.before and not context.blueprint then
+            local faces = 0
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if scored_card:is_face() then
+                    faces = faces + 1
+                end
+            end
+            if faces > 0 then
+                local chip_penalty = card.ability.extra.chip_mod * faces
+                if card.ability.extra.chips - chip_penalty < 0 then
+                    chip_penalty = -card.ability.extra.chips
+                    card.ability.extra.chips = 0
+                else
+                    card.ability.extra.chips = card.ability.extra.chips - chip_penalty
+                end
+                
+                return {
+                    -- BUG: This shows error
+                    message = localize{type = 'variable',key = 'a_hand_chips_minus',vars = {chip_penalty}},
                     colour = G.C.CHIPS
                 }
             end
@@ -1000,45 +1031,14 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
---[[
-local smods_emmie_ref = SMODS.grasslanders_emmie
-function SMODS.grasslanders_emmie()
-    if next(SMODS.find_card('j_grasslanders_emmie')) then
-        return true
-    end
-    return smods_emmie_ref()
-end
 
-[[patches
-[patches.pattern]
-target = '=[SMODS _ "src/overrides.lua"]'
-pattern = '''
-if skip and (wrap or not SMODS.Ranks[v].straight_edge) then
-    for _,w in ipairs(SMODS.Ranks[v].next) do
-        ret[#ret+1] = w
+local smods_shortcut_ref  = SMODS.shortcut
+function SMODS.shortcut()
+    if next(SMODS.find_card('j_grasslanders_emmie')) then
+        return 2
     end
+    return smods_shortcut_ref()
 end
-'''
-position = "at"
-payload = '''
-if type(skip) == 'number' and skip > 1 then
-    local function get_next_ranks(rank, skip, ret)
-        if skip > 0 and (wrap or not SMODS.Ranks[rank].straight_edge) then
-            for _,w in ipairs(SMODS.Ranks[rank].next) do
-                ret[#ret+1] = w
-                get_next_ranks(w, skip - 1, ret)
-            end
-        end
-    end
-    get_next_ranks(v, skip, ret)
-elseif skip and (wrap or not SMODS.Ranks[v].straight_edge) then
-    for _,w in ipairs(SMODS.Ranks[v].next) do
-        ret[#ret+1] = w
-    end
-end
-'''
-match_indent = true
-]]
 
 SMODS.Atlas({
     key = "edward",
