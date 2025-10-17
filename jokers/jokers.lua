@@ -1,4 +1,6 @@
 
+grasslanders = SMODS.current_mod
+
 -- you can have shared helper functions
 function shakecard(self) --visually shake a card
     G.E_MANAGER:add_event(Event({
@@ -136,14 +138,14 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "sprinkle",
-    path = "sprinkleb.png",
+    path = 'sprinkle.png',
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 20, chip_mod = 4, chip_reset = 20} },    --variables used for abilities and effects.
+    config = { extra = {chips = 20, weight = 0} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -156,72 +158,69 @@ SMODS.Joker{
     soul_pos=nil,                                        --pos of a soul sprite.
     atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
 
+    set_sprites = function(self, card, front)
+        local alt = 0
+        if grasslanders.config.altsprinkle then
+            alt = 1
+        end
+        card.children.center:set_sprite_pos({x=alt,y=0})
+    end,
+
     calculate = function(self,card,context)              --define calculate functions here
-
-        if context.individual and context.cardarea == G.play then
-            if not context.other_card:is_face() then
-                return {
-                    chips = card.ability.extra.chips,
-                    colour = G.C.CHIPS
-                }
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            card.ability.extra.chips = card.ability.extra.chip_reset
-            return {
-                message = localize('k_reset'),
-                colour = G.C.RED
-            }
-        end
-        if context.before and not context.blueprint then
-            local faces = 0
-            for _, scored_card in ipairs(context.scoring_hand) do
-                if scored_card:is_face() then
-                    faces = faces + 1
-                end
-            end
-            if faces > 0 then
-                local chip_penalty = card.ability.extra.chip_mod * faces
-                if card.ability.extra.chips - chip_penalty < 0 then
-                    chip_penalty = -card.ability.extra.chips
-                    card.ability.extra.chips = 0
-                else
-                    card.ability.extra.chips = card.ability.extra.chips - chip_penalty
-                end
-                
-                return {
-                    -- BUG: This shows error
-                    message = localize{type = 'variable',key = 'a_hand_chips_minus',vars = {chip_penalty}},
-                    colour = G.C.CHIPS
-                }
-            end
-        end
-
-        --[[
-        if card.ability.extra.chips - card.ability.extra.chip_mod > 0 then
-                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_mod
+        if not context.blueprint then
+            if context.individual and context.cardarea == G.hand and not context.end_of_round then
+                if context.other_card.debuff then
                     return {
-
-                        colour = G.C.CHIPS
+                        message = localize('k_debuffed'),
+                        colour = G.C.RED
                     }
-                end]]
+                else
+                    if context.other_card:is_face() then
+                        card.ability.extra.weight = card.ability.extra.weight - 1
+                        return {
+                            message = localize('k_downgrade_ex'),
+                            colour = G.C.CHIPS
+                        }
+                    else
+                        card.ability.extra.weight = card.ability.extra.weight + 1
+                        return {
+                            message = localize('k_upgrade_ex'),
+                            colour = G.C.CHIPS
+                        }
+                    end
+                end
+            end
+
+            if context.before then
+                card.ability.extra.weight = 0
+            end
+        end
+
+        if context.joker_main and context.cardarea == G.jokers then
+            if card.ability.extra.chips * card.ability.extra.weight > 0 then
+                return {
+                    chips = card.ability.extra.chips * card.ability.extra.weight,
+                    colour = G.C.CHIPS
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
+        return { vars = {card.ability.extra.chips}, key = self.key }
     end
 }
 
 SMODS.Atlas({
     key = "molty",
-    path = "j_sample_baroness.png",
+    path = "molty.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
     key = "molty",                                  --name used by the joker.    
-    config = { extra = {mult = 0, mult_mod = 10} },    --variables used for abilities and effects.
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -237,7 +236,7 @@ SMODS.Joker{
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
             if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
-                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
                     message = localize('k_upgrade_ex'),
                     colour = G.C.MULT,
@@ -247,17 +246,18 @@ SMODS.Joker{
 
         if context.joker_main and context.cardarea == G.jokers then
             return {
-                mult = card.ability.extra.mult, 
+                x_mult = card.ability.extra.x_mult, 
                 colour = G.C.MULT
             }
         end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult}, key = self.key }
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
 
+--[[
 SMODS.Atlas({
     key = "trizap",
     path = "j_sample_wee.png",
@@ -353,7 +353,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "reeflute",
-    path = "j_sample_wee.png",
+    path = "reeflute.png",
     px = 71,
     py = 95
 })
@@ -474,7 +474,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "volcarock",
     path = "j_sample_baroness.png",
@@ -534,7 +534,7 @@ SMODS.Joker{
         return { vars = {card.ability.extra.heat_mod, card.ability.extra.heat, card.ability.extra.heat_max, card.ability.extra.x_mult}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "junklake",
     path = "j_sample_wee.png",
@@ -751,7 +751,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "kracosteal",
     path = "j_sample_baroness.png",
@@ -796,7 +796,7 @@ SMODS.Joker{
         return { vars = {card.ability.extra.dollars}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "axonitta",
     path = "j_sample_wee.png",
@@ -827,7 +827,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "wisplasm",
     path = "j_sample_baroness.png",
@@ -872,7 +872,7 @@ SMODS.Joker{
         return {vars = {card.ability.extra.x_mult}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "tickini",
     path = "j_sample_wee.png",
@@ -906,7 +906,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "cocotom",
-    path = "j_sample_wee.png",
+    path = "cocotom.png",
     px = 71,
     py = 95
 })
@@ -965,7 +965,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 
 SMODS.Atlas({
     key = "erny",
@@ -1013,8 +1013,8 @@ SMODS.Joker{
     key = "emmie",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 6,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1076,7 +1076,7 @@ SMODS.Joker{
         return { vars = {card.ability.extra.x_mult, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "vegebonion",
     path = "j_sample_wee.png",
@@ -1200,7 +1200,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "vacomar",
     path = "j_sample_roomba.png",
@@ -1208,7 +1208,6 @@ SMODS.Atlas({
     py = 95
 })
 
--- TODO - Refactor this code to use a card instead of separate ranks and suits.
 SMODS.Joker{
     key = "vacomar",                                  --name used by the joker.    
     config = {extra = {card = {state = 'invalid', id = 0, rank = '', suit = ''}, discard_mod = 1, valid = false}},    --variables used for abilities and effects.

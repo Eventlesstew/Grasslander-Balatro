@@ -1,9 +1,48 @@
-SampleJimbos = {}
+local lovely = require("lovely")
 
 assert(SMODS.load_file("globals.lua"))()
 
--- Jokers
-local joker_src = NFS.getDirectoryItems(SMODS.current_mod.path .. "jokers")
-for _, file in ipairs(joker_src) do
-    assert(SMODS.load_file("jokers/" .. file))()
+grasslanders = SMODS.current_mod
+if NFS.read(SMODS.current_mod.path.."config.lua") then
+    local file = STR_UNPACK(NFS.read(SMODS.current_mod.path.."config.lua"))
+    grasslanders.config_path = SMODS.current_mod.path.."config.lua"
+    grasslanders.config_file = file
 end
+
+G.FUNCS.restart_game_smods = function(e)
+	SMODS.restart_game()
+end
+
+grasslanders.config_tab = function()
+	return {
+		n = G.UIT.ROOT,
+		config = {
+			emboss = 0.05,
+			r = 0.1,
+			align = "tl",
+			padding = 0.2,
+			colour = G.C.BLACK
+		},
+		nodes =  {
+            create_toggle({
+                align = "tl",
+                label = "Alt Sprinkle Design",
+                ref_table = grasslanders.config_file,
+                ref_value = "altsprinkle",
+                callback = function(_set_toggle)
+                    grasslanders.config_file.altsprinkle = _set_toggle
+                    grasslanders.config.altsprinkle = _set_toggle
+                    NFS.write(grasslanders.config_path, STR_PACK(grasslanders.config_file))
+                end
+            }),
+			UIBox_button({
+                align = "tl",
+                label = { "Apply Changes" }, 
+                minw = 3.5,
+                button = 'restart_game_smods'
+			}),
+		}
+	}
+end
+
+assert(SMODS.load_file("jokers/jokers.lua"))()

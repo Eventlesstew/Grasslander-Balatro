@@ -4,12 +4,11 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Played {C:attention}non-face {}cards",
-                    "give {C:chips}+#1# {}Chips",
-                    "when scored",
-                    "{C:chips}-#2# {}Chips for each",
-                    "{C:attention}face {}card in",
-                    "played hand this round",
+                    "{C:chips}-#1# {}Chips for every {C:attention}face",
+                    "card held in hand",
+                    "{C:chips}+#1# {}Chips for every {C:attention}non-face",
+                    "card held in hand",
+                    "for played hand",
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -33,11 +32,11 @@ return {
                 name = "Molty",
                 text = {
                     "This Joker gains",
-                    "{C:mult}+#1# {}Mult if played",
+                    "{X:mult,C:white}X#2#{} Mult if played",
                     "hand is on {C:attention}fire",
                     "{C:inactive}(When hand score",
                     "{C:inactive}beats target score)",
-                    "{C:inactive}(Currently {C:mult}+#2# {C:inactive}Mult)"
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_trizap = {
@@ -280,7 +279,7 @@ return {
             a_xmult="X#1# Mult",
             a_xmult_minus="-X#1# Mult",
 
-
+            k_downgrade_ex='Downgrade!',
             a_discard_one="+1 Discard",
             a_active='Active!',
 
