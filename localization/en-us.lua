@@ -215,9 +215,10 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "Played cards each give",
-                    "{X:mult,C:white}X#1#{} Mult if played",
-                    "hand contains a {C:attention}#2#",
+                    "Gains {X:mult,C:white}X#2#{} Mult for",
+                    "each played card if played",
+                    "hand contains a {C:attention}#3#",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)",
                 },
             },
 

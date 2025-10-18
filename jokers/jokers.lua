@@ -20,7 +20,7 @@ function return_JokerValues() -- not used, just here to demonstrate how you coul
             card = self,                            -- under which card to show the message
             colour = G.C.CHIPS,                     -- colour of the message, Balatro has some predefined colours, (Balatro/globals.lua)
             message = localize('k_upgrade_ex'),     -- this is the message that will be shown under the card when it triggers.
-            extra = { focus = self, message = localize('k_upgrade_ex') }, -- another way to show messages, not sure what's the difference.
+            extra = { focus = self, message = localize('k_upgrade_ex') },
         }
     end
 end
@@ -172,6 +172,7 @@ SMODS.Joker{
                 if context.other_card.debuff then
                     return {
                         message = localize('k_debuffed'),
+                        card = self,
                         colour = G.C.RED
                     }
                 else
@@ -179,6 +180,7 @@ SMODS.Joker{
                         card.ability.extra.weight = card.ability.extra.weight - 1
                         return {
                             message = localize('k_downgrade_ex'),
+                            card = self,
                             colour = G.C.CHIPS
                         }
                     else
@@ -257,10 +259,9 @@ SMODS.Joker{
     end
 }
 
---[[
 SMODS.Atlas({
     key = "trizap",
-    path = "j_sample_wee.png",
+    path = "trizap.png",
     px = 71,
     py = 95
 })
@@ -277,7 +278,7 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     effect=nil,
-    soul_pos=nil,
+    soul_pos={ x = 1, y = 0 },
     atlas = 'trizap',
 
     calculate = function(self,card,context)
@@ -289,6 +290,7 @@ SMODS.Joker{
     end
 }
 
+--[[
 SMODS.Atlas({
     key = "frogobonk",
     path = "j_sample_wee.png",
@@ -350,7 +352,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "reeflute",
     path = "reeflute.png",
@@ -381,7 +383,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "concrab",
     path = "j_sample_wee.png",
@@ -484,7 +486,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "volcarock",                                  --name used by the joker.    
-    config = { extra = {x_mult = 3, heat = 0, heat_mod = 1, heat_max = 3} },    --variables used for abilities and effects.
+    config = { extra = {x_mult = 3, heat = 0, heat_mod = 1, heat_max = 2} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -903,7 +905,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "cocotom",
     path = "cocotom.png",
@@ -934,7 +936,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "litabelle",
     path = "j_sample_wee.png",
@@ -1049,7 +1051,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {x_mult = 1.5, poker_hand = 'Straight Flush'}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5, poker_hand = 'Straight Flush'}},
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 7,
@@ -1065,15 +1067,23 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
             if next(context.poker_hands[card.ability.extra.poker_hand]) then
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
-                    x_mult = card.ability.extra.x_mult
+                    message = localize('k_upgrade_ex'),
+                    card = self,
+                    colour = G.C.MULT
                 }
             end
+        end
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                x_mult = card.ability.extra.x_mult
+            }
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 --[[
