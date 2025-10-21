@@ -186,6 +186,12 @@ return {
                 name = "Cocotom",
                 text = {
                     "{X:mult,C:white}INCOMPLETE",
+                    "When inactive, gains",
+                    "{X:mult,C:white}X#2#{} Mult when a",
+                    "playing card is",
+                    "destroyed",
+                    "Activates after #3# rounds",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
 
