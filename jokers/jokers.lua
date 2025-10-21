@@ -225,7 +225,7 @@ SMODS.Joker{
     config = { extra = {x_mult = 1, x_mult_mod = 0.5} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
+    cost = 7,                                            --cost to buy the joker in shops.
     blueprint_compat=true,                               --does joker work with blueprint.
     eternal_compat=true,                                 --can joker be eternal.
     perishable_compat=false,
@@ -270,11 +270,11 @@ SMODS.Joker{
     key = "trizap",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -292,7 +292,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "frogobonk",
-    path = "j_sample_wee.png",
+    path = "frogobonk.png",
     px = 71,
     py = 95
 })
@@ -302,10 +302,10 @@ SMODS.Joker{
     config = { extra = {x_mult = 1.2}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -317,7 +317,6 @@ SMODS.Joker{
             if next(SMODS.get_enhancements(context.other_card)) then
                 return {
                     x_mult = card.ability.extra.x_mult,
-                    card = self,
                     colour = G.C.MULT
                 }
             end
@@ -328,7 +327,6 @@ SMODS.Joker{
         return { vars = {card.ability.extra.x_mult}, key = self.key }
     end
 }
---[[
 
 SMODS.Atlas({
     key = "lumobonk",
@@ -339,10 +337,10 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "lumobonk",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.2}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 3,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -353,14 +351,31 @@ SMODS.Joker{
     atlas = 'lumobonk',
 
     calculate = function(self,card,context)
-
+        if not context.blueprint then
+            if context.individual and context.cardarea == G.play then
+                if context.other_card.edition == 'e_holo' then
+                    card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+                    return {
+                        message = localize('k_upgrade_ex'),
+                        card = self,
+                        colour = G.C.MULT
+                    }
+                end
+            end
+        end
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                x_mult = card.ability.extra.x_mult, 
+                colour = G.C.MULT
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.x_mult,card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
-]]
+
 SMODS.Atlas({
     key = "reeflute",
     path = "reeflute.png",
@@ -372,8 +387,8 @@ SMODS.Joker{
     key = "reeflute",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 1,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -415,7 +430,7 @@ SMODS.Joker{
     config = { extra = {poker_hand = 'High Card'}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -1182,7 +1197,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "hyphilliacs",
     path = "j_sample_wee.png",
@@ -1206,6 +1221,43 @@ SMODS.Joker{
     atlas = 'hyphilliacs',
 
     calculate = function(self,card,context)
+        if context.before and not context.blueprint then
+            for _, scored_card in ipairs(context.scoring_hand) do
+                local second_id = (scored_card:get_id() == 13 and 12) or (scored_card:get_id() == 12 and 13) or 0
+
+                if second_id ~= 0 then
+                    local valid = false
+
+                    for _, second_card in ipairs(context.scoring_hand) do
+                        if second_card:get_id() == second_id and (scored_card:is_suit(second_card.base.suit) or second_card:is_suit(scored_card.base.suit)) then
+                            valid = true
+                            break
+                        end
+                    end
+                    if not valid then
+                        scored_card:set_debuff(true)
+                    end
+                end
+            end
+        end
+        if context.repetition and context.cardarea == G.play then
+            local second_id = (context.other_card:get_id() == 13 and 12) or (context.other_card:get_id() == 12 and 13) or 0
+
+            if second_id ~= 0 then
+                local reps = 0
+                for _, second_card in ipairs(context.scoring_hand) do
+                    if second_card:get_id() == second_id and (context.other_card:is_suit(second_card.base.suit) or second_card:is_suit(context.other_card.base.suit)) then
+                        reps = reps + 1
+                    end
+                end
+                if reps > 0 then
+                    return {
+                        repetitions = reps
+                    }
+                end
+            end
+        end
+
 
     end,
 
@@ -1213,7 +1265,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "sugamimi",
     path = "j_sample_wee.png",

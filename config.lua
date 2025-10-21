@@ -1,1 +1,1 @@
-return {["altsprinkle"]=false,}
+return {["altsprinkle"]=true,}

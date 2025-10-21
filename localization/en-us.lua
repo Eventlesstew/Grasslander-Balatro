@@ -61,17 +61,18 @@ return {
             j_grasslanders_lumobonk = {
                 name = "Lumobonk",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                    "Gains X0.5 mult for",
-                    "each Polychrome card",
+                    "This Joker gains",
+                    "{X:mult,C:white}X#2#{} Mult for each",
+                    "{C:dark_edition}Polychrome {}card scored",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_reeflute = {
                 name = "Reeflute",
                 text = {
-                    "All cards held in",
-                    "hand give their base",
-                    "chip value"
+                    "All {C:attention}cards {}held in",
+                    "hand give their",
+                    "base chip value"
                 },
             },
             j_grasslanders_concrab = {
@@ -79,8 +80,8 @@ return {
                 text = {
                     "Grants Chips and Mult",
                     "of previous {C:attention}poker hand",
-                    "{C:inactive}(Currently {C:attention}#1#{C:inactive},",
-                    "{C:chips}+#2# {C:inactive}Chips and {C:mult}+#3# {C:inactive}Mult)"
+                    "{C:inactive}(Currently {C:attention}#1#{C:inactive})",
+                    "{C:inactive}({C:chips}+#2# {C:inactive}Chips and {C:mult}+#3# {C:inactive}Mult)"
                 },
             },
             j_grasslanders_anjellyze = {
@@ -242,7 +243,13 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Kings played without",
+                    "a Queen of the same",
+                    "suit are debuffed",
+                    "Otherwise retriggers",
+                    "according to how many of them",
+                    "are in hand",
+                    "and vice versa"
                 },
             },
 
