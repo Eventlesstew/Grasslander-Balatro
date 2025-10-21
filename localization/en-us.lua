@@ -243,13 +243,11 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "Kings played without",
-                    "a Queen of the same",
-                    "suit are debuffed",
-                    "Otherwise retriggers",
-                    "according to how many of them",
-                    "are in hand",
-                    "and vice versa"
+                    "Played Kings trigger",
+                    "all Queens of the same",
+                    "suit, is debuffed if",
+                    "none are played",
+                    "and vice versa",
                 },
             },
 
