@@ -290,7 +290,6 @@ SMODS.Joker{
     end
 }
 
---[[
 SMODS.Atlas({
     key = "frogobonk",
     path = "j_sample_wee.png",
@@ -300,7 +299,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "frogobonk",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1.2}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 5,
@@ -314,13 +313,22 @@ SMODS.Joker{
     atlas = 'frogobonk',
 
     calculate = function(self,card,context)
-
+        if context.individual and context.cardarea == G.play then
+            if next(SMODS.get_enhancements(context.other_card)) then
+                return {
+                    x_mult = card.ability.extra.x_mult,
+                    card = self,
+                    colour = G.C.MULT
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.x_mult}, key = self.key }
     end
 }
+--[[
 
 SMODS.Atlas({
     key = "lumobonk",
@@ -376,14 +384,25 @@ SMODS.Joker{
     atlas = 'reeflute',
 
     calculate = function(self,card,context)
-
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then
+            if context.other_card.debuff then
+                return {
+                    message = localize('k_debuffed'),
+                    colour = G.C.RED
+                }
+            else
+                return {
+                    chips = context.other_card:get_chip_bonus()
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
         return { vars = {}, key = self.key }
     end
 }
---[[
+
 SMODS.Atlas({
     key = "concrab",
     path = "j_sample_wee.png",
@@ -393,13 +412,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "concrab",
-    config = { extra = {}},
+    config = { extra = {poker_hand = 'High Card'}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -407,14 +426,29 @@ SMODS.Joker{
     atlas = 'concrab',
 
     calculate = function(self,card,context)
-
+        if context.joker_main and context.cardarea == G.jokers then
+            local effects = {
+                {
+                    chips = G.GAME.hands[card.ability.extra.poker_hand].chips, 
+                },
+                {
+                    mult = G.GAME.hands[card.ability.extra.poker_hand].mult, 
+                },
+            }
+            card.ability.extra.poker_hand = context.scoring_name
+            SMODS.merge_effects(effects)
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {
+            localize(card.ability.extra.poker_hand, 'poker_hands'),
+            G.GAME.hands[card.ability.extra.poker_hand].chips,
+            G.GAME.hands[card.ability.extra.poker_hand].mult
+        }, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "anjellyze",
     path = "j_sample_wee.png",

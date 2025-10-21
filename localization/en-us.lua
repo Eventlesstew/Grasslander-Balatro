@@ -53,9 +53,9 @@ return {
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                    "All enhanced cards grant",
-                    "X1.5 mult",
+                    "{C:attention}Enhanced {}cards grant",
+                    "{X:mult,C:white}X#1#{} Mult when",
+                    "scored"
                 },
             },
             j_grasslanders_lumobonk = {
@@ -69,13 +69,18 @@ return {
             j_grasslanders_reeflute = {
                 name = "Reeflute",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "All cards held in",
+                    "hand give their base",
+                    "chip value"
                 },
             },
             j_grasslanders_concrab = {
                 name = "Concrab",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Grants Chips and Mult",
+                    "of previous {C:attention}poker hand",
+                    "{C:inactive}(Currently {C:attention}#1#{C:inactive},",
+                    "{C:chips}+#2# {C:inactive}Chips and {C:mult}+#3# {C:inactive}Mult)"
                 },
             },
             j_grasslanders_anjellyze = {
