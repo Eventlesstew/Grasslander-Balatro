@@ -451,7 +451,7 @@ SMODS.Joker{
                 },
             }
             card.ability.extra.poker_hand = context.scoring_name
-            SMODS.merge_effects(effects)
+            return SMODS.merge_effects(effects)
         end
     end,
 
@@ -964,10 +964,10 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "cocotom",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 8,}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 5,
+    rarity = 3,
+    cost = 9,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -978,11 +978,43 @@ SMODS.Joker{
     atlas = 'cocotom',
 
     calculate = function(self,card,context)
-
+        if not context.blueprint and card.ability.extra.rounds > 0 then
+            if context.remove_playing_cards then 
+                if #context.removed > 0 then
+                    card.ability.extra.x_mult = card.ability.extra.x_mult + (#context.removed * card.ability.extra.x_mult_mod)
+                    return {
+                        message = localize {type='variable', key='a_xmult', vars={card.ability.extra.x_mult}},
+                        colour = G.C.MULT
+                    }
+                end
+            end
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                card.ability.extra.rounds = card.ability.extra.rounds - 1
+                if card.ability.extra.rounds <= 0 then
+                    return {
+                        message = localize('a_free_ex'),
+                        colour = G.C.FILTER
+                    }
+                else
+                    return {
+                        message = localize{key='a_left', vars={card.ability.extra.rounds}},
+                        colour = G.C.FILTER
+                    }
+                end
+            end
+        end
+        if context.joker_main and context.cardarea == G.jokers then
+            if card.ability.extra.rounds <= 0 then
+                return {
+                    x_mult = card.ability.extra.x_mult, 
+                    colour = G.C.MULT
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, card.ability.extra.rounds}, key = self.key }
     end
 }
 --[[
@@ -1200,11 +1232,12 @@ SMODS.Joker{
 ]]
 SMODS.Atlas({
     key = "hyphilliacs",
-    path = "j_sample_wee.png",
+    path = "hyphilliacs.png",
     px = 71,
     py = 95
 })
 
+-- BUG: Hyphilliac debuffing doesn't work right
 SMODS.Joker{
     key = "hyphilliacs",
     config = { extra = {}},
@@ -1235,7 +1268,18 @@ SMODS.Joker{
                         end
                     end
                     if not valid then
-                        scored_card:set_debuff(true)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                scored_card:juice_up()
+                                scored_card:set_debuff(true)
+                                SMODS.recalc_debuff(scored_card)
+                                return true
+                            end
+                        }))
+                        return {
+                            message = localize('k_debuffed'),
+                            colour = G.C.RED
+                        }
                     end
                 end
             end

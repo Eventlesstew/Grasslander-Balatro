@@ -185,12 +185,9 @@ return {
             j_grasslanders_cocotom = {
                 name = "Cocotom",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                    "When inactive, gains",
-                    "{X:mult,C:white}X#2#{} Mult when a",
-                    "playing card is",
-                    "destroyed",
-                    "Activates after #3# rounds",
+                    "When inactive, gains {X:mult,C:white}X#2#{} Mult",
+                    "when a {C:attention}playing card {}is destroyed",
+                    "Activates after {C:attention}#3#{} rounds",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
@@ -249,11 +246,10 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "Played Kings trigger",
-                    "all Queens of the same",
-                    "suit, is debuffed if",
-                    "none are played",
-                    "and vice versa",
+                    "Played {C:attention}Kings {}trigger all",
+                    "{C:attention}Queens {}of the same suit,",
+                    "but are debuffed if none",
+                    "are played and {C:attention}vice versa",
                 },
             },
 
@@ -297,8 +293,11 @@ return {
             a_xmult_minus="-X#1# Mult",
 
             k_downgrade_ex='Downgrade!',
+
             a_discard_one="+1 Discard",
             a_active='Active!',
+            a_free_ex='Free!',
+            a_left='#1# left',
 
             a_hand_chips = "+#1# Chips",
             a_hand_chips_minus = "-#1# Chips",
