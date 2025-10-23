@@ -283,11 +283,39 @@ SMODS.Joker{
     atlas = 'trizap',
 
     calculate = function(self,card,context)
-
+        if not context.blueprint then
+            if (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) then
+                local odds = 1
+                for _,joker in ipairs(G.jokers.cards) do
+                    if joker.edition and joker.edition.negative and joker ~= context.card then
+                        odds = odds + 1
+                    end
+                end
+                if SMODS.pseudorandom_probability(card, 'trizap', 1, odds) then
+                    local copied_joker = copy_card(context.card)
+                    copied_joker:set_edition("e_negative", true)
+                    if card.config.center.eternal_compat then
+                        copied_joker:set_eternal(true)
+                    end
+                    copied_joker:add_to_deck()
+                    G.jokers:emplace(copied_joker)
+                end
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        local odds = 1
+        for _,joker_card in G.jokers.cards do
+            if joker_card == 'e_holo' then
+                odds = odds + 1
+            end
+        end
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, odds, 'trizap')
+
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+        info_queue[#info_queue + 1] = { key = "eternal", set = "Other" } -- Copied from Cryptid mod, check if it's invalid
+        return { vars = {numerator, denominator}, key = self.key }
     end
 }
 

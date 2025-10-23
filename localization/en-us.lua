@@ -40,14 +40,15 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                    "Creates a negative copy",
-                    "of sold Joker",
-                    "1 in 4 chance to",
-                    "destroy itself"
+                    "If a {C:attention}Joker {}is",
+                    "sold or destroyed",
+                    "{C:green}#1# in #2#{} chance to",
+                    "create an {C:attention}Eternal {C:dark_edition}Negative",
+                    "copy",
+                    "{C:inactive}(Only applies {C:attention}Eternal",
+                    "{C:inactive}if not temporary)"
                 },
             },
-
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
