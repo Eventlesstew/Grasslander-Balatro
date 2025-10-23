@@ -494,10 +494,10 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "logobreak",
-    path = "j_sample_wee.png",
+    path = "logobreak.png",
     px = 71,
     py = 95
 })
@@ -525,7 +525,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-]]
+
 SMODS.Atlas({
     key = "volcarock",
     path = "j_sample_baroness.png",

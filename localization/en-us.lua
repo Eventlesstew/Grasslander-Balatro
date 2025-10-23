@@ -93,7 +93,11 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Gives a {C:attention}refund {}on",
+                    "the first item bought",
+                    "from {C:attention}shop",
+                    "Destroys itself if played",
+                    "hand is on fire",
                 },
             },
             j_grasslanders_volcarock = {
