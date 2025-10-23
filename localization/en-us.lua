@@ -34,8 +34,6 @@ return {
                     "This Joker gains",
                     "{X:mult,C:white}X#2#{} Mult if played",
                     "hand is on {C:attention}fire",
-                    "{C:inactive}(When hand score",
-                    "{C:inactive}beats target score)",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
@@ -94,10 +92,10 @@ return {
                 name = "Logobreak",
                 text = {
                     "Gives a {C:attention}refund {}on",
-                    "the first item bought",
+                    "first item bought",
                     "from {C:attention}shop",
-                    "Destroys itself if played",
-                    "hand is on fire",
+                    "This card is destroyed if",
+                    "played hand is on fire",
                 },
             },
             j_grasslanders_volcarock = {
@@ -282,6 +280,14 @@ return {
             -- message = localize{type='variable',key='a_xmult',vars={current_xmult}},
             -- that the key 'a_xmult' will use provided values from vars={} in that order to replace #1#, #2# etc... in the localization file.
 
+        g_onfire = {
+            name = "Hand On Fire",
+            text = {
+                "Occurs when played hand",
+                "scores greater than Blind",
+                "score"
+            },
+        },
 
         dictionary = {
             a_chips="+#1#",
@@ -301,6 +307,7 @@ return {
             a_discard_one="+1 Discard",
             a_active='Active!',
             a_free_ex='Free!',
+            a_fled='Fled',
             a_left='#1# left',
 
             a_hand_chips = "+#1# Chips",

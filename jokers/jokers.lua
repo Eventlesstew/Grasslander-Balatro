@@ -254,7 +254,8 @@ SMODS.Joker{
         end
     end,
 
-    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+    loc_vars = function(self, info_queue, card)
+        --info_queue[#info_queue + 1] = G.P_OTHER.g_onfire
         return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
@@ -463,7 +464,7 @@ SMODS.Joker{
         }, key = self.key }
     end
 }
---[[
+
 SMODS.Atlas({
     key = "anjellyze",
     path = "j_sample_wee.png",
@@ -494,7 +495,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-]]
+
 SMODS.Atlas({
     key = "logobreak",
     path = "logobreak.png",
@@ -504,12 +505,12 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "logobreak",
-    config = { extra = {}},
+    config = { extra = {active = true}},
     pos = { x = 0, y = 0 },
     rarity = 1,
     cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
+    blueprint_compat=false,
+    eternal_compat=false,
     perishable_compat=false,
     unlocked = true,
     discovered = true,
@@ -518,10 +519,34 @@ SMODS.Joker{
     atlas = 'logobreak',
 
     calculate = function(self,card,context)
-
+        if not context.blueprint then
+            if card.ability.extra.active then
+                if context.buying_card then
+                    card.ability.extra.active = false
+                    return {
+                        dollars = context.card.cost
+                    }
+                end
+            end
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                card.ability.extra.active = true
+                return {
+                    message = localize('a_active'),
+                    colour = G.C.FILTER,
+                }
+            end
+            if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
+                SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('a_fled'),
+                    colour = G.C.FILTER,
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.g_on_fire
         return { vars = {}, key = self.key }
     end
 }
