@@ -506,7 +506,7 @@ SMODS.Joker{
     key = "logobreak",
     config = { extra = {}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
