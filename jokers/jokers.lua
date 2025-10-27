@@ -314,7 +314,7 @@ SMODS.Joker{
         local numerator, denominator = SMODS.get_probability_vars(card, 1, odds, 'trizap')
 
         info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-        info_queue[#info_queue + 1] = { key = "eternal", set = "Other" } -- Copied from Cryptid mod, check if it's invalid
+        info_queue[#info_queue + 1] = { key = "eternal", set = "Other" }
         return { vars = {numerator, denominator}, key = self.key }
     end
 }
@@ -420,7 +420,7 @@ SMODS.Joker{
     cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -508,7 +508,7 @@ SMODS.Joker{
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -533,13 +533,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "logobreak",
-    config = { extra = {active = true}},
+    config = { extra = {active = false}},
     pos = { x = 0, y = 0 },
     rarity = 1,
-    cost = 5,
-    blueprint_compat=false,
+    cost = 3,
+    blueprint_compat=true,
     eternal_compat=false,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -547,22 +547,27 @@ SMODS.Joker{
     atlas = 'logobreak',
 
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if card.ability.extra.active then
-                if context.buying_card then
-                    card.ability.extra.active = false
-                    return {
-                        dollars = context.card.cost
-                    }
-                end
-            end
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                card.ability.extra.active = true
+        if card.ability.extra.active then
+            if context.buying_card then
                 return {
-                    message = localize('a_active'),
-                    colour = G.C.FILTER,
+                    dollars = context.card.cost
                 }
             end
+        end
+
+        if not context.blueprint then
+            if card.ability.extra.active then
+                if context.buying_card or context.ending_shop then
+                    card.ability.extra.active = false
+                end
+            else
+                if (context.end_of_round and context.game_over == false and context.main_eval) or context.buying_self then
+                    card.ability.extra.active = true
+                    local eval = function(card) return not card.ability.extra.active end
+                    juice_card_until(card, eval, true)
+                end
+            end
+
             if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
                 SMODS.destroy_cards(card, nil, nil, true)
                 return {
@@ -1031,6 +1036,10 @@ SMODS.Joker{
     atlas = 'cocotom',
 
     calculate = function(self,card,context)
+        if context.buying_self then
+            local eval = function(card) return card.ability.extra.rounds <= 0 end
+            juice_card_until(card,eval,true)
+        end
         if not context.blueprint and card.ability.extra.rounds > 0 then
             if context.remove_playing_cards then 
                 if #context.removed > 0 then
@@ -1341,16 +1350,17 @@ SMODS.Joker{
             local second_id = (context.other_card:get_id() == 13 and 12) or (context.other_card:get_id() == 12 and 13) or 0
 
             if second_id ~= 0 then
-                local reps = 0
+                local effects = {}
                 for _, second_card in ipairs(context.scoring_hand) do
                     if second_card:get_id() == second_id and (context.other_card:is_suit(second_card.base.suit) or second_card:is_suit(context.other_card.base.suit)) then
-                        reps = reps + 1
+                        effects[#effects + 1] = {
+                            repetitions = 1,
+                            card = second_card
+                        }
                     end
                 end
-                if reps > 0 then
-                    return {
-                        repetitions = reps
-                    }
+                if effects then
+                    return SMODS.merge_effects(effects)
                 end
             end
         end
