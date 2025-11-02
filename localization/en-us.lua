@@ -271,15 +271,15 @@ return {
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive}#2#{V:1}#3#{C:inactive})"
                 },
             },
-        }
-    },
-    Other = {
-        g_onfire = {
-            name = "Hand On Fire",
-            text = {
-                "Occurs when played hand",
-                "scores greater than Blind",
-                "score"
+        },
+        Other = {
+            g_onfire = {
+                name = "Hand On Fire",
+                text = {
+                    "Occurs when {C:attention}played hand",
+                    "scores greater than the",
+                    "{C:attention}Blind{} score"
+                },
             },
         },
     },

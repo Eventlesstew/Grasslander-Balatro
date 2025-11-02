@@ -255,7 +255,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_SEALS.g_onfire
+        info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
         return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
@@ -645,10 +645,10 @@ SMODS.Joker{
         return { vars = {card.ability.extra.heat_mod, card.ability.extra.heat, card.ability.extra.heat_max, card.ability.extra.x_mult}, key = self.key }
     end
 }
---[[
+
 SMODS.Atlas({
     key = "junklake",
-    path = "j_sample_wee.png",
+    path = "junklake.png",
     px = 71,
     py = 95
 })
@@ -677,6 +677,23 @@ SMODS.Joker{
     end
 }
 
+local function reset_junklake()
+    G.GAME.current_round.junklake_card = {rank = 'Ace'}
+    local valid_jake_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) then
+            valid_jake_cards[#valid_jake_cards + 1] = playing_card
+        end
+    end
+    local jake_card = pseudorandom_element(valid_jake_cards,
+        'grasslanders_junklake' .. G.GAME.round_resets.ante)
+    if jake_card then
+        G.GAME.current_round.junklake_card.rank = jake_card.base.value
+    end
+end
+
+
+--[[
 SMODS.Atlas({
     key = "pricklea",
     path = "j_sample_wee.png",
