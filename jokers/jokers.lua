@@ -655,7 +655,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "junklake",
-    config = { extra = {}},
+    config = { extra = {dollars = 20,count=0}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 5,
@@ -669,27 +669,75 @@ SMODS.Joker{
     atlas = 'junklake',
 
     calculate = function(self,card,context)
-
+        if not context.blueprint then
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                card.ability.extra.count = 0
+            end
+        end
+        if context.discard then
+            if context.other_card:get_id() == G.GAME.current_round.junklake_card.id then
+                if not context.blueprint then
+                    card.ability.extra.count = card.ability.extra.count + 1
+                end
+                if card.ability.extra.count >= G.GAME.current_round.junklake_card.amount then
+                    return {
+                        dollars = card.ability.extra.dollars
+                    }
+                end
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.dollars, localize(G.GAME.current_round.junklake_card.rank, 'ranks'),card.ability.extra.count,G.GAME.current_round.junklake_card.amount}, key = self.key }
     end
 }
 
 local function reset_junklake()
-    G.GAME.current_round.junklake_card = {rank = 'Ace'}
-    local valid_jake_cards = {}
+    G.GAME.current_round.junklake_card = {rank='Ace', id=1, amount=4}
+
+    local jake_ranks = {}
     for _, playing_card in ipairs(G.playing_cards) do
-        if not SMODS.has_no_suit(playing_card) then
-            valid_jake_cards[#valid_jake_cards + 1] = playing_card
+        if not SMODS.has_no_rank(playing_card) then
+            if not jake_ranks[playing_card.base.id] then
+                jake_ranks[playing_card.base.value] = {
+                    rank = playing_card.base.value,
+                    id = playing_card.base.id,
+                    amount = 0,
+                }
+            end
+            jake_ranks[playing_card.base.id].amount = jake_ranks[playing_card.base.id].amount + 1
         end
     end
-    local jake_card = pseudorandom_element(valid_jake_cards,
-        'grasslanders_junklake' .. G.GAME.round_resets.ante)
-    if jake_card then
-        G.GAME.current_round.junklake_card.rank = jake_card.base.value
+
+    local min = nil
+    local max = nil
+    for _,v in ipairs(jake_ranks) do
+        if (not min) or v.amount < min then
+            min = v.amount
+        end
+        if (not max) or v.amount > max then
+            max = v.amount
+        end
     end
+
+    local jake_table = {}
+    for _,v in ipairs(jake_ranks) do
+        local weight = max - min - v.amount + 2
+        local i = 1
+        while i <= weight do
+            jake_table[#jake_table + 1] = v.id
+            i = i + 1
+        end
+    end
+
+    local chosen_rank = pseudorandom_element(jake_table,'grasslanders_junklake' .. G.GAME.round_resets.ante)
+    G.GAME.current_round.junklake_card.rank = jake_ranks[chosen_rank].rank
+    G.GAME.current_round.junklake_card.id = jake_ranks[chosen_rank].id
+    G.GAME.current_round.junklake_card.amount = jake_ranks[chosen_rank].amount
+    print(jake_ranks)
+    print(G.GAME.current_round.junklake_card.rank)
+    print(G.GAME.current_round.junklake_card.amount)
 end
 
 
@@ -1530,3 +1578,7 @@ SMODS.Joker{
         return { vars = {rank, msg, suit, card.ability.extra.discard_mod, colours={col}}, key = self.key }
     end
 }
+
+function SMODS.current_mod.reset_game_globals(run_start)
+    reset_junklake()
+end
