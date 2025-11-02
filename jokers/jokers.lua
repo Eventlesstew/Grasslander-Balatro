@@ -255,7 +255,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        --info_queue[#info_queue + 1] = G.P_OTHER.g_onfire
+        info_queue[#info_queue + 1] = G.P_SEALS.g_onfire
         return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
@@ -287,7 +287,7 @@ SMODS.Joker{
             if (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) then
                 local odds = 1
                 for _,joker in ipairs(G.jokers.cards) do
-                    if joker.edition and joker.edition.negative and joker ~= context.card then
+                    if joker.edition and joker.edition.negative and joker ~= card then
                         odds = odds + 1
                     end
                 end
@@ -306,9 +306,11 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         local odds = 1
-        for _,joker_card in G.jokers.cards do
-            if joker_card == 'e_holo' then
-                odds = odds + 1
+        if G.jokers then
+            for _,joker in ipairs(G.jokers.cards) do
+                if joker.edition and joker.edition.negative and joker ~= card then
+                    odds = odds + 1
+                end
             end
         end
         local numerator, denominator = SMODS.get_probability_vars(card, 1, odds, 'trizap')
@@ -579,7 +581,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_CENTERS.g_on_fire
+        info_queue[#info_queue + 1] = G.P_SEALS.g_onfire
         return { vars = {}, key = self.key }
     end
 }

@@ -40,13 +40,12 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "If a {C:attention}Joker {}is",
-                    "sold or destroyed",
-                    "{C:green}#1# in #2#{} chance to",
-                    "create an {C:attention}Eternal {C:dark_edition}Negative",
-                    "copy",
-                    "{C:inactive}(Only applies {C:attention}Eternal",
-                    "{C:inactive}if not temporary)"
+                    "If a {C:attention}Joker {}is sold or",
+                    "destroyed, {C:green}#1# in #2#{} chance",
+                    "to create an {C:attention}Eternal",
+                    "{C:dark_edition}Negative {}copy",
+                    "{C:inactive}(Does not apply {C:attention}Eternal",
+                    "{C:inactive}to temporary Jokers)"
                 },
             },
             j_grasslanders_frogobonk = {
@@ -92,11 +91,10 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "Gives a {C:attention}refund {}on",
-                    "first item bought",
-                    "from {C:attention}shop",
-                    "This card is destroyed if",
-                    "played hand is on fire",
+                    "Gives a {C:attention}refund {}on first",
+                    "item bought from {C:attention}shop",
+                    "{C:red}self-destructs {}if played",
+                    "hand is on fire",
                 },
             },
             j_grasslanders_volcarock = {
@@ -160,7 +158,7 @@ return {
             j_grasslanders_kracosteal = {
                 name = "Kracosteal",
                 text = {
-                    "Each {C:attention}Steel Card",
+                    "Each {C:attention}Steel {}card",
                     "held in hand gives {C:money}$#1#",
                     "at end of round"
                 },
@@ -174,8 +172,8 @@ return {
             j_grasslanders_wisplasm = {
                 name = "Wisplasm",
                 text = {
-                    "Each {C:attention}Gold Card",
-                    "held in hand gives {X:mult,C:white}X#1#{} Mult",
+                    "Each {C:attention}Gold {}card held",
+                    "in hand gives {X:mult,C:white}X#1#{} Mult",
                     "at end of round"
                 },
             },
@@ -275,12 +273,7 @@ return {
             },
         }
     },
-    misc = {
-
-            -- do note that when using messages such as: 
-            -- message = localize{type='variable',key='a_xmult',vars={current_xmult}},
-            -- that the key 'a_xmult' will use provided values from vars={} in that order to replace #1#, #2# etc... in the localization file.
-
+    Other = {
         g_onfire = {
             name = "Hand On Fire",
             text = {
@@ -289,6 +282,12 @@ return {
                 "score"
             },
         },
+    },
+    misc = {
+
+            -- do note that when using messages such as: 
+            -- message = localize{type='variable',key='a_xmult',vars={current_xmult}},
+            -- that the key 'a_xmult' will use provided values from vars={} in that order to replace #1#, #2# etc... in the localization file
 
         dictionary = {
             a_chips="+#1#",
