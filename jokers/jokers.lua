@@ -655,13 +655,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "junklake",
-    config = { extra = {dollars = 20,count=0}},
+    config = { extra = {dollars = 20}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 1,
     cost = 5,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -669,32 +669,64 @@ SMODS.Joker{
     atlas = 'junklake',
 
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                card.ability.extra.count = 0
-            end
-        end
-        if context.before then
-            for _, scored_card in ipairs(context.scoring_hand) do
-            end
-        end
+        if
+            (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
+            context.before
+        then
+            local valid = false
 
-        if context.discard then
-            if context.other_card:get_id() == G.GAME.current_round.junklake_card.id then
-                if not context.blueprint then
-                    card.ability.extra.count = card.ability.extra.count + 1
+            local amount = 0
+            for _, counted_card in ipairs(G.playing_cards) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    amount = amount + 1
                 end
-                if card.ability.extra.count >= G.GAME.current_round.junklake_card.amount then
-                    return {
-                        dollars = card.ability.extra.dollars
-                    }
+            end
+
+            local count = amount
+            for _, counted_card in ipairs(G.deck.cards) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    count = count - 1
                 end
+            end
+            for _, counted_card in ipairs(context.full_hand) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    valid = true
+                    count = count + 1
+                end
+            end
+
+            if valid and amount >= count then
+                return {
+                    dollars = card.ability.extra.dollars
+                }
             end
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.dollars, localize(G.GAME.current_round.junklake_card.rank, 'ranks'),card.ability.extra.count,G.GAME.current_round.junklake_card.amount}, key = self.key }
+        local amount = 0
+        if G.playing_cards then
+            for _, counted_card in ipairs(G.playing_cards) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    amount = amount + 1
+                end
+            end
+        else
+            amount = 4
+        end
+
+        local count = amount
+        if G.deck.cards then
+            for _, counted_card in ipairs(G.deck.cards) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    count = count - 1
+                end
+            end
+        else
+            count = 0
+        end
+        
+        return { vars = {card.ability.extra.dollars, localize(G.GAME.current_round.junklake_card.rank, 'ranks'),count,amount}, key = self.key }
     end
 }
 

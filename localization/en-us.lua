@@ -110,7 +110,10 @@ return {
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Gives {C:money}$#1# {}if all",
+                    "{C:attention}#2#s{} are {C:attention}played",
+                    "or {C:attention}discarded",
+                    "{C:inactive}(Currently {C:attention}#3#{C:inactive}/{C:attention}#4#{C:inactive})"
                 },
             },
             j_grasslanders_pricklea = {
