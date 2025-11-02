@@ -674,6 +674,11 @@ SMODS.Joker{
                 card.ability.extra.count = 0
             end
         end
+        if context.before then
+            for _, scored_card in ipairs(context.scoring_hand) do
+            end
+        end
+
         if context.discard then
             if context.other_card:get_id() == G.GAME.current_round.junklake_card.id then
                 if not context.blueprint then
@@ -694,19 +699,33 @@ SMODS.Joker{
 }
 
 local function reset_junklake()
+    G.GAME.current_round.junklake_card = {rank = 'Ace', id = 1}
+    local valid_jake_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+            valid_jake_cards[#valid_jake_cards + 1] = playing_card
+        end
+    end
+    local jake_card = pseudorandom_element(valid_jake_cards, 'grasslanders_junklake' .. G.GAME.round_resets.ante)
+    if jake_card then
+        G.GAME.current_round.junklake_card.rank = jake_card.base.value
+        G.GAME.current_round.junklake_card.id = jake_card.base.id
+    end
+    --[[
     G.GAME.current_round.junklake_card = {rank='Ace', id=1, amount=4}
 
     local jake_ranks = {}
     for _, playing_card in ipairs(G.playing_cards) do
         if not SMODS.has_no_rank(playing_card) then
             if not jake_ranks[playing_card.base.id] then
-                jake_ranks[playing_card.base.value] = {
+                jake_ranks[playing_card.base.id] = {
                     rank = playing_card.base.value,
                     id = playing_card.base.id,
-                    amount = 0,
+                    amount = 1,
                 }
+            else
+                jake_ranks[playing_card.base.id].amount = jake_ranks[playing_card.base.id].amount + 1
             end
-            jake_ranks[playing_card.base.id].amount = jake_ranks[playing_card.base.id].amount + 1
         end
     end
 
@@ -731,13 +750,16 @@ local function reset_junklake()
         end
     end
 
+    
     local chosen_rank = pseudorandom_element(jake_table,'grasslanders_junklake' .. G.GAME.round_resets.ante)
     G.GAME.current_round.junklake_card.rank = jake_ranks[chosen_rank].rank
     G.GAME.current_round.junklake_card.id = jake_ranks[chosen_rank].id
     G.GAME.current_round.junklake_card.amount = jake_ranks[chosen_rank].amount
-    print(jake_ranks)
+    
+    print(jake_table)
     print(G.GAME.current_round.junklake_card.rank)
     print(G.GAME.current_round.junklake_card.amount)
+    ]]
 end
 
 
