@@ -4,11 +4,10 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "{C:chips}-#1# {}Chips for every {C:attention}face",
-                    "card held in hand",
-                    "{C:chips}+#1# {}Chips for every {C:attention}non-face",
-                    "card held in hand",
-                    "for played hand",
+                    "Gains {C:chips}+#2# {}Chips for every card",
+                    "held in hand if no face cards",
+                    "are held in hand",
+                    "{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)",
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -113,6 +112,7 @@ return {
                     "Gives {C:money}$#1# {}if all",
                     "{C:attention}#2#s{} are {C:attention}played",
                     "or {C:attention}discarded",
+                    "Rank changes every round",
                     "{C:inactive}(Currently {C:attention}#3#{C:inactive}/{C:attention}#4#{C:inactive})"
                 },
             },
