@@ -35,6 +35,17 @@ grasslanders.config_tab = function()
                     NFS.write(grasslanders.config_path, STR_PACK(grasslanders.config_file))
                 end
             }),
+            create_toggle({
+                align = "tl",
+                label = "Censor Hornetrix",
+                ref_table = grasslanders.config_file,
+                ref_value = "althornetrix",
+                callback = function(_set_toggle)
+                    grasslanders.config_file.althornetrix = _set_toggle
+                    grasslanders.config.althornetrix = _set_toggle
+                    NFS.write(grasslanders.config_path, STR_PACK(grasslanders.config_file))
+                end
+            }),
 			UIBox_button({
                 align = "tl",
                 label = { "Apply Changes" }, 

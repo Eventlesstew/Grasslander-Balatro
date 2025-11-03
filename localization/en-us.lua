@@ -21,8 +21,8 @@ return {
             j_grasslanders_blowy = {
                 name = "Blowy",
                 text = {
-                    "{C:attention}+#1# {}Hand size per hand played",
-                    "{C:attention}-#1# {}Hand size per discard",
+                    "{C:attention}+#1# {}Hand size per discard",
+                    "{C:attention}-#1# {}Hand size per hand played",
                     "this round",
                     "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
@@ -101,7 +101,7 @@ return {
                 text = {
                     "{C:attention}+#1# {}Heat per discard",
                     "{C:attention}-#1# {}Heat per hand played",
-                    "If Heat exceeds {C:attention}#3#{}, grants",
+                    "If Heat reaches {C:attention}#3#{}, grants",
                     "{X:mult,C:white}X#4#{} Mult and resets Heat",
                     "{C:inactive}(Currently {C:attention}#2# {C:inactive}Heat)"
                 },

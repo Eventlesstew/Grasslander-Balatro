@@ -89,20 +89,20 @@ SMODS.Joker{
         if not context.blueprint then
             if context.after then
                 card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
-                G.hand:change_size(card.ability.extra.h_mod)
+                G.hand:change_size(-card.ability.extra.h_mod)
 
                 return {
-                    message = localize{type = 'variable',key = 'a_handsize',vars = {card.ability.extra.h_mod}},
+                    message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
                     colour = G.C.FILTER
                 }
             end
             if context.discard and context.other_card == context.full_hand[#context.full_hand] then
                 if G.hand.config.card_limit > 0 then
                     card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
-                    G.hand:change_size(-card.ability.extra.h_mod)
+                    G.hand:change_size(card.ability.extra.h_mod)
 
                     return {
-                        message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
+                        message = localize{type = 'variable',key = 'a_handsize',vars = {card.ability.extra.h_mod}},
                         colour = G.C.FILTER
                     }
                 end
@@ -355,7 +355,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "lumobonk",
-    path = "j_sample_wee.png",
+    path = "lumobonk.png",
     px = 71,
     py = 95
 })
@@ -610,7 +610,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "volcarock",                                  --name used by the joker.    
-    config = { extra = {x_mult = 3, heat = 0, heat_mod = 1, heat_max = 2} },    --variables used for abilities and effects.
+    config = { extra = {x_mult = 3, heat = 0, heat_mod = 1, heat_max = 3} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -646,7 +646,7 @@ SMODS.Joker{
         end
 
         if context.joker_main and context.cardarea == G.jokers then
-            if card.ability.extra.heat > card.ability.extra.heat_max then
+            if card.ability.extra.heat >= card.ability.extra.heat_max then
                 card.ability.extra.heat = 0
                 return {
                     x_mult = card.ability.extra.x_mult, 
@@ -857,7 +857,7 @@ SMODS.Joker{
 ]]
 SMODS.Atlas({
     key = "hornetrix",
-    path = "j_sample_wee.png",
+    path = "hornetrix.png",
     px = 71,
     py = 95
 })
@@ -876,6 +876,14 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'hornetrix',
+
+    set_sprites = function(self, card, front)
+        local alt = 0
+        if grasslanders.config.althornetrix then
+            alt = 1
+        end
+        card.children.center:set_sprite_pos({x=alt,y=0})
+    end,
 
     calculate = function(self,card,context)
         if context.setting_blind and not context.blueprint then
