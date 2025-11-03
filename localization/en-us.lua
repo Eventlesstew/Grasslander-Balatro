@@ -90,10 +90,10 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "Gives a {C:attention}refund {}on first",
-                    "item bought from {C:attention}shop",
-                    "{C:red}self-destructs {}if played",
-                    "hand is on fire",
+                    "When {C:attention}Blind {}is defeated,",
+                    "creates a {C:attention}Coupon Tag",
+                    "if played hand is",
+                    "not on {C:attention}fire"
                 },
             },
             j_grasslanders_volcarock = {
@@ -109,9 +109,8 @@ return {
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "Gives {C:money}$#1# {}if all",
-                    "{C:attention}#2#s{} are {C:attention}played",
-                    "or {C:attention}discarded",
+                    "Gives {C:money}$#1# {}if all {C:attention}#2#s",
+                    "are {C:attention}played {}or {C:attention}discarded",
                     "Rank changes every round",
                     "{C:inactive}(Currently {C:attention}#3#{C:inactive}/{C:attention}#4#{C:inactive})"
                 },

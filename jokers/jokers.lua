@@ -145,7 +145,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 0, chip_mod=20} },    --variables used for abilities and effects.
+    config = { extra = {chips = 0, chip_mod=5} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -186,7 +186,7 @@ SMODS.Joker{
                         card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
                         return {
                             message = localize('k_upgrade_ex'),
-                            card = card,
+                            message_card = card,
                             colour = G.C.CHIPS
                         }
                     end
@@ -686,7 +686,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if
             (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
-            context.before
+            context.after
         then
             local valid = false
 
@@ -703,6 +703,11 @@ SMODS.Joker{
                     count = count - 1
                 end
             end
+            for _, counted_card in ipairs(G.hand.cards) do
+                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                    count = count - 1
+                end
+            end
             for _, counted_card in ipairs(context.full_hand) do
                 if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
                     valid = true
@@ -710,7 +715,7 @@ SMODS.Joker{
                 end
             end
 
-            if valid and amount >= count then
+            if valid and count >= amount then
                 return {
                     dollars = card.ability.extra.dollars
                 }
@@ -719,29 +724,37 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
+        local rank = "2"
         local amount = 0
-        if G.playing_cards then
-            for _, counted_card in ipairs(G.playing_cards) do
-                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
-                    amount = amount + 1
+        local count = 0
+        if G.GAME.current_round.junklake_card then
+            rank = G.GAME.current_round.junklake_card.rank
+            if G.playing_cards then
+                for _, counted_card in ipairs(G.playing_cards) do
+                    if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                        amount = amount + 1
+                    end
                 end
             end
-        else
-            amount = 4
-        end
-
-        local count = amount
-        if G.deck.cards then
-            for _, counted_card in ipairs(G.deck.cards) do
-                if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
-                    count = count - 1
+            count = amount
+            if G.deck and G.hand.cards then
+                for _, counted_card in ipairs(G.deck.cards) do
+                    if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                        count = count - 1
+                    end
+                end
+                for _, counted_card in ipairs(G.hand.cards) do
+                    if counted_card:get_id() == G.GAME.current_round.junklake_card.id then
+                        count = count - 1
+                    end
                 end
             end
         else
             count = 0
+            amount = 4
         end
 
-        return { vars = {card.ability.extra.dollars, localize(G.GAME.current_round.junklake_card.rank, 'ranks'),count,amount}, key = self.key }
+        return { vars = {card.ability.extra.dollars, localize(rank, 'ranks'),count,amount}, key = self.key }
     end
 }
 
