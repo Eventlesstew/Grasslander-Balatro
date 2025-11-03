@@ -125,7 +125,11 @@ return {
             j_grasslanders_hornetrix = {
                 name = "Hornetrix",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "When {C:attention}Blind{} is selected,",
+                    "destroy a random {C:attention}Consumable",
+                    "and permanently add {X:money,C:white}X#1#",
+                    "its sell value to it's own",
+                    "sell value",
                 },
             },
             j_grasslanders_chonkreep = {

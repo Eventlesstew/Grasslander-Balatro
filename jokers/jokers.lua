@@ -543,6 +543,7 @@ SMODS.Joker{
     atlas = 'logobreak',
 
     calculate = function(self,card,context)
+        --[[
         if card.ability.extra.active then
             if context.buying_card then
                 return {
@@ -572,10 +573,30 @@ SMODS.Joker{
                 }
             end
         end
+        ]]
+        if card.ability.extra.active then
+            if not context.blueprint then
+                if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
+                    card.ability.extra.active = false
+                end
+            end
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        add_tag(Tag('tag_coupon'))
+                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                        return true
+                    end)
+                }))
+            end
+        elseif context.setting_blind and not context.blueprint then
+            card.ability.extra.active = true
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_SEALS.g_onfire
+        info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
         return { vars = {}, key = self.key }
     end
 }
@@ -820,7 +841,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "hornetrix",
     path = "j_sample_wee.png",
@@ -830,7 +851,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "hornetrix",
-    config = { extra = {}},
+    config = { extra = {sell_multiplier = 4}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 5,
@@ -844,14 +865,24 @@ SMODS.Joker{
     atlas = 'hornetrix',
 
     calculate = function(self,card,context)
-
+        if context.setting_blind and not context.blueprint then
+            local eaten_card = pseudorandom_element(G.consumeables.cards, 'grasslanders_hornetrix')
+            if eaten_card then
+                card.ability.extra_value = card.ability.extra_value + eaten_card.sell_cost * card.ability.extra.sell_multiplier
+                SMODS.destroy_cards(eaten_card)
+                return {
+                    message = localize('k_eaten_ex'),
+                    colour = G.C.MONEY
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.sell_multiplier}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "chonkreep",
     path = "j_sample_wee.png",
