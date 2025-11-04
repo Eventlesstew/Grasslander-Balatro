@@ -316,7 +316,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "frogobonk",
-    config = { extra = {x_mult = 1.2}},
+    config = { extra = {mult = 5}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 7,
@@ -333,9 +333,16 @@ SMODS.Joker{
         if context.individual and context.cardarea == G.play then
             if next(SMODS.get_enhancements(context.other_card)) then
                 return {
-                    x_mult = card.ability.extra.x_mult,
+                    mult = card.ability.extra.mult,
                     colour = G.C.MULT
                 }
+            end
+            if context.other_card:get_edition() then
+                SMODS.add_card {
+                    set = 'Joker',
+                    
+                }
+                SMODS.destroy_cards(card, nil, nil, true)
             end
         end
     end,

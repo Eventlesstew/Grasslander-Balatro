@@ -56,7 +56,7 @@ return {
                 },
             },
             j_grasslanders_lumobonk = {
-                name = "Lumobonk",
+                name = "Frbbngook",
                 text = {
                     "This Joker gains",
                     "{X:mult,C:white}X#2#{} Mult for each",
