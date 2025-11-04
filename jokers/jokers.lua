@@ -158,14 +158,6 @@ SMODS.Joker{
     soul_pos=nil,                                        --pos of a soul sprite.
     atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
 
-    set_sprites = function(self, card, front)
-        local alt = 0
-        if grasslanders.config.altsprinkle then
-            alt = 1
-        end
-        card.children.center:set_sprite_pos({x=alt,y=0})
-    end,
-
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
             if context.individual and context.cardarea == G.hand and not context.end_of_round then
