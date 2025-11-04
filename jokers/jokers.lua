@@ -338,17 +338,15 @@ SMODS.Joker{
                 }
             end
             if context.other_card:get_edition() then
-                SMODS.add_card {
-                    set = 'Joker',
-                    
-                }
                 SMODS.destroy_cards(card, nil, nil, true)
+                SMODS.add_card{key = "j_grasslanders_lumobonk"}
             end
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult}, key = self.key }
+        info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
+        return { vars = {card.ability.extra.mult}, key = self.key }
     end
 }
 
@@ -361,7 +359,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "lumobonk",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.2}},
+    config = { extra = {x_mult = 2}},
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 8,
@@ -377,26 +375,18 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if not context.blueprint then
             if context.individual and context.cardarea == G.play then
-                if context.other_card.edition == 'e_holo' then
-                    card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+                if context.other_card:get_edition() then
                     return {
-                        message = localize('k_upgrade_ex'),
-                        card = self,
+                        x_mult = card.ability.extra.x_mult, 
                         colour = G.C.MULT
                     }
                 end
             end
         end
-        if context.joker_main and context.cardarea == G.jokers then
-            return {
-                x_mult = card.ability.extra.x_mult, 
-                colour = G.C.MULT
-            }
-        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult,card.ability.extra.x_mult_mod}, key = self.key }
+        return { vars = {card.ability.extra.x_mult}, key = self.key }
     end
 }
 

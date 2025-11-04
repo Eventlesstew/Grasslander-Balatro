@@ -50,18 +50,19 @@ return {
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
-                    "{C:attention}Enhanced {}cards grant",
-                    "{X:mult,C:white}X#1#{} Mult when",
-                    "scored"
+                    "{C:mult}+#1#{} Mult for each",
+                    "{C:attention}Enhanced {}card scored",
+                    "Becomes {C:attention}Crazy {}if a",
+                    "{C:dark_edition}Polychrome {}card is",
+                    "scored",
                 },
             },
             j_grasslanders_lumobonk = {
-                name = "Frbbngook",
+                name = "Frbbngook", -- Lumobonk
                 text = {
-                    "This Joker gains",
-                    "{X:mult,C:white}X#2#{} Mult for each",
-                    "{C:dark_edition}Polychrome {}card scored",
-                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
+                    "{X:mult,C:white}X#1#{} Mult for each",
+                    "{C:attention}card {}scored",
+                    "with an {C:attention}Edition",
                 },
             },
             j_grasslanders_reeflute = {
