@@ -371,6 +371,7 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'lumobonk',
+    in_pool = false,
 
     calculate = function(self,card,context)
         if not context.blueprint then
