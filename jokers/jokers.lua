@@ -502,16 +502,53 @@ SMODS.Joker{
     atlas = 'anjellyze',
 
     calculate = function(self,card,context)
+        if context.before then
+            local repeated_hand = false
+            for _,h in ipairs(card.ability.extra.hands) do
+                if context.scoring_name == h then
+                    card.ability.extra.hands = {}
+                    repeated_hand = true
+                    break
+                end
+            end
 
+            card.ability.extra.hands[#card.ability.extra.hands + 1] = context.scoring_name
+
+            if repeated_hand then
+                return {
+                    message = localize('k_reset'),
+                    colour = G.C.MULT
+                }
+            else
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT
+                }
+            end
+        end
+
+        if context.joker_main and context.cardarea == G.jokers then
+            return{
+                mult = card.ability.extra.mult * #card.ability.extra.hands
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
         local hand_list = {}
-        info_queue[#info_queue + 1] = {
-            name = localize('anjellyze_played_cards')
-            text = hand_list
-        }
-        return { vars = {}, key = self.key }
+        local total_mult = 0
+        if #card.ability.extra.hands > 0 then
+            total_mult = card.ability.extra.mult * #card.ability.extra.hands
+            for _,h in ipairs(card.ability.extra.hands) do
+                hand_list[#hand_list + 1] = localize(h, 'poker_hands')
+            end
+        else
+            hand_list = {'bro'}
+        end
+        
+        -- TODO: Figure out how to change the text part of Annie.
+        info_queue[#info_queue + 1] = {set = "Other", key = "anjellyze_hands", text = hand_list}
+        return { vars = {total_mult, card.ability.extra.mult}, key = self.key }
     end
 }
 

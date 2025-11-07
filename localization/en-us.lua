@@ -85,7 +85,12 @@ return {
             j_grasslanders_anjellyze = {
                 name = "Anjellyze",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "{C:mult}+#2#{} Mult for each",
+                    "unique {C:attention}poker hand",
+                    "played, resets when a",
+                    "{C:attention}poker hand{} is",
+                    "repeated",
+                    "{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult)"
                 },
             },
             j_grasslanders_logobreak = {
@@ -288,6 +293,12 @@ return {
                     "{C:attention}Blind{} score"
                 },
             },
+            anjellyze_hands = {
+                name = "Played Hands",
+                text = {
+                    ''
+                }
+            }
         },
     },
     misc = {
@@ -322,6 +333,8 @@ return {
 
             k_heat_ex="Heat!",
             k_cool_ex="Cool!",
+
+            anjellyze_none = "None",
         }
     }
 }
