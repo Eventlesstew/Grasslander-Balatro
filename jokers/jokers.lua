@@ -435,7 +435,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "concrab",
-    path = "j_sample_wee.png",
+    path = "concrab.png",
     px = 71,
     py = 95
 })
@@ -488,7 +488,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "anjellyze",
-    config = { extra = {}},
+    config = { extra = {mult = 5, hands = {}}},
     pos = { x = 0, y = 0 },
     rarity = 2,
     cost = 5,
@@ -506,6 +506,11 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
+        local hand_list = {}
+        info_queue[#info_queue + 1] = {
+            name = localize('anjellyze_played_cards')
+            text = hand_list
+        }
         return { vars = {}, key = self.key }
     end
 }
@@ -879,7 +884,8 @@ SMODS.Joker{
         if context.setting_blind and not context.blueprint then
             local eaten_card = pseudorandom_element(G.consumeables.cards, 'grasslanders_hornetrix')
             if eaten_card then
-                card.ability.extra_value = card.ability.extra_value + eaten_card.sell_cost * card.ability.extra.sell_multiplier
+                card.ability.extra_value = card.ability.extra_value + (eaten_card.sell_cost * card.ability.extra.sell_multiplier)
+                card:set_cost()
                 SMODS.destroy_cards(eaten_card)
                 return {
                     message = localize('k_eaten_ex'),

@@ -50,11 +50,11 @@ return {
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
-                    "{C:mult}+#1#{} Mult for each",
-                    "{C:attention}Enhanced {}card scored",
-                    "Becomes {C:attention}Crazy {}if a",
-                    "{C:dark_edition}Polychrome {}card is",
+                    "{C:attention}Enhanced {}cards grant",
+                    "{C:mult}+#1#{} Mult when",
                     "scored",
+                    "Becomes {C:attention}Crazy if a",
+                    "{C:dark_edition}Polychrome {}card is scored"
                 },
             },
             j_grasslanders_lumobonk = {
