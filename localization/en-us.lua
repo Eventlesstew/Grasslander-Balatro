@@ -210,18 +210,26 @@ return {
                 },
             },
 
+            j_grasslanders_triple9 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_triple10 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+
             j_grasslanders_litabelle = {
                 name = "Litabelle",
                 text = {
                     "{X:mult,C:white}INCOMPLETE",
                 },
             },
-            j_grasslanders_harparachnids = {
-                name = "Harparachnids",
-                text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                },
-            },
+            
             j_grasslanders_erny = {
                 name = "Erny",
                 text = {
@@ -251,6 +259,25 @@ return {
                 },
             },
 
+            j_grasslanders_quad3 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_quad4 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_quad5 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+
             j_grasslanders_vegebonion = {
                 name = "Vegebonion",
                 text = {
@@ -273,6 +300,19 @@ return {
                 },
             },
 
+            j_grasslanders_bad4 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_bad5 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+
             j_grasslanders_sugamimi = {
                 name = "Sugamimi",
                 text = {
@@ -289,6 +329,37 @@ return {
                     "of round",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive}#2#{V:1}#3#{C:inactive})"
                 },
+            },
+            j_grasslanders_synth3 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_synth4 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_synth5 = {
+                name = "???",
+                text = {
+                    "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+
+            j_grasslanders_penny = {
+                name = "Penny",
+                text = {
+                    "{X:red,C:white}INCOMPLETE"
+                }
+            },
+            j_grasslanders_beezy = {
+                name = "Beezies",
+                text = {
+                    "{X:red,C:white}INCOMPLETE"
+                }
             },
         },
         Other = {
