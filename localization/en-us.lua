@@ -4,10 +4,10 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Gains {C:chips}+#2# {}Chips for every card",
-                    "held in hand if no face cards",
-                    "are held in hand",
-                    "{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)",
+                    "Played {C:attention}Aces {}give",
+                    "{C:chips}+#1# {}Chips if no",
+                    "{C:attention}face {}cards are",
+                    "held in hand",
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -50,15 +50,17 @@ return {
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
-                    "{C:attention}Enhanced {}cards grant",
-                    "{C:mult}+#1#{} Mult when",
+                    "{C:mult}+#1#{} Mult for each",
+                    "{C:attention}Enhanced {}card scored",
+                    --[[
+                    "Becomes {C:attention}Crazy {}if a",
+                    "{C:dark_edition}Polychrome {}card is",
                     "scored",
-                    "Becomes {C:attention}Crazy if a",
-                    "{C:dark_edition}Polychrome {}card is scored"
+                    ]]
                 },
             },
             j_grasslanders_lumobonk = {
-                name = "Frbbngook", -- Lumobonk
+                name = "Lumobonk", -- Frbbngook
                 text = {
                     "{X:mult,C:white}X#1#{} Mult for each",
                     "{C:attention}card {}scored",
@@ -96,10 +98,11 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "When {C:attention}Blind {}is defeated,",
-                    "creates a {C:attention}Coupon Tag",
-                    "if played hand is",
-                    "not on {C:attention}fire"
+                    "If played hand is",
+                    "not on {C:attention}fire{},",
+                    "{C:green}#1# in #2#{} chance to",
+                    "create a {C:attention}Coupon Tag",
+                    "at end of round",
                 },
             },
             j_grasslanders_volcarock = {
@@ -132,7 +135,7 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected,",
                     "destroy a random {C:attention}Consumable",
-                    "and permanently add {X:money,C:white}X#1#",
+                    "and add {C:money}quadruple",
                     "its sell value to it's own",
                     "sell value",
                 },
@@ -147,7 +150,11 @@ return {
             j_grasslanders_mossibug = {
                 name = "Mossibug",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "{C:chips}+#1#{} Chips",
+                    "{C:chips}-#2#{} Chips after",
+                    "played hand or discard",
+                    "{C:chips}+#3#{} Chips when",
+                    "{C:attention}Boss Blind{} is defeated"
                 },
             },
             j_grasslanders_santile = {
@@ -186,7 +193,6 @@ return {
                 text = {
                     "Each {C:attention}Gold {}card held",
                     "in hand gives {X:mult,C:white}X#1#{} Mult",
-                    "at end of round"
                 },
             },
             j_grasslanders_tickini = {
@@ -334,6 +340,8 @@ return {
             k_heat_ex="Heat!",
             k_cool_ex="Cool!",
 
+            k_sleep_ex="Sleep!",
+            k_awake_ex="Awake!",
             anjellyze_none = "None",
         }
     }

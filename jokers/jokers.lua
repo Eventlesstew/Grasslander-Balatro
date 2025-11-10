@@ -145,7 +145,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 0, chip_mod=5} },    --variables used for abilities and effects.
+    config = { extra = {chips = 50, rank = 'Ace'} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -159,43 +159,27 @@ SMODS.Joker{
     atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
-        if not context.blueprint then
-            if context.individual and context.cardarea == G.hand and not context.end_of_round then
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:get_id() == 1 then
                 local valid = true
                 for _,v in ipairs(G.hand.cards) do
                     if v:is_face() then
                         valid = false
+                        break
                     end
                 end
                 if valid then
-                    if context.other_card.debuff then
-                        return {
-                            message = localize('k_debuffed'),
-                            card = context.other_card,
-                            colour = G.C.RED
-                        }
-                    else
-                        card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                        return {
-                            message = localize('k_upgrade_ex'),
-                            message_card = card,
-                            colour = G.C.CHIPS
-                        }
-                    end
+                    return {
+                        chips = card.ability.extra.chips,
+                        colour = G.C.CHIPS
+                    }
                 end
             end
-        end
-
-        if context.joker_main and context.cardarea == G.jokers then
-            return {
-                chips = card.ability.extra.chips,
-                colour = G.C.CHIPS
-            }
         end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
+        return { vars = {card.ability.extra.chips, localize(card.ability.extra.rank, 'ranks')}, key = self.key }
     end
 }
 
@@ -318,8 +302,8 @@ SMODS.Joker{
     key = "frogobonk",
     config = { extra = {mult = 5}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
-    cost = 7,
+    rarity = 1,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -361,8 +345,8 @@ SMODS.Joker{
     key = "lumobonk",
     config = { extra = {x_mult = 2}},
     pos = { x = 0, y = 0 },
-    rarity = 3,
-    cost = 8,
+    rarity = 1,
+    cost = 10,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -561,7 +545,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "logobreak",
-    config = { extra = {active = false}},
+    config = { extra = {active = false, odds = 2, tag = 'tag_coupon'}},
     pos = { x = 0, y = 0 },
     rarity = 1,
     cost = 3,
@@ -613,9 +597,10 @@ SMODS.Joker{
                 end
             end
             if context.end_of_round and context.game_over == false and context.main_eval then
+                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds)
                 G.E_MANAGER:add_event(Event({
                     func = (function()
-                        add_tag(Tag('tag_coupon'))
+                        add_tag(Tag(card.ability.extra.tag))
                         play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
                         play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
                         return true
@@ -628,8 +613,9 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak")
         info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
-        return { vars = {}, key = self.key }
+        return { vars = {numerator,denominator}, key = self.key }
     end
 }
 
@@ -967,7 +953,7 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-
+]]
 SMODS.Atlas({
     key = "mossibug",
     path = "j_sample_wee.png",
@@ -977,9 +963,9 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "mossibug",
-    config = { extra = {}},
+    config = { extra = {chips = 100, chip_penalty = 100, chip_mod = 10}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
@@ -991,14 +977,44 @@ SMODS.Joker{
     atlas = 'mossibug',
 
     calculate = function(self,card,context)
+        if
+            (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
+            context.after
+        then
+            if card.ability.extra.chips > 0 then
+                if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+                else
+                    card.ability.extra.chips = 0
+                end
+                return {
+                    message = localize('k_sleep_ex'),
+                    colour = G.C.CHIPS
+                } 
+            end
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            if context.beat_boss then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                return {
+                    message = localize('k_awake_ex'),
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                chips = card.ability.extra.chips
+            }
+        end
 
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.chips,card.ability.extra.chip_penalty,card.ability.extra.chip_mod}, key = self.key }
     end
 }
-
+--[[
 SMODS.Atlas({
     key = "santile",
     path = "j_sample_wee.png",
@@ -1222,7 +1238,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "cocotom",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 8,}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 12,}},
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 9,
