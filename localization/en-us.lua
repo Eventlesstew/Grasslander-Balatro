@@ -135,9 +135,8 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected,",
                     "destroy a random {C:attention}Consumable",
-                    "and add {C:money}quadruple",
-                    "its sell value to it's own",
-                    "sell value",
+                    "and add {C:money}quadruple {}its sell",
+                    "value to it's own sell value",
                 },
             },
             j_grasslanders_chonkreep = {
@@ -226,9 +225,11 @@ return {
             j_grasslanders_erny = {
                 name = "Erny",
                 text = {
-                    "Retrigger all played",
-                    "cards if played hand",
-                    "contains a {C:attention}Straight Flush",
+                    "Gains {X:mult,C:white}X#2#{} Mult if played",
+                    "hand contains a {C:attention}#3#",
+                    "and a {C:attention}#4#{}, resets if",
+                    "hand contains neither",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_emmie = {

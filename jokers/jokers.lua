@@ -88,7 +88,7 @@ SMODS.Joker{
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
             if context.after then
-                card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
+                card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
                 G.hand:change_size(-card.ability.extra.h_mod)
 
                 return {
@@ -98,7 +98,7 @@ SMODS.Joker{
             end
             if context.discard and context.other_card == context.full_hand[#context.full_hand] then
                 if G.hand.config.card_limit > 0 then
-                    card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
+                    card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
                     G.hand:change_size(card.ability.extra.h_mod)
 
                     return {
@@ -548,7 +548,7 @@ SMODS.Joker{
     config = { extra = {active = false, odds = 2, tag = 'tag_coupon'}},
     pos = { x = 0, y = 0 },
     rarity = 1,
-    cost = 3,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=false,
     perishable_compat=true,
@@ -597,15 +597,16 @@ SMODS.Joker{
                 end
             end
             if context.end_of_round and context.game_over == false and context.main_eval then
-                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds)
-                G.E_MANAGER:add_event(Event({
-                    func = (function()
-                        add_tag(Tag(card.ability.extra.tag))
-                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-                        return true
-                    end)
-                }))
+                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds) then
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            add_tag(Tag(card.ability.extra.tag))
+                            play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                            play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                            return true
+                        end)
+                    }))
+                end
             end
         elseif context.setting_blind and not context.blueprint then
             card.ability.extra.active = true
@@ -692,7 +693,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 },
     rarity = 1,
     cost = 5,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -885,8 +886,8 @@ SMODS.Joker{
     config = { extra = {sell_multiplier = 4}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
+    cost = 6,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
@@ -956,20 +957,20 @@ SMODS.Joker{
 ]]
 SMODS.Atlas({
     key = "mossibug",
-    path = "j_sample_wee.png",
+    path = "mossibug.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
     key = "mossibug",
-    config = { extra = {chips = 100, chip_penalty = 100, chip_mod = 10}},
+    config = { extra = {chips = 100, chip_penalty = 10, chip_mod = 100}},
     pos = { x = 0, y = 0 },
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1337,7 +1338,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "erny",
-    config = { extra = {repetitions = 1,poker_hand = 'Straight Flush'}},
+    config = { extra = {x_mult = 1, x_mult_mod = 1, hand1 = 'Straight', hand2 = 'Flush'}},
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 7,
@@ -1351,15 +1352,36 @@ SMODS.Joker{
     atlas = 'erny',
 
     calculate = function(self,card,context)
-        if context.repetition and context.cardarea == G.play and next(context.poker_hands[card.ability.extra.poker_hand]) then
+        if context.before then
+            if next(context.poker_hands[card.ability.extra.hand1]) and next(context.poker_hands[card.ability.extra.hand2]) then
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT
+                }
+            elseif (not next(context.poker_hands[card.ability.extra.hand1])) and (not next(context.poker_hands[card.ability.extra.hand2])) then
+                card.ability.extra.x_mult = 1
+                return {
+                    message = localize('k_reset'),
+                    colour = G.C.MULT
+                }
+            end
+        end
+        if context.joker_main then
             return {
-                repetitions = card.ability.extra.repetitions
+                x_mult = card.ability.extra.x_mult,
+                colour = G.C.MULT
             }
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
+        return { vars = {
+            card.ability.extra.x_mult,
+            card.ability.extra.x_mult_mod,
+            localize(card.ability.extra.hand1, 'poker_hands'),
+            localize(card.ability.extra.hand2, 'poker_hands')
+        }, key = self.key }
     end
 }
 
