@@ -329,7 +329,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
+        --info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
         return { vars = {card.ability.extra.mult}, key = self.key }
     end
 }
