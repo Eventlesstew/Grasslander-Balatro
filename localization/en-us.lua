@@ -184,8 +184,9 @@ return {
                 text = {
                     "Gains {C:mult}+#2# {}Mult for",
                     "each consecutive {C:attention}#3#",
-                    "played, resets when a different",
-                    "{C:attention}poker hand {}is played",
+                    "played, resets and changes to a",
+                    "different {C:attention}poker hand",
+                    "if played",
                     "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
                 },
             },
