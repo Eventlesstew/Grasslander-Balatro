@@ -580,15 +580,15 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "volcarock",
-    path = "j_sample_baroness.png",
+    key = "volcarox",
+    path = "volcarox.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
-    key = "volcarock",                                  --name used by the joker.    
-    config = { extra = {x_mult = 3, heat = 0, heat_mod = 1, heat_max = 3} },    --variables used for abilities and effects.
+    key = "volcarox",                                  --name used by the joker.    
+    config = { extra = {} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -599,43 +599,14 @@ SMODS.Joker{
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'volcarock',                                --atlas name, single sprites are deprecated.
+    atlas = 'volcarox',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
-        if not context.blueprint then
-            if context.discard and context.other_card == context.full_hand[#context.full_hand] then
-                card.ability.extra.heat = card.ability.extra.heat + card.ability.extra.heat_mod
-
-                return {
-                    message = localize('k_heat_ex'),
-                    colour = G.C.RED
-                }
-            end
-            if context.before then
-                if card.ability.extra.heat > 0 and card.ability.extra.heat <= card.ability.extra.heat_max then
-                    card.ability.extra.heat = card.ability.extra.heat - card.ability.extra.heat_mod
-
-                    return {
-                        message = localize('k_cool_ex'),
-                        colour = G.C.CHIPS
-                    }
-                end
-            end
-        end
-
-        if context.joker_main and context.cardarea == G.jokers then
-            if card.ability.extra.heat >= card.ability.extra.heat_max then
-                card.ability.extra.heat = 0
-                return {
-                    x_mult = card.ability.extra.x_mult, 
-                    colour = G.C.MULT
-                }
-            end
-        end
+        
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.heat_mod, card.ability.extra.heat, card.ability.extra.heat_max, card.ability.extra.x_mult}, key = self.key }
+        return { vars = {}, key = self.key }
     end
 }
 

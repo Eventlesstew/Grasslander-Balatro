@@ -105,14 +105,12 @@ return {
                     "at end of round",
                 },
             },
-            j_grasslanders_volcarock = {
-                name = "Volcarock",
+            j_grasslanders_volcarox = {
+                name = "Volcarox",
                 text = {
-                    "{C:attention}+#1# {}Heat per discard",
-                    "{C:attention}-#1# {}Heat per hand played",
-                    "If Heat reaches {C:attention}#3#{}, grants",
-                    "{X:mult,C:white}X#4#{} Mult and resets Heat",
-                    "{C:inactive}(Currently {C:attention}#2# {C:inactive}Heat)"
+                    "{X:mult,C:white}INCOMPLETE",
+                    "Draw 10 cards",
+                    "on last discard"
                 },
             },
             j_grasslanders_junklake = {
