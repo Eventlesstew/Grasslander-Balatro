@@ -87,11 +87,11 @@ return {
             j_grasslanders_anjellyze = {
                 name = "Anjellyze",
                 text = {
-                    "{C:mult}+#2#{} Mult for each",
-                    "unique {C:attention}poker hand",
-                    "played, resets when a",
-                    "{C:attention}poker hand{} is",
-                    "repeated",
+                    "This {C:attention}Joker{} gains",
+                    "{C:mult}+#2#{} Mult if poker hand",
+                    "is a {C:attention}#3#",
+                    "poker hand changes",
+                    "at end of round",
                     "{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult)"
                 },
             },
@@ -108,9 +108,9 @@ return {
             j_grasslanders_volcarox = {
                 name = "Volcarox",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
-                    "Draw 10 cards",
-                    "on last discard"
+                    "Draw {C:attention}#1#{} extra {C:attention}cards",
+                    "when {C:attention}#2# {}discards",
+                    "are remaining"
                 },
             },
             j_grasslanders_junklake = {
@@ -182,7 +182,11 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Gains {C:mult}+#2# {}Mult for",
+                    "each consecutive {C:attention}#3#",
+                    "played, resets when a different",
+                    "{C:attention}poker hand {}is played",
+                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_wisplasm = {
@@ -369,12 +373,14 @@ return {
                     "{C:attention}Blind{} score"
                 },
             },
+            --[[
             anjellyze_hands = {
                 name = "Played Hands",
                 text = {
                     ''
                 }
             }
+            ]]
         },
     },
     misc = {
@@ -412,7 +418,7 @@ return {
 
             k_sleep_ex="Sleep!",
             k_awake_ex="Awake!",
-            anjellyze_none = "None",
+            --anjellyze_none = "None",
         }
     }
 }

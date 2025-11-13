@@ -431,13 +431,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "anjellyze",
-    config = { extra = {mult = 5, hands = {}}},
+    config = { extra = {mult = 0, mult_mod = 4, poker_hand = 'High Card'}},
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -445,6 +445,33 @@ SMODS.Joker{
     atlas = 'anjellyze',
 
     calculate = function(self,card,context)
+        if not context.blueprint then
+            if context.before and context.scoring_name == card.ability.extra.poker_hand then
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                }
+            end
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                local _poker_hands = {}
+                for handname, _ in pairs(G.GAME.hands) do
+                    if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
+                        _poker_hands[#_poker_hands + 1] = handname
+                    end
+                end
+                card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'vremade_to_do')
+                return {
+                    message = localize('k_reset')
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+        --[[
         if context.before then
             local repeated_hand = false
             for _,h in ipairs(card.ability.extra.hands) do
@@ -475,9 +502,11 @@ SMODS.Joker{
                 mult = card.ability.extra.mult * #card.ability.extra.hands
             }
         end
+        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
+        --[[
         local hand_list = {}
         local total_mult = 0
         if #card.ability.extra.hands > 0 then
@@ -492,6 +521,8 @@ SMODS.Joker{
         -- TODO: Figure out how to change the text part of Annie.
         info_queue[#info_queue + 1] = {set = "Other", key = "anjellyze_hands", text = hand_list}
         return { vars = {total_mult, card.ability.extra.mult}, key = self.key }
+        ]]
+        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 
@@ -588,7 +619,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "volcarox",                                  --name used by the joker.    
-    config = { extra = {} },    --variables used for abilities and effects.
+    config = { extra = {draw = 10, active = false, d_remaining = 0} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -602,11 +633,18 @@ SMODS.Joker{
     atlas = 'volcarox',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
-        
+        if context.setting_blind then
+            card.ability.extra.active = true
+        end
+        if context.hand_drawn and G.GAME.current_round.discards_left == card.ability.extra.d_remaining and card.ability.extra.active then
+            card.ability.extra.active = false
+            G.deck.config.card_limit = G.deck.config.card_limit + card.ability.extra.draw
+            --G.deck.cards[1]:add_to_deck()
+        end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
     end
 }
 
@@ -1148,13 +1186,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "axonitta",
-    config = { extra = {}},
+    config = { extra = {mult = 0, mult_mod = 5, poker_hand = 'High Card'}},
     pos = { x = 0, y = 0 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1162,11 +1200,31 @@ SMODS.Joker{
     atlas = 'axonitta',
 
     calculate = function(self,card,context)
-
+        if context.before and not context.blueprint then
+            if context.scoring_name == card.ability.extra.poker_hand then
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                }
+            else
+                card.ability.extra.mult = 0
+                card.ability.extra.poker_hand = context.scoring_name
+                return {
+                    message = localize('k_reset'),
+                    colour = G.C.MULT,
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.mult, card.ability.extra.mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 
