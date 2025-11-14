@@ -1423,7 +1423,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "erny",
-    path = "j_sample_wee.png",
+    path = "erny.png",
     px = 71,
     py = 95
 })
@@ -1479,7 +1479,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "emmie",
-    path = "j_sample_wee.png",
+    path = "emmie.png",
     px = 71,
     py = 95
 })
@@ -1529,7 +1529,7 @@ end
 
 SMODS.Atlas({
     key = "edward",
-    path = "j_sample_wee.png",
+    path = "edward.png",
     px = 71,
     py = 95
 })
