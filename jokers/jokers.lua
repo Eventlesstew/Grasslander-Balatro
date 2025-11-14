@@ -1,4 +1,3 @@
-
 grasslanders = SMODS.current_mod
 
 -- you can have shared helper functions
@@ -610,6 +609,10 @@ SMODS.Joker{
     end
 }
 
+SMODS.Sound ({
+    key = 'erupt',
+    path = 'volc_explosion.ogg',
+})
 SMODS.Atlas({
     key = "volcarox",
     path = "volcarox.png",
@@ -638,8 +641,14 @@ SMODS.Joker{
         end
         if context.hand_drawn and G.GAME.current_round.discards_left == card.ability.extra.d_remaining and card.ability.extra.active then
             card.ability.extra.active = false
-            G.deck.config.card_limit = G.deck.config.card_limit + card.ability.extra.draw
-            --G.deck.cards[1]:add_to_deck()
+            return {
+                message = localize('k_erupt_ex'),
+                colour = G.C.RED,
+                sound = 'grasslanders_erupt',
+                func = function() -- This is for timing purposes, everything here runs after the message
+                    SMODS.draw_cards(card.ability.extra.draw)
+                end,
+            }
         end
     end,
 
@@ -1500,14 +1509,14 @@ SMODS.Joker{
     atlas = 'emmie',
 
     calculate = function(self,card,context)
-        if context.setting_blind then
+        if context.first_hand_drawn then
             card.ability.extra.active = true
+            local eval = function() return not card.ability.extra.active end
+            juice_card_until(card, eval, true)
         end
-        --[[
-        if context.after and next(context.poker_hands['Straight']) then
+        if (context.before and next(context.poker_hands['Straight'])) or (context.end_of_round and context.main_eval) then
             card.ability.extra.active = false
         end
-        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1517,10 +1526,9 @@ SMODS.Joker{
 
 local smods_shortcut_ref  = SMODS.shortcut
 function SMODS.shortcut()
-    local emmie = next(SMODS.find_card('j_grasslanders_emmie'))
-    for _,v in emmie do
+    local emmie = SMODS.find_card('j_grasslanders_emmie')
+    for _,v in ipairs(emmie) do
         if v.ability.extra.active then
-            v.ability.extra.active = false
             return 'emmie'
         end
     end
@@ -1550,6 +1558,18 @@ SMODS.Joker{
     atlas = 'edward',
 
     calculate = function(self,card,context)
+        if context.debuff_card then
+            local my_pos = 0
+            for k, v in pairs(G.jokers.cards) do
+                if v == card then
+                    my_pos = k
+                end
+            end
+            if G.jokers.cards[my_pos+1] and context.other_card == G.jokers.cards[my_pos+1] then
+                return {debuff = true}
+            end
+        end
+        --[[
         if context.individual and context.cardarea == G.play then
             if next(context.poker_hands[card.ability.extra.poker_hand]) then
                 card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
@@ -1565,6 +1585,7 @@ SMODS.Joker{
                 x_mult = card.ability.extra.x_mult
             }
         end
+        ]]
     end,
 
     loc_vars = function(self, info_queue, card)

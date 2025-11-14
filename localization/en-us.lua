@@ -416,6 +416,7 @@ return {
 
             k_heat_ex="Heat!",
             k_cool_ex="Cool!",
+            k_erupt_ex="Erupt!",
 
             k_sleep_ex="Sleep!",
             k_awake_ex="Awake!",
