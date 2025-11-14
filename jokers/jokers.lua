@@ -1486,7 +1486,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "emmie",
-    config = { extra = {}},
+    config = { extra = {active = false}},
     pos = { x = 0, y = 0 },
     rarity = 3,
     cost = 8,
@@ -1500,6 +1500,14 @@ SMODS.Joker{
     atlas = 'emmie',
 
     calculate = function(self,card,context)
+        if context.setting_blind then
+            card.ability.extra.active = true
+        end
+        --[[
+        if context.after and next(context.poker_hands['Straight']) then
+            card.ability.extra.active = false
+        end
+        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1509,8 +1517,12 @@ SMODS.Joker{
 
 local smods_shortcut_ref  = SMODS.shortcut
 function SMODS.shortcut()
-    if next(SMODS.find_card('j_grasslanders_emmie')) then
-        return 2
+    local emmie = next(SMODS.find_card('j_grasslanders_emmie'))
+    for _,v in emmie do
+        if v.ability.extra.active then
+            v.ability.extra.active = false
+            return 'emmie'
+        end
     end
     return smods_shortcut_ref()
 end

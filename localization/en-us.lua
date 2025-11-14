@@ -246,10 +246,10 @@ return {
             j_grasslanders_emmie = {
                 name = "Emmie",
                 text = {
-                    "Allows {C:attention}Straight Flushes{}",
+                    "Allows first played {C:attention}Straight{}",
                     "to be made with gaps",
                     "of {C:attention}2 ranks",
-                    "{C:inactive}(ex: {C:attention}10H 7H 6H 4H 2H{C:inactive})",
+                    "{C:inactive}(ex: {C:attention}10 7 6 4 2{C:inactive})",
                 },
             },
             j_grasslanders_edward = {
