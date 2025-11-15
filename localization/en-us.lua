@@ -1,5 +1,17 @@
 return {
     descriptions = {
+        Blind = {
+            bl_grasslanders_clacker = {
+                name = "Small Blind",
+                text = {
+                },
+            },
+            bl_grasslanders_biter = {
+                name = "Big Blind",
+                text = {
+                },
+            },
+        },
         Joker = {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
