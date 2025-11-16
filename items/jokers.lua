@@ -206,7 +206,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
-            if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
+            if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then
                 card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
                     message = localize('k_upgrade_ex'),
@@ -581,7 +581,7 @@ SMODS.Joker{
         ]]
         if card.ability.extra.active then
             if not context.blueprint then
-                if context.after and SMODS.calculate_round_score() > G.GAME.blind.chips then
+                if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then
                     card.ability.extra.active = false
                 end
             end
@@ -955,29 +955,30 @@ SMODS.Joker{
     atlas = 'mossibug',
 
     calculate = function(self,card,context)
-        if
-            (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
-            context.after
-        then
-            if card.ability.extra.chips > 0 then
-                if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
-                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+        if not context.blueprint then
+            if
+                (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
+                context.after
+            then
+                if G.GAME.blind.boss and (G.GAME.chips + SMODS.calculate_round_score()) >= G.GAME.blind.chips then
+                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                    return {
+                        message = localize('k_awake_ex'),
+                        colour = G.C.CHIPS
+                    }
                 else
-                    card.ability.extra.chips = 0
+                    if card.ability.extra.chips > 0 then
+                        if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                            card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+                        else
+                            card.ability.extra.chips = 0
+                        end
+                        return {
+                            message = localize('k_sleep_ex'),
+                            colour = G.C.CHIPS
+                        } 
+                    end
                 end
-                return {
-                    message = localize('k_sleep_ex'),
-                    colour = G.C.CHIPS
-                } 
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            if context.beat_boss then
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                return {
-                    message = localize('k_awake_ex'),
-                    colour = G.C.CHIPS
-                }
             end
         end
         if context.joker_main then
@@ -985,7 +986,6 @@ SMODS.Joker{
                 chips = card.ability.extra.chips
             }
         end
-
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1309,7 +1309,7 @@ SMODS.Joker{
                 card.ability.extra.rounds = card.ability.extra.rounds - 1
                 if card.ability.extra.rounds <= 0 then
                     return {
-                        message = localize('a_free_ex'),
+                        message = localize('k_free_ex'),
                         colour = G.C.FILTER
                     }
                 else
@@ -1441,7 +1441,7 @@ SMODS.Joker{
     key = "erny",
     config = { extra = {x_mult = 1, x_mult_mod = 1, hand1 = 'Straight', hand2 = 'Flush'}},
     pos = { x = 0, y = 0 },
-    rarity = 3,
+    rarity = 2,
     cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
@@ -1497,11 +1497,11 @@ SMODS.Joker{
     key = "emmie",
     config = { extra = {active = false}},
     pos = { x = 0, y = 0 },
-    rarity = 3,
-    cost = 8,
+    rarity = 2,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1535,6 +1535,13 @@ function SMODS.shortcut()
     return smods_shortcut_ref()
 end
 
+local card_stop_drag_ref = Card.stop_drag
+function Card:stop_drag()
+    local ret = card_stop_drag_ref(self)
+    SMODS.calculate_context({grasslanders_stop_drag = true, cardarea = self.area})
+    return ret
+end
+
 SMODS.Atlas({
     key = "edward",
     path = "edward.png",
@@ -1544,13 +1551,13 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5, poker_hand = 'Straight Flush'}},
+    config = { extra = {mult = 0, mult_mod = 2, chosen_joker = 0}},
     pos = { x = 0, y = 0 },
-    rarity = 3,
+    rarity = 2,
     cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1558,15 +1565,36 @@ SMODS.Joker{
     atlas = 'edward',
 
     calculate = function(self,card,context)
-        if context.debuff_card then
-            local my_pos = 0
+        if context.debuff_card and context.debuff_card.area == G.jokers and context.debuff_card == G.jokers.cards[card.ability.extra.chosen_joker] then
+            return {debuff = true}
+        end
+        
+        if 
+            (context.card_added and context.cardarea == G.jokers) or
+            (context.selling_card and context.cardarea == G.jokers) or
+            (context.grasslanders_stop_drag and context.cardarea == G.jokers) or
+            context.joker_type_destroyed
+        then
+            local old_pos = card.ability.extra.chosen_joker
             for k, v in pairs(G.jokers.cards) do
                 if v == card then
-                    my_pos = k
+                    card.ability.extra.chosen_joker = k + 1
+                    break
                 end
             end
-            if G.jokers.cards[my_pos+1] and context.other_card == G.jokers.cards[my_pos+1] then
-                return {debuff = true}
+
+            --[[
+            local target_jokers = {G.jokers.cards[card.ability.extra.chosen_joker]}
+            if old_pos ~= card.ability.extra.chosen_joker then
+                target_jokers[#target_jokers + 1] = G.jokers.cards[old_pos]
+            end
+            ]]
+            for _,v in pairs(G.jokers.cards) do
+                local debuffed = v.debuff
+                SMODS.recalc_debuff(v)
+                if v.debuff ~= debuffed then
+                    v:juice_up()
+                end
             end
         end
         --[[
@@ -1589,7 +1617,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
+        return { vars = {}, key = self.key }
     end
 }
 

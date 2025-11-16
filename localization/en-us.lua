@@ -11,6 +11,34 @@ return {
                 text = {
                 },
             },
+            bl_grasslanders_spiker = {
+                name = "The Spiker",
+                text = {
+                    "All Spade cards are",
+                    "drawn face down",
+                },
+            },
+            bl_grasslanders_clacklume = {
+                name = "The Clacklume",
+                text = {
+                    "All Heart cards are",
+                    "drawn face down",
+                },
+            },
+            bl_grasslanders_wondertraps = {
+                name = "The Wondertraps",
+                text = {
+                    "All Club cards are",
+                    "drawn face down",
+                },
+            },
+            bl_grasslanders_cruncher = {
+                name = "The Cruncher",
+                text = {
+                    "All Diamond cards are",
+                    "drawn face down",
+                },
+            },
         },
         Joker = {
             j_grasslanders_sprinkle = {
@@ -267,10 +295,7 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "Gains {X:mult,C:white}X#2#{} Mult for",
-                    "each played card if played",
-                    "hand contains a {C:attention}#3#",
-                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)",
+                    "{X:mult,C:white}INCOMPLETE",
                 },
             },
 
@@ -419,7 +444,10 @@ return {
 
             a_discard_one="+1 Discard",
             a_active='Active!',
-            a_free_ex='Free!',
+
+            k_trap='Trap',
+            k_free='Free',
+            k_free_ex='Free!',
             a_fled='Fled',
             a_left='#1# left',
 
