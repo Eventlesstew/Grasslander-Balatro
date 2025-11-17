@@ -1,3 +1,15 @@
+SMODS.Atlas({
+    key = "gloom",
+    path = "j_sample_wee.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Enhancement {
+    key = 'gloom',
+    atlas = 'gloom'
+}
+
 --[[
 SMODS.Atlas({
     key = "clacker",

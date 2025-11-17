@@ -1,5 +1,14 @@
 return {
     descriptions = {
+        Enhanced = {
+            m_grasslanders_gloom = {
+                name = "Gloom Card",
+                text = {
+                    "This card does",
+                    "nothing",
+                },
+            },
+        },
         Blind = {
             bl_grasslanders_clacker = {
                 name = "Small Blind",
@@ -208,7 +217,10 @@ return {
             },j_grasslanders_fortromtoise = {
                 name = "Fortromtoise",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Gains {X:mult,C:white}X#2#{} Mult for",
+                    "each card {C:attention}discarded{}, resets",
+                    "after this Joker scores",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_kracosteal = {
