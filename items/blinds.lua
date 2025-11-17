@@ -8,7 +8,7 @@ SMODS.Atlas({
 SMODS.Enhancement {
     key = 'gloom',
     atlas = 'gloom',
-    --replace_base_card = true,
+    replace_base_card = true,
     no_rank = true,
     no_suit = true,
 }
