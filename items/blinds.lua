@@ -1,13 +1,16 @@
 SMODS.Atlas({
     key = "gloom",
-    path = "j_sample_wee.png",
+    path = "gloom.png",
     px = 71,
     py = 95
 })
 
 SMODS.Enhancement {
     key = 'gloom',
-    atlas = 'gloom'
+    atlas = 'gloom',
+    replace_base_card = true,
+    no_rank = true,
+    no_suit = true,
 }
 
 --[[

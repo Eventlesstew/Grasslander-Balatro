@@ -89,11 +89,9 @@ return {
                 name = "Trizap",
                 text = {
                     "If a {C:attention}Joker {}is sold or",
-                    "destroyed, {C:green}#1# in #2#{} chance",
-                    "to create an {C:attention}Eternal",
-                    "{C:dark_edition}Negative {}copy",
-                    "{C:inactive}(Does not apply {C:attention}Eternal",
-                    "{C:inactive}to temporary Jokers)"
+                    "destroyed, creates an {C:attention}Eternal",
+                    "copy with a random",
+                    "{C:attention}enhancement",
                 },
             },
             j_grasslanders_frogobonk = {
@@ -307,7 +305,10 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Disables {C:attention}Joker{} to the right",
+                    "and gains {C:mult}+#2#{} Mult if it",
+                    "attempts to trigger",
+                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
                 },
             },
 
@@ -411,6 +412,16 @@ return {
                 name = "Beezies",
                 text = {
                     "{X:red,C:white}INCOMPLETE"
+                }
+            },
+
+            j_grasslanders_buffslimester = {
+                name = "Slimester",
+                text = {
+                    "{X:red,C:white}X#2#{} Mult for each month",
+                    "{C:attention}Dark Depths{} has been",
+                    "in development for",
+                    "{C:inactive}Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 }
             },
         },
