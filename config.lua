@@ -1,1 +1,1 @@
-return {["grasslanderJokers"]=true,["althornetrix"]=false,["clackerblinds"]=true,}
+return {["grasslanderJokers"]=true,["extrajokers"]=true,["althornetrix"]=false,["clackerblinds"]=true,}

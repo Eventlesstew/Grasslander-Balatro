@@ -41,6 +41,26 @@ SMODS.Back {
     end,
 }
 
+SMODS.Atlas({
+    key = "small",
+    raw_key = "true",
+    path = "clackerblinds.png",
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 21,
+    px = 34,
+    py = 34
+})
+
+SMODS.Atlas({
+    key = "big",
+    raw_key = "true",
+    path = "clackerblinds.png",
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 21,
+    px = 34,
+    py = 34
+})
+
 --[[
 SMODS.Atlas({
     key = "clacker",
@@ -100,7 +120,7 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 2},
-    vars = {suit = 'Spades'},
+    config = {extra = {suit = 'Spades'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
@@ -108,7 +128,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.effect.suit) then
+                context.other_card:is_suit(blind.ability.extra.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -124,7 +144,10 @@ SMODS.Blind {
         for _, playing_card in pairs(G.playing_cards) do
             playing_card.ability.wheel_flipped = nil
         end
-    end
+    end,
+    loc_vars = function(self)
+        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+    end,
 }
 
 SMODS.Atlas({
@@ -142,15 +165,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 3},
-    vars = {suit = 'Hearts'},
+    config = {extra = {suit = 'Hearts'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("827144"),
+    boss_colour = HEX("47395b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.effect.suit) then
+                context.other_card:is_suit(blind.ability.extra.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -166,7 +189,10 @@ SMODS.Blind {
         for _, playing_card in pairs(G.playing_cards) do
             playing_card.ability.wheel_flipped = nil
         end
-    end
+    end,
+    loc_vars = function(self)
+        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+    end,
 }
 
 SMODS.Atlas({
@@ -184,15 +210,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 4},
-    vars = {suit = 'Clubs'},
+    config = {extra = {suit = 'Clubs'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("395b51"),
+    boss_colour = HEX("47395b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.effect.suit) then
+                context.other_card:is_suit(blind.ability.extra.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -208,7 +234,10 @@ SMODS.Blind {
         for _, playing_card in pairs(G.playing_cards) do
             playing_card.ability.wheel_flipped = nil
         end
-    end
+    end,
+    loc_vars = function(self)
+        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+    end,
 }
 
 SMODS.Atlas({
@@ -225,16 +254,16 @@ SMODS.Blind {
     atlas = 'cruncher',
     unlocked = true,
     discovered = true,     
-    pos = {x = 0, y = 4},
-    vars = {suit = 'Diamonds'},
+    pos = {x = 0, y = 5},
+    config = {extra = {suit = 'Diamonds'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("714482"),
+    boss_colour = HEX("47395b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.effect.suit) then
+                context.other_card:is_suit(blind.ability.extra.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -250,5 +279,96 @@ SMODS.Blind {
         for _, playing_card in pairs(G.playing_cards) do
             playing_card.ability.wheel_flipped = nil
         end
-    end
+    end,
+    loc_vars = function(self)
+        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+    end,
+}
+
+SMODS.Atlas({
+    key = 'observer',
+    path = "clackerblinds.png",
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 21,
+    px = 34,
+    py = 34
+})
+
+SMODS.Blind {
+    key = 'observer',
+    atlas = 'observer',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 7},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 1},
+    boss_colour = HEX("47395b"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.stay_flipped and context.to_area == G.hand and
+                context.other_card:is_suit(blind.ability.extra.suit) then
+                return {
+                    stay_flipped = true
+                }
+            end
+        end
+    end,
+    disable = function(self)
+        for i = 1, #G.hand.cards do
+            if G.hand.cards[i].facing == 'back' then
+                G.hand.cards[i]:flip()
+            end
+        end
+        for _, playing_card in pairs(G.playing_cards) do
+            playing_card.ability.wheel_flipped = nil
+        end
+    end,
+    loc_vars = function(self)
+        return { vars = {} }
+    end,
+}
+
+SMODS.Atlas({
+    key = 'tesloid',
+    path = "clackerblinds.png",
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 21,
+    px = 34,
+    py = 34
+})
+
+SMODS.Blind {
+    key = 'tesloid',
+    atlas = 'tesloid',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 8},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 1},
+    boss_colour = HEX("47395b"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.stay_flipped and context.to_area == G.hand and
+                context.other_card:is_suit(blind.ability.extra.suit) then
+                return {
+                    stay_flipped = true
+                }
+            end
+        end
+    end,
+    disable = function(self)
+        for i = 1, #G.hand.cards do
+            if G.hand.cards[i].facing == 'back' then
+                G.hand.cards[i]:flip()
+            end
+        end
+        for _, playing_card in pairs(G.playing_cards) do
+            playing_card.ability.wheel_flipped = nil
+        end
+    end,
+    loc_vars = function(self)
+        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+    end,
 }

@@ -481,57 +481,9 @@ SMODS.Joker{
                 mult = card.ability.extra.mult
             }
         end
-        --[[
-        if context.before then
-            local repeated_hand = false
-            for _,h in ipairs(card.ability.extra.hands) do
-                if context.scoring_name == h then
-                    card.ability.extra.hands = {}
-                    repeated_hand = true
-                    break
-                end
-            end
-
-            card.ability.extra.hands[#card.ability.extra.hands + 1] = context.scoring_name
-
-            if repeated_hand then
-                return {
-                    message = localize('k_reset'),
-                    colour = G.C.MULT
-                }
-            else
-                return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.MULT
-                }
-            end
-        end
-
-        if context.joker_main and context.cardarea == G.jokers then
-            return{
-                mult = card.ability.extra.mult * #card.ability.extra.hands
-            }
-        end
-        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
-        --[[
-        local hand_list = {}
-        local total_mult = 0
-        if #card.ability.extra.hands > 0 then
-            total_mult = card.ability.extra.mult * #card.ability.extra.hands
-            for _,h in ipairs(card.ability.extra.hands) do
-                hand_list[#hand_list + 1] = localize(h, 'poker_hands')
-            end
-        else
-            hand_list = {'bro'}
-        end
-        
-        -- TODO: Figure out how to change the text part of Annie.
-        info_queue[#info_queue + 1] = {set = "Other", key = "anjellyze_hands", text = hand_list}
-        return { vars = {total_mult, card.ability.extra.mult}, key = self.key }
-        ]]
         return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
@@ -2247,41 +2199,6 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
-    key = "buffslimester",
-    path = "SLIMESTER.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "buffslimester",
-    config = { extra = {x_mult=35, x_mult_mod=1}},
-    pos = { x = 0, y = 0 },
-    rarity = 3,
-    cost = 8,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'buffslimester',
-
-    calculate = function(self,card,context)
-        if context.joker_main then
-            return {
-                x_mult = card.ability.extra.x_mult
-            }
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult,card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
 

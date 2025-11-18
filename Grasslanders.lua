@@ -48,6 +48,17 @@ grasslanders.config_tab = function()
             }),
             create_toggle({
                 align = "tl",
+                label = "Extra Jokers",
+                ref_table = grasslanders.config_file,
+                ref_value = "extrajokers",
+                callback = function(_set_toggle)
+                    grasslanders.config_file.extrajokers = _set_toggle
+                    grasslanders.config.extrajokers = _set_toggle
+                    NFS.write(grasslanders.config_path, STR_PACK(grasslanders.config_file))
+                end
+            }),
+            create_toggle({
+                align = "tl",
                 label = "Clacker Blinds",
                 ref_table = grasslanders.config_file,
                 ref_value = "clackerblinds",
