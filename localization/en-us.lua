@@ -5,7 +5,7 @@ return {
                 name = "Gloom Deck",
                 text = {
                     "All Cards are",
-                    "{C:attention}#1#{} cards"
+                    "{C:attention}Gloom{} cards"
                 },
                 unlock = {
                     "Win a run with",
@@ -60,6 +60,20 @@ return {
                 text = {
                     "All Diamond cards are",
                     "drawn face down",
+                },
+            },
+            bl_grasslanders_observer = {
+                name = "The Observer",
+                text = {
+                    "Cards played previously this",
+                    "Ante are drawn face down",
+                },
+            },
+            bl_grasslanders_tesloid = {
+                name = "The Tesloid",
+                text = {
+                    "Sets base Mult",
+                    "to 1",
                 },
             },
         },

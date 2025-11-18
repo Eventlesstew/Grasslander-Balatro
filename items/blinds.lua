@@ -43,7 +43,7 @@ SMODS.Back {
 
 SMODS.Atlas({
     key = "small",
-    raw_key = "true",
+    raw_key = true,
     path = "clackerblinds.png",
     atlas_table = 'ANIMATION_ATLAS',
     frames = 21,
@@ -53,7 +53,7 @@ SMODS.Atlas({
 
 SMODS.Atlas({
     key = "big",
-    raw_key = "true",
+    raw_key = true,
     path = "clackerblinds.png",
     atlas_table = 'ANIMATION_ATLAS',
     frames = 21,
@@ -169,7 +169,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("47395b"),
+    boss_colour = HEX("827144"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
@@ -214,7 +214,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("47395b"),
+    boss_colour = HEX("395651"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
@@ -259,7 +259,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("47395b"),
+    boss_colour = HEX("714482"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
@@ -299,11 +299,11 @@ SMODS.Blind {
     atlas = 'observer',
     unlocked = true,
     discovered = true,     
-    pos = {x = 0, y = 7},
+    pos = {x = 0, y = 6},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
-    boss_colour = HEX("47395b"),
+    boss_colour = HEX("448269"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
@@ -343,12 +343,12 @@ SMODS.Blind {
     atlas = 'tesloid',
     unlocked = true,
     discovered = true,     
-    pos = {x = 0, y = 8},
+    pos = {x = 0, y = 7},
     config = {extra = {mult = 1}},
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("47395b"),
+    boss_colour = HEX("615852"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.modify_hand then

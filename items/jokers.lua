@@ -958,7 +958,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "santile",
-    path = "j_sample_wee.png",
+    path = "santile.png",
     px = 71,
     py = 95
 })
