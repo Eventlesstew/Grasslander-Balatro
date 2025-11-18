@@ -307,7 +307,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
+                context.debuff_card.ability.played_this_ante then
                 return {
                     stay_flipped = true
                 }
@@ -344,31 +344,17 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 8},
+    config = {extra = {mult = 1}},
     dollars = 5,
     mult = 2,
-    boss = {min = 1},
+    boss = {min = 2},
     boss_colour = HEX("47395b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
-                return {
-                    stay_flipped = true
-                }
+            if context.modify_hand then
+                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                mult = blind.ability.extra.mult
             end
         end
-    end,
-    disable = function(self)
-        for i = 1, #G.hand.cards do
-            if G.hand.cards[i].facing == 'back' then
-                G.hand.cards[i]:flip()
-            end
-        end
-        for _, playing_card in pairs(G.playing_cards) do
-            playing_card.ability.wheel_flipped = nil
-        end
-    end,
-    loc_vars = function(self)
-        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
     end,
 }
