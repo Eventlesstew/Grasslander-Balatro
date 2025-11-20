@@ -42,7 +42,7 @@ SMODS.Back {
 }
 
 SMODS.Atlas({
-    key = "small",
+    key = "bl_small",
     raw_key = true,
     path = "clackerblinds.png",
     atlas_table = 'ANIMATION_ATLAS',
@@ -52,7 +52,7 @@ SMODS.Atlas({
 })
 
 SMODS.Atlas({
-    key = "big",
+    key = "bl_big",
     raw_key = true,
     path = "clackerblinds.png",
     atlas_table = 'ANIMATION_ATLAS',

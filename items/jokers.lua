@@ -144,7 +144,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
-    config = { extra = {chips = 50, rank = 'Ace'} },    --variables used for abilities and effects.
+    config = { extra = {chips = 20} },    --variables used for abilities and effects.
     pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5,                                            --cost to buy the joker in shops.
@@ -159,26 +159,24 @@ SMODS.Joker{
 
     calculate = function(self,card,context)              --define calculate functions here
         if context.individual and context.cardarea == G.play then
-            if context.other_card:get_id() == 1 then
-                local valid = true
-                for _,v in ipairs(G.hand.cards) do
-                    if v:is_face() then
-                        valid = false
-                        break
-                    end
+            local valid = true
+            for _,v in ipairs(G.hand.cards) do
+                if v:is_face() then
+                    valid = false
+                    break
                 end
-                if valid then
-                    return {
-                        chips = card.ability.extra.chips,
-                        colour = G.C.CHIPS
-                    }
-                end
+            end
+            if valid then
+                return {
+                    chips = card.ability.extra.chips,
+                    colour = G.C.CHIPS
+                }
             end
         end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.chips, localize(card.ability.extra.rank, 'ranks')}, key = self.key }
+        return { vars = {card.ability.extra.chips}, key = self.key }
     end
 }
 

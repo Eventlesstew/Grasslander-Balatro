@@ -81,7 +81,7 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Played {C:attention}Aces {}give",
+                    "Played cards give",
                     "{C:chips}+#1# {}Chips if no",
                     "{C:attention}face {}cards are",
                     "held in hand",
