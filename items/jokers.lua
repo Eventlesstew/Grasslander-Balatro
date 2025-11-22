@@ -892,37 +892,6 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "tickini",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "tickini",
-    config = { extra = {}},
-    pos = { x = 1, y = 4},
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'tickini',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
     key = "mossibug",
     path = "jokers.png",
     px = 71,
@@ -980,6 +949,37 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         return { vars = {card.ability.extra.chips,card.ability.extra.chip_penalty,card.ability.extra.chip_mod}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "tickini",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "tickini",
+    config = { extra = {}},
+    pos = { x = 1, y = 4},
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'tickini',
+
+    calculate = function(self,card,context)
+
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
     end
 }
 
@@ -1874,10 +1874,9 @@ SMODS.Joker{
     end
 }
 
---[[
 SMODS.Atlas({
     key = "bad4",
-    path = "j_sample_money.png",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
@@ -1885,7 +1884,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "bad4",
     config = { extra = {}},
-    pos = { x = 0, y = 0 },
+    pos = { x = 3, y = 7 },
     rarity = 4,
     cost = 20,
     blueprint_compat=true,
@@ -1908,7 +1907,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "bad5",
-    path = "j_sample_money.png",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
@@ -1916,7 +1915,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "bad5",
     config = { extra = {}},
-    pos = { x = 0, y = 0 },
+    pos = { x = 4, y = 7 },
     rarity = 4,
     cost = 20,
     blueprint_compat=true,
@@ -1936,7 +1935,6 @@ SMODS.Joker{
         return { vars = {}, key = self.key }
     end
 }
-]]
 
 SMODS.Atlas({
     key = "sugamimi",
@@ -2081,10 +2079,10 @@ function SMODS.current_mod.reset_game_globals(run_start)
     reset_junklake()
 end
 
---[[
+
 SMODS.Atlas({
     key = "synth3",
-    path = "j_sample_money.png",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
@@ -2092,7 +2090,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "synth3",
     config = { extra = {}},
-    pos = { x = 0, y = 0 },
+    pos = { x = 2, y = 8 },
     rarity = 4,
     cost = 20,
     blueprint_compat=true,
@@ -2115,7 +2113,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "synth4",
-    path = "j_sample_money.png",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
@@ -2123,7 +2121,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "synth4",
     config = { extra = {}},
-    pos = { x = 0, y = 0 },
+    pos = { x = 3, y = 8 },
     rarity = 4,
     cost = 20,
     blueprint_compat=true,
@@ -2146,7 +2144,7 @@ SMODS.Joker{
 
 SMODS.Atlas({
     key = "synth5",
-    path = "j_sample_money.png",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
@@ -2154,7 +2152,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "synth5",
     config = { extra = {}},
-    pos = { x = 0, y = 0 },
+    pos = { x = 4, y = 8 },
     rarity = 4,
     cost = 20,
     blueprint_compat=true,
@@ -2168,37 +2166,6 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
 
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-]]
-
-SMODS.Atlas({
-    key = "penny",
-    path = "j_sample_wee.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "penny",
-    config = { extra = {}},
-    pos = { x = 0, y = 0 },
-    rarity = 3,
-    cost = 8,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'penny',
-
-    calculate = function(self,card,context)
     end,
 
     loc_vars = function(self, info_queue, card)

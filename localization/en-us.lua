@@ -429,38 +429,6 @@ return {
                     "{X:black,C:white}UNDISCLOSED"
                 }
             },
-            j_grasslanders_penny = {
-                name = "Penny",
-                text = {
-                    "{X:red,C:white}INCOMPLETE"
-                }
-            },
-            j_grasslanders_beezy = {
-                name = "Beezies",
-                text = {
-                    "{X:red,C:white}INCOMPLETE"
-                }
-            },
-            j_grasslanders_buffslimester = {
-                name = "Slimester",
-                text = {
-                    "{X:red,C:white}X#2#{} Mult for each month",
-                    "{C:attention}Dark Depths{} has been",
-                    "in development for",
-                    "{C:inactive}Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
-                }
-            },
-            j_grasslanders_logoleaf = {
-                name = "Logoleaf",
-                text = {
-                    {
-                        "{C:chips}+#2# {}Chips at end of round",
-                        "{C:chips}-#3# {}Chips if played hand",
-                        "is on fire",
-                        "{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)",
-                    }
-                },
-            },
         },
         Other = {
             g_onfire = {
