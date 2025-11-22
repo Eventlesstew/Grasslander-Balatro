@@ -25,44 +25,6 @@ function return_JokerValues() -- not used, just here to demonstrate how you coul
 end
 
 SMODS.Atlas({
-    key = "scorpibeat",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "scorpibeat",                                  --name used by the joker.    
-    config = { extra = {mult = 18} },    --variables used for abilities and effects.
-    pos = { x = 1, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
-    perishable_compat=true,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'scorpibeat',                                --atlas name, single sprites are deprecated.
-
-    calculate = function(self,card,context)              --define calculate functions here
-        if context.joker_main and context.cardarea == G.jokers then
-            if G.GAME.blind.boss then
-                return {
-                    mult = card.ability.extra.mult, 
-                    colour = G.C.MULT
-                }
-            end
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = { card.ability.extra.mult}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
     key = "blowy",
     path = "jokers.png",
     px = 71,
@@ -132,6 +94,44 @@ SMODS.Joker{
             operator = ''
         end
         return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size, operator}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "scorpibeat",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "scorpibeat",                                  --name used by the joker.    
+    config = { extra = {mult = 18} },    --variables used for abilities and effects.
+    pos = { x = 1, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
+    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    cost = 5,                                            --cost to buy the joker in shops.
+    blueprint_compat=true,                               --does joker work with blueprint.
+    eternal_compat=true,                                 --can joker be eternal.
+    perishable_compat=true,
+    unlocked = true,                                     --is joker unlocked by default.
+    discovered = true,                                   --is joker discovered by default.    
+    effect=nil,                                          --you can specify an effect here eg. 'Mult'
+    soul_pos=nil,                                        --pos of a soul sprite.
+    atlas = 'scorpibeat',                                --atlas name, single sprites are deprecated.
+
+    calculate = function(self,card,context)              --define calculate functions here
+        if context.joker_main and context.cardarea == G.jokers then
+            if G.GAME.blind.boss then
+                return {
+                    mult = card.ability.extra.mult, 
+                    colour = G.C.MULT
+                }
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+        return { vars = { card.ability.extra.mult}, key = self.key }
     end
 }
 
@@ -384,6 +384,170 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
+    key = "pricklea",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "pricklea",
+    config = { extra = {}},
+    pos = { x = 0, y = 2 },
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'pricklea',
+
+    calculate = function(self,card,context)
+
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "reeflute",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "reeflute",
+    config = { extra = {}},
+    pos = { x = 2, y = 1 },
+    rarity = 1,
+    cost = 6,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'reeflute',
+
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then
+            if context.other_card.debuff then
+                return {
+                    message = localize('k_debuffed'),
+                    colour = G.C.RED
+                }
+            else
+                return {
+                    chips = context.other_card:get_chip_bonus()
+                }
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
+    end
+}
+
+SMODS.Sound ({
+    key = 'erupt',
+    path = 'volc_explosion.ogg',
+})
+SMODS.Atlas({
+    key = "volcarox",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "volcarox",                                  --name used by the joker.    
+    config = { extra = {draw = 10, active = false, d_remaining = 0} },    --variables used for abilities and effects.
+    pos = { x = 3, y = 1 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
+    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    cost = 5,                                            --cost to buy the joker in shops.
+    blueprint_compat=true,                               --does joker work with blueprint.
+    eternal_compat=true,                                 --can joker be eternal.
+    perishable_compat=false,
+    unlocked = true,                                     --is joker unlocked by default.
+    discovered = true,                                   --is joker discovered by default.    
+    effect=nil,                                          --you can specify an effect here eg. 'Mult'
+    soul_pos=nil,                                        --pos of a soul sprite.
+    atlas = 'volcarox',                                --atlas name, single sprites are deprecated.
+
+    calculate = function(self,card,context)              --define calculate functions here
+        if context.setting_blind then
+            card.ability.extra.active = true
+        end
+        if context.hand_drawn and G.GAME.current_round.discards_left == card.ability.extra.d_remaining and card.ability.extra.active then
+            card.ability.extra.active = false
+            return {
+                message = localize('k_erupt_ex'),
+                colour = G.C.RED,
+                sound = 'grasslanders_erupt',
+                func = function() -- This is for timing purposes, everything here runs after the message
+                    SMODS.draw_cards(card.ability.extra.draw)
+                end,
+            }
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+        return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "frogobonk",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "frogobonk",
+    config = { extra = {mult = 5}},
+    pos = {x = 4, y = 2},
+    rarity = 1,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'frogobonk',
+
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play then
+            if next(SMODS.get_enhancements(context.other_card)) then
+                return {
+                    mult = card.ability.extra.mult,
+                    colour = G.C.MULT
+                }
+            end
+            if context.other_card:get_edition() then
+                SMODS.destroy_cards(card, nil, nil, true)
+                SMODS.add_card{key = "j_grasslanders_lumobonk"}
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        --info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
+        return { vars = {card.ability.extra.mult}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
     key = "junklake",
     path = "jokers.png",
     px = 71,
@@ -545,170 +709,6 @@ local function reset_junklake()
 end
 
 SMODS.Atlas({
-    key = "reeflute",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "reeflute",
-    config = { extra = {}},
-    pos = { x = 2, y = 1 },
-    rarity = 1,
-    cost = 6,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'reeflute',
-
-    calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.hand and not context.end_of_round then
-            if context.other_card.debuff then
-                return {
-                    message = localize('k_debuffed'),
-                    colour = G.C.RED
-                }
-            else
-                return {
-                    chips = context.other_card:get_chip_bonus()
-                }
-            end
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Sound ({
-    key = 'erupt',
-    path = 'volc_explosion.ogg',
-})
-SMODS.Atlas({
-    key = "volcarox",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "volcarox",                                  --name used by the joker.    
-    config = { extra = {draw = 10, active = false, d_remaining = 0} },    --variables used for abilities and effects.
-    pos = { x = 3, y = 1 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
-    perishable_compat=false,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'volcarox',                                --atlas name, single sprites are deprecated.
-
-    calculate = function(self,card,context)              --define calculate functions here
-        if context.setting_blind then
-            card.ability.extra.active = true
-        end
-        if context.hand_drawn and G.GAME.current_round.discards_left == card.ability.extra.d_remaining and card.ability.extra.active then
-            card.ability.extra.active = false
-            return {
-                message = localize('k_erupt_ex'),
-                colour = G.C.RED,
-                sound = 'grasslanders_erupt',
-                func = function() -- This is for timing purposes, everything here runs after the message
-                    SMODS.draw_cards(card.ability.extra.draw)
-                end,
-            }
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
-    key = "pricklea",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "pricklea",
-    config = { extra = {}},
-    pos = { x = 0, y = 2 },
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'pricklea',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
-    key = "frogobonk",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "frogobonk",
-    config = { extra = {mult = 5}},
-    pos = {x = 4, y = 2},
-    rarity = 1,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'frogobonk',
-
-    calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play then
-            if next(SMODS.get_enhancements(context.other_card)) then
-                return {
-                    mult = card.ability.extra.mult,
-                    colour = G.C.MULT
-                }
-            end
-            if context.other_card:get_edition() then
-                SMODS.destroy_cards(card, nil, nil, true)
-                SMODS.add_card{key = "j_grasslanders_lumobonk"}
-            end
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        --info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
-        return { vars = {card.ability.extra.mult}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
     key = "hornetrix",
     path = "jokers.png",
     px = 71,
@@ -815,37 +815,6 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "chonkreep",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "chonkreep",
-    config = { extra = {}},
-    pos = { x = 3, y = 2 },
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'chonkreep',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
     key = "concrab",
     path = "jokers.png",
     px = 71,
@@ -892,18 +861,18 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "cocotom",
+    key = "chonkreep",
     path = "jokers.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
-    key = "cocotom",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 12,}},
-    pos = { x = 0, y = 3 },
-    rarity = 3,
-    cost = 9,
+    key = "chonkreep",
+    config = { extra = {}},
+    pos = { x = 3, y = 2 },
+    rarity = 2,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -911,50 +880,45 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'cocotom',
+    atlas = 'chonkreep',
 
     calculate = function(self,card,context)
-        if context.buying_self then
-            local eval = function(card) return card.ability.extra.rounds <= 0 end
-            juice_card_until(card,eval,true)
-        end
-        if not context.blueprint and card.ability.extra.rounds > 0 then
-            if context.remove_playing_cards then 
-                if #context.removed > 0 then
-                    card.ability.extra.x_mult = card.ability.extra.x_mult + (#context.removed * card.ability.extra.x_mult_mod)
-                    return {
-                        message = localize {type='variable', key='a_xmult', vars={card.ability.extra.x_mult}},
-                        colour = G.C.MULT
-                    }
-                end
-            end
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                card.ability.extra.rounds = card.ability.extra.rounds - 1
-                if card.ability.extra.rounds <= 0 then
-                    return {
-                        message = localize('k_free_ex'),
-                        colour = G.C.FILTER
-                    }
-                else
-                    return {
-                        message = localize{key='a_left', vars={card.ability.extra.rounds}},
-                        colour = G.C.FILTER
-                    }
-                end
-            end
-        end
-        if context.joker_main and context.cardarea == G.jokers then
-            if card.ability.extra.rounds <= 0 then
-                return {
-                    x_mult = card.ability.extra.x_mult, 
-                    colour = G.C.MULT
-                }
-            end
-        end
+
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, card.ability.extra.rounds}, key = self.key }
+        return { vars = {}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "tickini",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "tickini",
+    config = { extra = {}},
+    pos = { x = 1, y = 4},
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'tickini',
+
+    calculate = function(self,card,context)
+
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
     end
 }
 
@@ -1067,6 +1031,91 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
+    key = "fortromtoise",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "fortromtoise",
+    config = { extra = {x_mult = 1, x_mult_mod = 0.25}},
+    pos = { x = 3, y = 4 },
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'fortromtoise',
+
+    calculate = function(self,card,context)
+        if context.discard then
+            card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+            }
+        end
+        if context.joker_main then
+            local effects = {
+                {
+                    x_mult = card.ability.extra.x_mult, 
+                },
+                {
+
+                    message = localize('k_reset'),
+                    colour = G.C.MULT,
+                }
+            }
+            card.ability.extra.x_mult = 1
+            return SMODS.merge_effects(effects)
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
+    key = "triple9",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "triple9",
+    config = { extra = {}},
+    pos = { x = 0, y = 4},
+    rarity = 4,
+    cost = 20,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'triple9',
+
+    in_pool = function(self, args)
+        return false
+    end,
+    calculate = function(self,card,context)
+
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
+    end
+}
+
+SMODS.Atlas({
     key = "kracosteal",
     path = "jokers.png",
     px = 71,
@@ -1157,37 +1206,6 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "tickini",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "tickini",
-    config = { extra = {}},
-    pos = { x = 1, y = 4},
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'tickini',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-
-SMODS.Atlas({
     key = "axonitta",
     path = "jokers.png",
     px = 71,
@@ -1239,53 +1257,36 @@ SMODS.Joker{
 }
 
 SMODS.Atlas({
-    key = "fortromtoise",
+    key = "triple10",
     path = "jokers.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
-    key = "fortromtoise",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.25}},
-    pos = { x = 3, y = 4 },
-    rarity = 2,
-    cost = 5,
+    key = "triple10",
+    config = { extra = {}},
+    pos = { x = 4, y = 4},
+    rarity = 4,
+    cost = 20,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'fortromtoise',
+    atlas = 'triple10',
 
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
-        if context.discard then
-            card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
-            return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
-            }
-        end
-        if context.joker_main then
-            local effects = {
-                {
-                    x_mult = card.ability.extra.x_mult, 
-                },
-                {
 
-                    message = localize('k_reset'),
-                    colour = G.C.MULT,
-                }
-            }
-            card.ability.extra.x_mult = 1
-            return SMODS.merge_effects(effects)
-        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
+        return { vars = {}, key = self.key }
     end
 }
 
@@ -1333,69 +1334,73 @@ SMODS.Joker{
     end
 }
 
---[[
+
 SMODS.Atlas({
-    key = "triple9",
-    path = "j_sample_money.png",
+    key = "cocotom",
+    path = "jokers.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
-    key = "triple9",
-    config = { extra = {}},
-    pos = { x = 0, y = 0 },
-    rarity = 4,
-    cost = 20,
+    key = "cocotom",
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 12,}},
+    pos = { x = 0, y = 3 },
+    rarity = 3,
+    cost = 9,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'triple9',
+    atlas = 'cocotom',
 
     calculate = function(self,card,context)
-
+        if context.buying_self then
+            local eval = function(card) return card.ability.extra.rounds <= 0 end
+            juice_card_until(card,eval,true)
+        end
+        if not context.blueprint and card.ability.extra.rounds > 0 then
+            if context.remove_playing_cards then 
+                if #context.removed > 0 then
+                    card.ability.extra.x_mult = card.ability.extra.x_mult + (#context.removed * card.ability.extra.x_mult_mod)
+                    return {
+                        message = localize {type='variable', key='a_xmult', vars={card.ability.extra.x_mult}},
+                        colour = G.C.MULT
+                    }
+                end
+            end
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                card.ability.extra.rounds = card.ability.extra.rounds - 1
+                if card.ability.extra.rounds <= 0 then
+                    return {
+                        message = localize('k_free_ex'),
+                        colour = G.C.FILTER
+                    }
+                else
+                    return {
+                        message = localize{key='a_left', vars={card.ability.extra.rounds}},
+                        colour = G.C.FILTER
+                    }
+                end
+            end
+        end
+        if context.joker_main and context.cardarea == G.jokers then
+            if card.ability.extra.rounds <= 0 then
+                return {
+                    x_mult = card.ability.extra.x_mult, 
+                    colour = G.C.MULT
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, card.ability.extra.rounds}, key = self.key }
     end
 }
-
-SMODS.Atlas({
-    key = "triple10",
-    path = "j_sample_money.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "triple10",
-    config = { extra = {}},
-    pos = { x = 0, y = 0 },
-    rarity = 4,
-    cost = 20,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'triple10',
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}
-]]
 
 SMODS.Atlas({
     key = "litabelle",
@@ -1438,7 +1443,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "erny",
     config = { extra = {x_mult = 1, x_mult_mod = 1, hand1 = 'Straight', hand2 = 'Flush'}},
-    pos = { x = 1, y = 5 },
+    pos = { x = 3, y = 5 },
     rarity = 2,
     cost = 7,
     blueprint_compat=true,
@@ -1550,7 +1555,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "edward",
     config = { extra = {mult = 0, mult_mod = 2, chosen_joker = 0}},
-    pos = { x = 3, y = 5 },
+    pos = { x = 1, y = 5 },
     rarity = 3,
     cost = 9,
     blueprint_compat=true,

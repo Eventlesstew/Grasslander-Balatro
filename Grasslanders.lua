@@ -80,6 +80,9 @@ end
 if grasslanders.config_file.grasslanderJokers then
     assert(SMODS.load_file("items/jokers.lua"))()
 end
+if grasslanders.config_file.extrajokers then
+    assert(SMODS.load_file("items/extra_jokers.lua"))()
+end
 if grasslanders.config_file.clackerblinds then
     assert(SMODS.load_file("items/blinds.lua"))()
 end
