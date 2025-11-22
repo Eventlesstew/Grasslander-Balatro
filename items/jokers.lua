@@ -1895,7 +1895,9 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'bad4',
-
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
 
     end,
@@ -1926,6 +1928,10 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'bad5',
+
+    in_pool = function(self, args)
+        return false
+    end,
 
     calculate = function(self,card,context)
 
@@ -2102,6 +2108,10 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'synth3',
 
+    in_pool = function(self, args)
+        return false
+    end,
+
     calculate = function(self,card,context)
 
     end,
@@ -2132,6 +2142,10 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'synth4',
+
+    in_pool = function(self, args)
+        return false
+    end,
 
     calculate = function(self,card,context)
 
@@ -2164,6 +2178,10 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'synth5',
 
+    in_pool = function(self, args)
+        return false
+    end,
+    
     calculate = function(self,card,context)
 
     end,

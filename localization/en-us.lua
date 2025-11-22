@@ -439,14 +439,6 @@ return {
                     "{C:attention}Blind{} score"
                 },
             },
-            --[[
-            anjellyze_hands = {
-                name = "Played Hands",
-                text = {
-                    ''
-                }
-            }
-            ]]
         },
     },
     misc = {
