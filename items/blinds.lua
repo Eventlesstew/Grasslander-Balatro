@@ -120,15 +120,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 2},
-    config = {extra = {suit = 'Spades'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
+    effect = {suit = "Spades"},
     boss_colour = HEX("47395b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
+                context.other_card:is_suit(self.effect.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -146,7 +146,10 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
     end,
 }
 
@@ -165,15 +168,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 3},
-    config = {extra = {suit = 'Hearts'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
+    effect = {suit = "Hearts"},
     boss_colour = HEX("827144"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
+                context.other_card:is_suit(self.effect.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -191,7 +194,10 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
     end,
 }
 
@@ -210,15 +216,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 4},
-    config = {extra = {suit = 'Clubs'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
+    effect = {suit = "Clubs"},
     boss_colour = HEX("395651"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
+                context.other_card:is_suit(self.effect.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -236,7 +242,10 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
     end,
 }
 
@@ -255,15 +264,15 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 5},
-    config = {extra = {suit = 'Diamonds'}},
     dollars = 5,
     mult = 2,
     boss = {min = 1},
+    effect = {suit = "Diamonds"},
     boss_colour = HEX("714482"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.other_card:is_suit(blind.ability.extra.suit) then
+                context.other_card:is_suit(self.effect.suit) then
                 return {
                     stay_flipped = true
                 }
@@ -281,7 +290,10 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {localize(blind.ability.extra.suit, 'suits')} }
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize(self.effect.suit, 'suits_singular')} }
     end,
 }
 
@@ -324,7 +336,10 @@ SMODS.Blind {
             playing_card.ability.wheel_flipped = nil
         end
     end,
-    loc_vars = function(self)
+    loc_vars = function(self, info_queue, blind)
+        return { vars = {} }
+    end,
+    collection_loc_vars = function(self)
         return { vars = {} }
     end,
 }
@@ -344,7 +359,6 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 7},
-    config = {extra = {mult = 1}},
     dollars = 5,
     mult = 2,
     boss = {min = 2},
@@ -353,7 +367,8 @@ SMODS.Blind {
         if not blind.disabled then
             if context.modify_hand then
                 blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
-                mult = blind.ability.extra.mult
+                mult = 1
+                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
             end
         end
     end,

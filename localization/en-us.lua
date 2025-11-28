@@ -37,28 +37,28 @@ return {
             bl_grasslanders_spiker = {
                 name = "The Spiker",
                 text = {
-                    "All Spade cards are",
+                    "All #1# cards are",
                     "drawn face down",
                 },
             },
             bl_grasslanders_clacklume = {
                 name = "The Clacklume",
                 text = {
-                    "All Heart cards are",
+                    "All #1# cards are",
                     "drawn face down",
                 },
             },
             bl_grasslanders_wondertraps = {
                 name = "The Wondertraps",
                 text = {
-                    "All Club cards are",
+                    "All #1# cards are",
                     "drawn face down",
                 },
             },
             bl_grasslanders_cruncher = {
                 name = "The Cruncher",
                 text = {
-                    "All Diamond cards are",
+                    "All #1# cards are",
                     "drawn face down",
                 },
             },
@@ -275,10 +275,18 @@ return {
                     "in hand gives {X:mult,C:white}X#1#{} Mult",
                 },
             },
+            j_grasslanders_ziffy = {
+                name = "Ziffy",
+                text = {
+                    "Gives a {C:attention}refund{} if",
+                    "{C:attention}Booster Pack{} is skipped",
+                },
+            },
             j_grasslanders_tickini = {
                 name = "Tickini",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "{C:attention}Blind{} no longer ends until",
+                    "last {C:attention}hand{} is played",
                 },
             },
             j_grasslanders_cocotom = {
@@ -294,7 +302,9 @@ return {
             j_grasslanders_triple9 = {
                 name = "???",
                 text = {
-                    "{X:black,C:white}UNDISCLOSED"
+                    "{X:black,C:white}UNDISCLOSED",
+                    "{C:inactive}It's revelation",
+                    "{C:inactive}is approaching..."
                 }
             },
             j_grasslanders_triple10 = {
@@ -343,7 +353,9 @@ return {
             j_grasslanders_quad3 = {
                 name = "???",
                 text = {
-                    "{X:black,C:white}UNDISCLOSED"
+                    "{X:black,C:white}UNDISCLOSED",
+                    "{C:inactive}It's revelation",
+                    "{C:inactive}is approaching..."
                 }
             },
             j_grasslanders_quad4 = {
