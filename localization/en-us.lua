@@ -252,9 +252,9 @@ return {
             j_grasslanders_kracosteal = {
                 name = "Kracosteal",
                 text = {
-                    "Each {C:attention}Steel {}card",
-                    "held in hand gives {C:money}$#1#",
-                    "at end of round"
+                    "Allows you to choose {C:attention}#1#",
+                    "extra item from any",
+                    "{C:attention}Booster Pack"
                 },
             },
             j_grasslanders_axonitta = {
@@ -271,8 +271,8 @@ return {
             j_grasslanders_wisplasm = {
                 name = "Wisplasm",
                 text = {
-                    "Each {C:attention}Gold {}card held",
-                    "in hand gives {X:mult,C:white}X#1#{} Mult",
+                    "{C:attention}Booster Packs{} contain",
+                    "{C:attention}#1#{} extra items"
                 },
             },
             j_grasslanders_ziffy = {

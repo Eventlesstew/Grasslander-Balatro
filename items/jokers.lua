@@ -230,14 +230,14 @@ SMODS.Joker{
 SMODS.Atlas({
     key = "trizap",
     path = "jokers.png",
-    px = 71,
-    py = 95
+    px = 142,
+    py = 190
 })
 
 SMODS.Joker{
     key = "trizap",
     config = { extra = {}},
-    pos = { x = 4, y = 0 },
+    pos = { x = 2, y = 1 },
     rarity = 3,
     cost = 8,
     blueprint_compat=true,
@@ -246,7 +246,8 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     effect=nil,
-    soul_pos={ x = 5, y = 0 },
+    soul_pos={ x = 2, y = 0 },
+    display_size = { w = 71 * 2, h = 95 * 2 },
     atlas = 'trizap',
 
     calculate = function(self,card,context)
@@ -483,7 +484,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "frogobonk",
     config = { extra = {mult = 5}},
-    pos = {x = 4, y = 2},
+    pos = {x = 5, y = 5},
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
@@ -702,9 +703,10 @@ SMODS.Joker{
     set_sprites = function(self, card, front)
         local alt = 1
         if grasslanders.config.althornetrix then
-            alt = 5
+            card.children.center:set_sprite_pos({x=1,y=2})
+        else
+            card.children.center:set_sprite_pos({x=5,y=7})
         end
-        card.children.center:set_sprite_pos({x=alt,y=2})
     end,
 
     calculate = function(self,card,context)
@@ -793,7 +795,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "concrab",
     config = { extra = {poker_hand = 'High Card'}},
-    pos = { x = 4, y = 1 },
+    pos = { x = 5, y = 4 },
     rarity = 2,
     cost = 7,
     blueprint_compat=true,
@@ -1005,7 +1007,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "kracosteal",
-    config = { extra = {dollars = 3}},
+    config = { extra = {choice_mod = 1}},
     pos = { x = 3, y = 3 },
     rarity = 2,
     cost = 7,
@@ -1018,6 +1020,37 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'kracosteal',
 
+    add_to_deck = function(self, card, from_debuff)
+        if not G.GAME.modifiers.booster_choice_mod then
+            G.GAME.modifiers.booster_choice_mod = 0
+        end
+        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod + card.ability.extra.choice_mod
+
+        --[[
+        if not G.GAME.modifiers.booster_size_mod then
+            G.GAME.modifiers.booster_size_mod = 0
+        end
+        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod + card.ability.extra.choice_mod
+        ]]
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        if not G.GAME.modifiers.booster_choice_mod then
+            G.GAME.modifiers.booster_choice_mod = 0
+        end
+        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod - card.ability.extra.choice_mod
+
+        --[[
+        if not G.GAME.modifiers.booster_size_mod then
+            G.GAME.modifiers.booster_size_mod = 0
+        end
+        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod - card.ability.extra.choice_mod
+        ]]
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.choice_mod}, key = self.key }
+    end
+    --[[
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.hand and context.end_of_round then
             if SMODS.has_enhancement(context.other_card, 'm_steel') then
@@ -1039,6 +1072,7 @@ SMODS.Joker{
         info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
         return { vars = {card.ability.extra.dollars}, key = self.key }
     end
+    ]]
 }
 
 SMODS.Atlas({
@@ -1050,8 +1084,8 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "wisplasm",
-    config = { extra = {x_mult = 1.5}},
-    pos = { x = 4, y = 3 },
+    config = { extra = {size_mod = 2}},
+    pos = { x = 5, y = 6 },
     rarity = 2,
     cost = 7,
     blueprint_compat=true,
@@ -1063,6 +1097,23 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'wisplasm',
 
+    add_to_deck = function(self, card, from_debuff)
+        if not G.GAME.modifiers.booster_size_mod then
+            G.GAME.modifiers.booster_size_mod = 0
+        end
+        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod + card.ability.extra.size_mod
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        if not G.GAME.modifiers.booster_size_mod then
+            G.GAME.modifiers.booster_size_mod = 0
+        end
+        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod - card.ability.extra.size_mod
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.size_mod}, key = self.key }
+    end
+    --[[
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.hand and not context.end_of_round then
             if SMODS.has_enhancement(context.other_card, 'm_gold') then
@@ -1084,6 +1135,7 @@ SMODS.Joker{
         info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
         return {vars = {card.ability.extra.x_mult}, key = self.key }
     end
+    ]]
 }
 
 SMODS.Atlas({
@@ -1231,7 +1283,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "ziffy",
     config = { extra = {booster_cost = 0}},
-    pos = { x = 5, y = 3},
+    pos = { x = 5, y = 8},
     rarity = 2,
     cost = 5,
     blueprint_compat=true,
@@ -1837,7 +1889,7 @@ SMODS.Joker{
                             func = function()
                                 scored_card:juice_up()
                                 scored_card:set_debuff(true)
-                                SMODS.recalc_debuff(scored_card)
+                                --MODS.recalc_debuff(scored_card)
                                 return true
                             end
                         }))
