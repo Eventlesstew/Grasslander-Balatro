@@ -25,26 +25,26 @@ function return_JokerValues() -- not used, just here to demonstrate how you coul
 end
 
 SMODS.Atlas({
-    key = "blowy",
+    key = "grasslanderJoker",
     path = "jokers.png",
     px = 71,
     py = 95
 })
 
 SMODS.Joker{
-    key = "blowy",                                  --name used by the joker.    
-    config = {extra = {h_size = 0, h_mod = 1}},    --variables used for abilities and effects.
-    pos = { x = 0, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=false,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
+    key = "blowy",
+    atlas = 'grasslanderJoker',
+    config = {extra = {h_size = 0, h_mod = 1}},
+    pos = { x = 0, y = 0 },
+    soul_pos=nil,
+    rarity = 1,
+    cost = 5,
+    blueprint_compat=false,
+    eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,                                     --is joker unlocked by default.
+    unlocked = true,
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'blowy',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
@@ -97,15 +97,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "scorpibeat",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "scorpibeat",                                  --name used by the joker.    
+    atlas = 'grasslanderJoker',
     config = { extra = {mult = 18} },    --variables used for abilities and effects.
     pos = { x = 1, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
@@ -117,7 +111,6 @@ SMODS.Joker{
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'scorpibeat',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
         if context.joker_main and context.cardarea == G.jokers then
@@ -135,15 +128,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "sprinkle",
-    path = 'jokers.png',
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "sprinkle",                                  --name used by the joker.    
+    atlas = 'grasslanderJoker',
     config = { extra = {chips = 20} },    --variables used for abilities and effects.
     pos = { x = 2, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
@@ -155,7 +142,6 @@ SMODS.Joker{
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'sprinkle',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
         if context.individual and context.cardarea == G.play then
@@ -179,16 +165,9 @@ SMODS.Joker{
         return { vars = {card.ability.extra.chips}, key = self.key }
     end
 }
-
-SMODS.Atlas({
-    key = "molty",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "molty",                                  --name used by the joker.    
+    atlas = 'grasslanderJoker',
     config = { extra = {x_mult = 1, x_mult_mod = 0.5} },    --variables used for abilities and effects.
     pos = { x = 3, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
@@ -200,7 +179,6 @@ SMODS.Joker{
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'molty',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
         if not context.blueprint then
@@ -227,17 +205,12 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "trizap",
-    path = "jokers.png",
-    px = 142,
-    py = 190
-})
-
 SMODS.Joker{
     key = "trizap",
+    atlas = 'grasslanderJoker',
     config = { extra = {}},
-    pos = { x = 2, y = 1 },
+    pos = { x = 4, y = 0 },
+    soul_pos={ x = 5, y = 0 },
     rarity = 3,
     cost = 8,
     blueprint_compat=true,
@@ -246,9 +219,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     effect=nil,
-    soul_pos={ x = 2, y = 0 },
-    display_size = { w = 71 * 2, h = 95 * 2 },
-    atlas = 'trizap',
 
     calculate = function(self,card,context)
         if (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) then
@@ -300,15 +270,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "logobreak",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "logobreak",
+    atlas = 'grasslanderJoker',
     config = { extra = {active = false, odds = 2, tag = 'tag_coupon'}},
     pos = { x = 0, y = 1 },
     rarity = 1,
@@ -320,7 +284,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'logobreak',
 
     calculate = function(self,card,context)
         if card.ability.extra.active then
@@ -353,15 +316,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "pricklea",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "pricklea",
+    atlas = 'grasslanderJoker',
     config = { extra = {}},
     pos = { x = 0, y = 2 },
     rarity = 2,
@@ -373,7 +330,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'pricklea',
 
     calculate = function(self,card,context)
 
@@ -384,15 +340,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "reeflute",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "reeflute",
+    atlas = 'grasslanderJoker',
     config = { extra = {}},
     pos = { x = 2, y = 1 },
     rarity = 1,
@@ -404,7 +354,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'reeflute',
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.hand and not context.end_of_round then
@@ -430,15 +379,10 @@ SMODS.Sound ({
     key = 'erupt',
     path = 'volc_explosion.ogg',
 })
-SMODS.Atlas({
-    key = "volcarox",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
 
 SMODS.Joker{
-    key = "volcarox",                                  --name used by the joker.    
+    key = "volcarox",                                  --name used by the joker.  
+    atlas = 'grasslanderJoker',  
     config = { extra = {draw = 10, active = false, d_remaining = 0} },    --variables used for abilities and effects.
     pos = { x = 3, y = 1 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
     rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
@@ -450,7 +394,6 @@ SMODS.Joker{
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
-    atlas = 'volcarox',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here
         if context.setting_blind then
@@ -474,15 +417,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "frogobonk",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "frogobonk",
+    atlas = 'grasslanderJoker',
     config = { extra = {mult = 5}},
     pos = {x = 5, y = 5},
     rarity = 1,
@@ -494,7 +431,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'frogobonk',
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
@@ -517,15 +453,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "junklake",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "junklake",
+    atlas = 'grasslanderJoker',
     config = { extra = {dollars = 20}},
     pos = { x = 1, y = 1 },
     rarity = 1,
@@ -537,7 +467,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'junklake',
 
     calculate = function(self,card,context)
         if
@@ -678,15 +607,9 @@ local function reset_junklake()
     ]]
 end
 
-SMODS.Atlas({
-    key = "hornetrix",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "hornetrix",
+    atlas = 'grasslanderJoker',
     config = { extra = {sell_multiplier = 4}},
     pos = { x = 1, y = 2 },
     rarity = 2,
@@ -698,7 +621,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'hornetrix',
 
     set_sprites = function(self, card, front)
         local alt = 1
@@ -738,6 +660,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "anjellyze",
+    atlas = 'grasslanderJoker',
     config = { extra = {mult = 0, mult_mod = 4, poker_hand = 'High Card'}},
     pos = { x = 2, y = 2 },
     rarity = 1,
@@ -749,7 +672,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'anjellyze',
 
     calculate = function(self,card,context)
         if not context.blueprint then
@@ -785,15 +707,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "concrab",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "concrab",
+    atlas = 'grasslanderJoker',
     config = { extra = {poker_hand = 'High Card'}},
     pos = { x = 5, y = 4 },
     rarity = 2,
@@ -805,7 +721,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'concrab',
 
     calculate = function(self,card,context)
         if context.joker_main and context.cardarea == G.jokers then
@@ -831,15 +746,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "chonkreep",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "chonkreep",
+    atlas = 'grasslanderJoker',
     config = { extra = {}},
     pos = { x = 3, y = 2 },
     rarity = 2,
@@ -851,7 +760,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'chonkreep',
 
     calculate = function(self,card,context)
 
@@ -862,15 +770,9 @@ SMODS.Joker{
     end
 }
 
-SMODS.Atlas({
-    key = "mossibug",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
 SMODS.Joker{
     key = "mossibug",
+    atlas = 'grasslanderJoker',
     config = { extra = {chips = 100, chip_penalty = 10, chip_mod = 100}},
     pos = { x = 1, y = 3 },
     rarity = 1,
@@ -882,7 +784,6 @@ SMODS.Joker{
     discovered = true,
     effect=nil,
     soul_pos=nil,
-    atlas = 'mossibug',
 
     calculate = function(self,card,context)
         if not context.blueprint then

@@ -1,7 +1,5 @@
 local lovely = require("lovely")
 
-assert(SMODS.load_file("globals.lua"))()
-
 grasslanders = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path.."config.lua") then
     local file = STR_UNPACK(NFS.read(SMODS.current_mod.path.."config.lua"))
