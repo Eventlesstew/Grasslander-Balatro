@@ -151,7 +151,7 @@ return {
                 },
             },
             j_grasslanders_concrab = {
-                name = "Concrab",
+                name = "Plingit",
                 text = {
                     "Grants Chips and Mult",
                     "of previous {C:attention}poker hand",
@@ -198,7 +198,7 @@ return {
                 },
             },
             j_grasslanders_pricklea = {
-                name = "Pricklea",
+                name = "Maceblaze",
                 text = {
                     "{X:mult,C:white}INCOMPLETE",
                 },

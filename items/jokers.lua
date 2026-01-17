@@ -421,7 +421,7 @@ SMODS.Joker{
     key = "frogobonk",
     atlas = 'grasslanderJoker',
     config = { extra = {mult = 5}},
-    pos = {x = 5, y = 5},
+    pos = {x = 4, y = 2},
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
@@ -627,7 +627,7 @@ SMODS.Joker{
         if grasslanders.config.althornetrix then
             card.children.center:set_sprite_pos({x=1,y=2})
         else
-            card.children.center:set_sprite_pos({x=5,y=7})
+            card.children.center:set_sprite_pos({x=5,y=2})
         end
     end,
 
@@ -711,7 +711,7 @@ SMODS.Joker{
     key = "concrab",
     atlas = 'grasslanderJoker',
     config = { extra = {poker_hand = 'High Card'}},
-    pos = { x = 5, y = 4 },
+    pos = { x = 4, y = 1 },
     rarity = 2,
     cost = 7,
     blueprint_compat=true,
@@ -986,7 +986,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "wisplasm",
     config = { extra = {size_mod = 2}},
-    pos = { x = 5, y = 6 },
+    pos = { x = 4, y = 3 },
     rarity = 2,
     cost = 7,
     blueprint_compat=true,
@@ -1184,7 +1184,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "ziffy",
     config = { extra = {booster_cost = 0}},
-    pos = { x = 5, y = 8},
+    pos = { x = 5, y = 3},
     rarity = 2,
     cost = 5,
     blueprint_compat=true,
@@ -1916,7 +1916,7 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     effect=nil,
-    soul_pos=nil,
+    soul_pos={ x = 0, y = 9 },
     atlas = 'sugamimi',
 
     calculate = function(self,card,context)
