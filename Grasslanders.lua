@@ -64,6 +64,7 @@ grasslanders.config_tab = function()
 		}
 	}
 end
+assert(SMODS.load_file("items/icon.lua"))()
 if grasslanders.config_file.grasslanderJokers then
     assert(SMODS.load_file("items/jokers.lua"))()
 end

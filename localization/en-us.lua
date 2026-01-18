@@ -200,16 +200,19 @@ return {
             j_grasslanders_pricklea = {
                 name = "Maceblaze",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Retriggers played {C:attention}card{} if",
+                    "there are no other cards",
+                    "that contain the same",
+                    "{C:attention}enhancement{}",
                 },
             },
             j_grasslanders_hornetrix = {
                 name = "Hornetrix",
                 text = {
                     "When {C:attention}Blind{} is selected,",
-                    "destroy a random {C:attention}Consumable",
-                    "and add {C:money}quadruple {}its sell",
-                    "value to it's own sell value",
+                    "destroy a random",
+                    "{C:attention}Consumable{} and gain",
+                    "{C:money}$#1#{} of {C:attention}sell value",
                 },
             },
             j_grasslanders_chonkreep = {
@@ -232,7 +235,7 @@ return {
             j_grasslanders_santile = {
                 name = "Santile",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Stone cards give +150 chips when scored, but have a 1 in 4 chance to be destroyed",
                 },
             },
             j_grasslanders_penny = {

@@ -319,20 +319,51 @@ SMODS.Joker{
 SMODS.Joker{
     key = "pricklea",
     atlas = 'grasslanderJoker',
-    config = { extra = {}},
+    config = { extra = {repetitions = 1}},
     pos = { x = 0, y = 2 },
     rarity = 2,
-    cost = 5,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
     effect=nil,
     soul_pos=nil,
 
     calculate = function(self,card,context)
+        if context.repetition and context.cardarea == G.play then
+            local valid = true
 
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if scored_card ~= context.other_card then
+                    if next(SMODS.get_enhancements(context.other_card)) then
+                        --print(SMODS.get_enhancements(context.other_card))
+                        print(SMODS.get_enhancements(context.other_card))
+                        for enhancement, _ in ipairs(SMODS.get_enhancements(context.other_card)) do
+                            print(enhancement)
+                            if SMODS.has_enhancement(scored_card, enhancement) then
+                                valid = false
+                                break
+                            end
+                        end
+
+                    elseif not next(SMODS.get_enhancements(scored_card)) then
+                        valid = false
+                    end
+                end
+
+                if not valid then
+                    break
+                end
+            end
+
+            if valid then
+                return {
+                    repetitions = card.ability.extra.repetitions
+                }
+            end
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -610,7 +641,7 @@ end
 SMODS.Joker{
     key = "hornetrix",
     atlas = 'grasslanderJoker',
-    config = { extra = {sell_multiplier = 4}},
+    config = { extra = {dollars = 5}},
     pos = { x = 1, y = 2 },
     rarity = 2,
     cost = 6,
@@ -625,9 +656,9 @@ SMODS.Joker{
     set_sprites = function(self, card, front)
         local alt = 1
         if grasslanders.config.althornetrix then
-            card.children.center:set_sprite_pos({x=1,y=2})
-        else
             card.children.center:set_sprite_pos({x=5,y=2})
+        else
+            card.children.center:set_sprite_pos({x=1,y=2})
         end
     end,
 
@@ -635,7 +666,7 @@ SMODS.Joker{
         if context.setting_blind and not context.blueprint then
             local eaten_card = pseudorandom_element(G.consumeables.cards, 'grasslanders_hornetrix')
             if eaten_card then
-                card.ability.extra_value = card.ability.extra_value + (eaten_card.sell_cost * card.ability.extra.sell_multiplier)
+                card.ability.extra_value = card.ability.extra_value + card.ability.extra.dollars
                 card:set_cost()
                 SMODS.destroy_cards(eaten_card)
                 return {
@@ -647,7 +678,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.sell_multiplier}, key = self.key }
+        return { vars = {card.ability.extra.dollars}, key = self.key }
     end
 }
 
