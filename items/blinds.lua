@@ -106,7 +106,7 @@ SMODS.Blind {
 ]]
 
 SMODS.Atlas({
-    key = "spiker",
+    key = "clackerblind",
     path = "clackerblinds.png",
     atlas_table = 'ANIMATION_ATLAS',
     frames = 21,
@@ -114,9 +114,18 @@ SMODS.Atlas({
     py = 34
 })
 
+SMODS.Atlas({
+    key = "clackerblindplaceholder",
+    path = "clackerblinds.png",
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 1,
+    px = 34,
+    py = 34
+})
+
 SMODS.Blind {
     key = 'spiker',
-    atlas = 'spiker',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 2},
@@ -153,18 +162,9 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Atlas({
-    key = 'clacklume',
-    path = "clackerblinds.png",
-    atlas_table = 'ANIMATION_ATLAS',
-    frames = 21,
-    px = 34,
-    py = 34
-})
-
 SMODS.Blind {
     key = 'clacklume',
-    atlas = 'clacklume',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 3},
@@ -201,18 +201,9 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Atlas({
-    key = 'wondertraps',
-    path = "clackerblinds.png",
-    atlas_table = 'ANIMATION_ATLAS',
-    frames = 21,
-    px = 34,
-    py = 34
-})
-
 SMODS.Blind {
     key = 'wondertraps',
-    atlas = 'wondertraps',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 4},
@@ -249,18 +240,9 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Atlas({
-    key = 'cruncher',
-    path = "clackerblinds.png",
-    atlas_table = 'ANIMATION_ATLAS',
-    frames = 21,
-    px = 34,
-    py = 34
-})
-
 SMODS.Blind {
     key = 'cruncher',
-    atlas = 'cruncher',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 5},
@@ -297,18 +279,9 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Atlas({
-    key = 'observer',
-    path = "clackerblinds.png",
-    atlas_table = 'ANIMATION_ATLAS',
-    frames = 21,
-    px = 34,
-    py = 34
-})
-
 SMODS.Blind {
     key = 'observer',
-    atlas = 'observer',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 6},
@@ -319,7 +292,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.stay_flipped and context.to_area == G.hand and
-                context.debuff_card.ability.played_this_ante then
+                context.other_card.ability.played_this_ante then
                 return {
                     stay_flipped = true
                 }
@@ -344,18 +317,9 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Atlas({
-    key = 'tesloid',
-    path = "clackerblinds.png",
-    atlas_table = 'ANIMATION_ATLAS',
-    frames = 21,
-    px = 34,
-    py = 34
-})
-
 SMODS.Blind {
     key = 'tesloid',
-    atlas = 'tesloid',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 7},
@@ -370,6 +334,558 @@ SMODS.Blind {
                 mult = 1
                 update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
             end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'fangatusk',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 8},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.modify_hand then
+                blind.triggered = true
+                hand_chips = 0
+                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'crawler',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 9},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.setting_blind then
+                blind.var_penalty = 0
+            end
+            if context.before and #context.scoring_hand >= 5 then
+                blind.triggered = true
+                blind.var_penalty = blind.var_penalty + 1
+                G.hand:change_size(-1)
+            end
+        end
+    end,
+
+    disable = function(self)
+        if blind.var_penalty then
+            G.hand:change_size(blind.var_penalty)
+        end
+    end,
+    defeat = function(self)
+        if not G.GAME.blind.disabled then
+            if blind.var_penalty then
+                G.hand:change_size(blind.var_penalty)
+            end
+        end
+    end
+}
+
+SMODS.Blind {
+    key = 'woeslop',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 10},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'veguar',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 11},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'crusher',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 12},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'ripted',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 13},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'shifter',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 14},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'strider',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 15},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'deepwalker',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 16},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'stigz',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 17},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'kyner',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 18},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'rockagnaw',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 19},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'wallkerip',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 20},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'clacteriophage',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 21},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'screecher',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 22},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'leaper',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 23},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'glumplesk',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 24},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'chomper',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 25},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'jawtrap',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 26},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'silentflash',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 27},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'snaggler',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 28},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'bumpohorn',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 29},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'wartumorr',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 30},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'twinckler',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 31},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'maw',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 32},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'persecutor',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 33},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'radiochomper',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 34},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'matriarch',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 35},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 2},
+    boss_colour = HEX("615852"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
         end
     end,
 }

@@ -2208,3 +2208,33 @@ SMODS.Joker{
     end
 }
 ]]
+
+SMODS.Atlas({
+    key = "pilumar",
+    path = "jokers.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Joker{
+    key = "pilumar",
+    config = { extra = {}},
+    pos = { x = 5, y = 4},
+    rarity = 1,
+    cost = 1,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=false,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'pilumar',
+
+    calculate = function(self,card,context)
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {}, key = self.key }
+    end
+}

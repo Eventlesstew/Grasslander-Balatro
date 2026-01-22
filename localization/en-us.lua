@@ -76,6 +76,228 @@ return {
                     "to 1",
                 },
             },
+            bl_grasslanders_fangatusk = {
+                name = "The Fangatusk",
+                text = {
+                    "Sets base Chips",
+                    "to 0",
+                },
+            },
+            bl_grasslanders_crawler = {
+                name = "The Crawler",
+                text = {
+                    "WIP",
+                    "Playing 5 cards reduces",
+                    "your hand size by 1",
+                },
+            },
+            bl_grasslanders_woeslop = {
+                name = "The Woeslop",
+                text = {
+                    "WIP",
+                    "All cards become Gloom",
+                    "Cards in final hand of round",
+                },
+            },
+            bl_grasslanders_veguar = {
+                name = "The Veguar",
+                text = {
+                    "INCOMPLETE",
+                    "Played face cards",
+                    "become Gloom Cards"
+                },
+            },
+            bl_grasslanders_crusher = {
+                name = "The Crusher",
+                text = {
+                    "INCOMPLETE",
+                    "First drawn hand",
+                    "is debuffed"
+                },
+            },
+            bl_grasslanders_ripted = {
+                name = "The Ripted",
+                text = {
+                    "INCOMPLETE",
+                    "Debuffs drawn cards",
+                    "after each hand played"
+                },
+            },
+            bl_grasslanders_shifter = {
+                name = "The Shifter",
+                text = {
+                    "INCOMPLETE",
+                    "Flips all cards in hand",
+                    "after each hand played"
+                },
+            },
+            bl_grasslanders_strider = {
+                name = "The Strider",
+                text = {
+                    "INCOMPLETE",
+                    "Halves your hands",
+                    "and discards"
+                },
+            },
+            bl_grasslanders_deepwalker = {
+                name = "The Deep Walker",
+                text = {
+                    "INCOMPLETE",
+                    "Increases requirement by (X1 base)",
+                    "after each hand played"
+                },
+            },
+            bl_grasslanders_stigz = {
+                name = "The Stigz",
+                text = {
+                    "INCOMPLETE",
+                    "Adds a Gloom Card to hand",
+                    "after each hand played"
+                },
+            },
+            bl_grasslanders_kyner = {
+                name = "The Kyner",
+                text = {
+                    "INCOMPLETE",
+                    "All enhanced cards are",
+                    "drawn face down"
+                },
+            },
+            bl_grasslanders_rockagnaw = {
+                name = "The Rockagnaw",
+                text = {
+                    "INCOMPLETE",
+                    "Lose $1 per Joker triggered",
+                    "during scoring or discarding"
+                },
+            },
+            bl_grasslanders_wallkerip = {
+                name = "The Wallkerip",
+                text = {
+                    "INCOMPLETE",
+                    "Cannot play hands with",
+                    "3 different suits"
+                },
+            },
+            bl_grasslanders_clacteriophage = {
+                name = "The Clacteriophage",
+                text = {
+                    "INCOMPLETE",
+                    "One random card in hand becomes a",
+                    "Gloom Card after each hand played",
+                },
+            },
+            bl_grasslanders_screecher = {
+                name = "The Screecher",
+                text = {
+                    "INCOMPLETE",
+                    "Playing a (Most played hand)",
+                    "decreases it's level by 3",
+                },
+            },
+            bl_grasslanders_leaper = {
+                name = "The Leaper",
+                text = {
+                    "INCOMPLETE",
+                    "1 in 10 cards drawn become",
+                    "Gloom cards",
+                },
+            },
+            bl_grasslanders_glumplesk = {
+                name = "The Glumplesk",
+                text = {
+                    "INCOMPLETE",
+                    "Cannot rearrange any cards",
+                },
+            },
+            bl_grasslanders_chomper = {
+                name = "The Chomper",
+                text = {
+                    "INCOMPLETE",
+                    "Disables a random Joker for each hand",
+                    "Enables a random Joker for each discard"
+                },
+            },
+            bl_grasslanders_jawtrap = {
+                name = "The Jawtrap",
+                text = {
+                    "INCOMPLETE",
+                    "Destroys a random Joker if",
+                    "more than one hand type is played",
+                    "this round"
+                },
+            },
+            bl_grasslanders_silentflash = {
+                name = "The Silent Flash",
+                text = {
+                    "INCOMPLETE",
+                    "After play, always draw",
+                    "1 card",
+                },
+            },
+            bl_grasslanders_snaggler = {
+                name = "The Snaggler",
+                text = {
+                    "INCOMPLETE",
+                    "Cannot draw more than 4 cards",
+                    "after play or discard",
+                },
+            },
+            bl_grasslanders_bumpohorn = {
+                name = "The Bumpohorn",
+                text = {
+                    "INCOMPLETE",
+                    "Repeating a hand type",
+                    "sets money to $0",
+                },
+            },
+            bl_grasslanders_wartumorr = {
+                name = "The Wartumorr",
+                text = {
+                    "INCOMPLETE",
+                    "Gloom Cards cannot be selected",
+                },
+            },
+            bl_grasslanders_twinckler = {
+                name = "Twinckler",
+                text = {
+                    "INCOMPLETE",
+                    "Disables your leftmost and rightmost Jokers",
+                },
+            },
+            bl_grasslanders_maw = {
+                name = "M.A.W",
+                text = {
+                    "INCOMPLETE",
+                    "Resets your score if hand scores",
+                    "less than (25% of required)"
+                },
+            },
+            bl_grasslanders_persecutor = {
+                name = "Persecutor",
+                text = {
+                    "INCOMPLETE",
+                    "Forces 2 cards to be selected",
+                    "after each hand"
+                },
+            },
+            bl_grasslanders_radiochomper = {
+                name = "Radiochomper",
+                text = {
+                    "INCOMPLETE",
+                    "Disables all Jokers",
+                    "After play or discard",
+                    "enable one random Joker"
+                },
+            },
+            bl_grasslanders_matriarch = {
+                name = "The Matriarch",
+                text = {
+                    "INCOMPLETE",
+                    "Resets score when you",
+                    "beat it the first time",
+                },
+            },
         },
         Joker = {
             j_grasslanders_sprinkle = {
@@ -143,7 +365,7 @@ return {
                 },
             },
             j_grasslanders_reeflute = {
-                name = "Reeflute",
+                name = "Reeflet",
                 text = {
                     "All {C:attention}cards {}held in",
                     "hand give their",
@@ -442,6 +664,14 @@ return {
                 name = "???",
                 text = {
                     "{X:black,C:white}UNDISCLOSED"
+                }
+            },
+            j_grasslanders_pilumar = {
+                name = "Pilumar",
+                text = {
+                    "Does nothing",
+                    "{s:0.8,C:inactive}Oh wait he's",
+                    "{s:0.8,C:inactive}fucking dead"
                 }
             },
         },
