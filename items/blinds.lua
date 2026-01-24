@@ -1,3 +1,25 @@
+function shakeBlind(self)
+    G.E_MANAGER:add_event(Event({
+        trigger = 'immediate',
+        func = (function()
+            SMODS.juice_up_blind()
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.06 * G.SETTINGS.GAMESPEED,
+                blockable = false,
+                blocking = false,
+                func = function()
+                    play_sound('tarot2', 0.76, 0.4)
+                    return true
+                end
+            }))
+            play_sound('tarot2', 1, 0.4)
+            return true
+        end)
+    }))
+    delay(0.4)
+end
+
 SMODS.Atlas({
     key = "gloom",
     path = "gloom.png",
@@ -346,8 +368,8 @@ SMODS.Blind {
     pos = {x = 0, y = 8},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss = {min = 1},
+    boss_colour = HEX("825444"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.modify_hand then
@@ -367,30 +389,31 @@ SMODS.Blind {
     pos = {x = 0, y = 9},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss = {min = 1},
+    boss_colour = HEX("3d354c"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.setting_blind then
                 blind.var_penalty = 0
             end
-            if context.before and #context.scoring_hand >= 5 then
+            if context.before and #context.full_hand >= 5 then
                 blind.triggered = true
                 blind.var_penalty = blind.var_penalty + 1
                 G.hand:change_size(-1)
+                shakeBlind()
             end
         end
     end,
 
     disable = function(self)
-        if blind.var_penalty then
-            G.hand:change_size(blind.var_penalty)
+        if G.GAME.blind.var_penalty then
+            G.hand:change_size(G.GAME.blind.var_penalty)
         end
     end,
     defeat = function(self)
         if not G.GAME.blind.disabled then
-            if blind.var_penalty then
-                G.hand:change_size(blind.var_penalty)
+            if G.GAME.blind.var_penalty then
+                G.hand:change_size(G.GAME.blind.var_penalty)
             end
         end
     end
@@ -404,13 +427,27 @@ SMODS.Blind {
     pos = {x = 0, y = 10},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 1},
+    boss_colour = HEX("333545"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                local cards = 0
+                for _, v in ipairs(G.hand.cards) do
+                    cards = cards + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                end
+                if cards > 0 then
+                    shakeBlind()
+                    delay(0.4)
+                end
+            end
         end
     end,
 }
@@ -423,13 +460,30 @@ SMODS.Blind {
     pos = {x = 0, y = 11},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 1, max = 4},
+    boss_colour = HEX("869d7a"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.before and not context.blueprint then
+                local faces = 0
+                for _, scored_card in ipairs(context.scoring_hand) do
+                    if scored_card:is_face() then
+                        faces = faces + 1
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                                scored_card:juice_up()
+                                return true
+                            end
+                        }))
+                    end
+                end
+                if faces > 0 then
+                    return {
+                        shakeBlind()
+                    }
+                end
+            end
         end
     end,
 }
@@ -443,14 +497,30 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss_colour = HEX("73596d"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.to_area == G.hand and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
+                context.other_card.ability.gl_crusher_debuff = true
+                context.other_card.debuff = true
+            end
+            if context.debuff_card and context.debuff_card.ability.gl_crusher_debuff then
+                return {
+                    debuff = true
+                }
+            end
         end
     end,
+    disable = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_crusher_debuff = nil
+        end
+    end,
+    defeat = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_crusher_debuff = nil
+        end
+    end
 }
 
 SMODS.Blind {
@@ -462,12 +532,34 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss_colour = HEX("a05c68"),
     calculate = function(self, blind, context)
+        if context.setting_blind or context.hand_drawn then
+            blind.prepped = nil
+        end
         if not blind.disabled then
+            if context.press_play then
+                blind.prepped = true
+            end
+            if context.to_area == G.hand and blind.prepped then
+                context.other_card.ability.gl_ripted_debuff = true
+                context.other_card.debuff = true
+            end
+            if context.debuff_card and context.debuff_card.ability.gl_ripted_debuff then
+                return {
+                    debuff = true
+                }
+            end
+        end
+    end,
+    disable = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_ripted_debuff = nil
+        end
+    end,
+    defeat = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_ripted_debuff = nil
         end
     end,
 }
@@ -481,14 +573,34 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss_colour = HEX("667359"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.after then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                        for _,v in ipairs(G.hand.cards) do
+                            if v.facing ~= 'back' then
+                                v:flip()
+                            end
+                        end
+                        return true
+                    end,
+                }))
+            end
         end
     end,
+    disable = function(self)
+        for i = 1, #G.hand.cards do
+            if G.hand.cards[i].facing == 'back' then
+                G.hand.cards[i]:flip()
+            end
+        end
+        for _, playing_card in pairs(G.playing_cards) do
+            playing_card.ability.wheel_flipped = nil
+        end
+    end
 }
 
 SMODS.Blind {
@@ -500,13 +612,21 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss_colour = HEX("597371"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind then
+                blind.hands_sub = math.max(math.floor(G.GAME.round_resets.hands * 0.5), 1)
+                ease_hands_played(-blind.hands_sub)
+
+                blind.discards_sub = math.max(math.floor(G.GAME.current_round.discards_left * 0.5), 0)
+                ease_discard(-blind.discards_sub)
+            end
         end
+    end,
+    disable = function(self)
+        ease_hands_played(G.GAME.blind.hands_sub)
+        ease_discard(G.GAME.blind.discards_sub)
     end,
 }
 
@@ -520,9 +640,6 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 2},
     boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
         end

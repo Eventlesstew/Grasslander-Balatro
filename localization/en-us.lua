@@ -80,29 +80,26 @@ return {
                 name = "The Fangatusk",
                 text = {
                     "Sets base Chips",
-                    "to 0",
+                    "to 0"
                 },
             },
             bl_grasslanders_crawler = {
                 name = "The Crawler",
                 text = {
-                    "WIP",
                     "Playing 5 cards reduces",
-                    "your hand size by 1",
+                    "your hand size by 1"
                 },
             },
             bl_grasslanders_woeslop = {
                 name = "The Woeslop",
                 text = {
-                    "WIP",
-                    "All cards become Gloom",
-                    "Cards in final hand of round",
+                    "All cards held in hand become",
+                    "Gloom Cards at end of round"
                 },
             },
             bl_grasslanders_veguar = {
                 name = "The Veguar",
                 text = {
-                    "INCOMPLETE",
                     "Played face cards",
                     "become Gloom Cards"
                 },
@@ -110,7 +107,6 @@ return {
             bl_grasslanders_crusher = {
                 name = "The Crusher",
                 text = {
-                    "INCOMPLETE",
                     "First drawn hand",
                     "is debuffed"
                 },
@@ -118,7 +114,6 @@ return {
             bl_grasslanders_ripted = {
                 name = "The Ripted",
                 text = {
-                    "INCOMPLETE",
                     "Debuffs drawn cards",
                     "after each hand played"
                 },
@@ -126,7 +121,6 @@ return {
             bl_grasslanders_shifter = {
                 name = "The Shifter",
                 text = {
-                    "INCOMPLETE",
                     "Flips all cards in hand",
                     "after each hand played"
                 },
@@ -134,7 +128,6 @@ return {
             bl_grasslanders_strider = {
                 name = "The Strider",
                 text = {
-                    "INCOMPLETE",
                     "Halves your hands",
                     "and discards"
                 },
@@ -143,7 +136,7 @@ return {
                 name = "The Deep Walker",
                 text = {
                     "INCOMPLETE",
-                    "Increases requirement by (X1 base)",
+                    "Increases requirement by [1X base]",
                     "after each hand played"
                 },
             },
