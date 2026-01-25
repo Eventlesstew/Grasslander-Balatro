@@ -772,6 +772,12 @@ SMODS.Joker{
         end
     end,
 
+    set_ability = function(self, card, initial, delay_sprites)
+        if G.GAME.current_round.last_played_hand then
+            card.ability.extra.poker_hand = G.GAME.current_round.last_played_hand
+        end
+    end,
+
     loc_vars = function(self, info_queue, card)
         return { vars = {
             localize(card.ability.extra.poker_hand, 'poker_hands'),
@@ -811,7 +817,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 100, chip_penalty = 10, chip_mod = 100}},
+    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 100}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 5,
@@ -1204,6 +1210,12 @@ SMODS.Joker{
             return {
                 mult = card.ability.extra.mult
             }
+        end
+    end,
+
+    set_ability = function(self, card, initial, delay_sprites)
+        if G.GAME.current_round.last_played_hand then
+            card.ability.extra.poker_hand = G.GAME.current_round.last_played_hand
         end
     end,
 
@@ -2090,11 +2102,6 @@ SMODS.Joker{
     end
 }
 
-function SMODS.current_mod.reset_game_globals(run_start)
-    reset_junklake()
-end
-
-
 SMODS.Atlas({
     key = "synth3",
     path = "jokers.png",
@@ -2231,3 +2238,16 @@ SMODS.Joker{
     end
 }
 ]]
+function SMODS.current_mod.reset_game_globals(run_start)
+    if run_start then
+        G.GAME.current_round.last_played_hand = 'High Card'
+    end
+
+    reset_junklake()
+end
+
+function SMODS.current_mod.calculate(self, context)
+    if context.before then
+        G.GAME.current_round.last_played_hand = context.scoring_name
+    end
+end

@@ -305,9 +305,8 @@ return {
             j_grasslanders_scorpibeat = {
                 name = "Scorpibeat",
                 text = {
-                    "{C:mult}+#1# {}Mult when",
-                    "{C:attention}Boss Blind {}is",
-                    "selected"
+                    "{C:mult}+#1# {}Mult during",
+                    "a {C:attention}Boss Blind{}"
                 },
             },
             j_grasslanders_blowy = {
@@ -377,8 +376,8 @@ return {
             j_grasslanders_anjellyze = {
                 name = "Anjellyze",
                 text = {
-                    "Upgrades poker hand if it",
-                    "is a {C:attention}#3#{}",
+                    "Upgrades poker hand",
+                    "if it is a {C:attention}#3#{}",
                     "poker hand changes",
                     "each hand"
                 },
@@ -479,12 +478,10 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "Gains {C:mult}+#2# {}Mult for",
-                    "each consecutive {C:attention}#3#",
-                    "played, resets and changes to a",
-                    "different {C:attention}poker hand",
-                    "if played",
-                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
+                    "{C:mult}+#2#{} Mult for each",
+                    "consecutive poker hand",
+                    "{C:inactive}(Currently {C:attention}#3#{}",
+                    "{C:inactive}at {C:mult}+#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_wisplasm = {
@@ -545,8 +542,8 @@ return {
                 text = {
                     "Gains {X:mult,C:white}X#2#{} Mult if played",
                     "hand contains a {C:attention}#5#",
-                    "Resets if hand does not contain a",
-                    "{C:attention}#3#{} or a {C:attention}#4#{}",
+                    "Resets if hand does not",
+                    "contain a {C:attention}#3#{} or a {C:attention}#4#{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },

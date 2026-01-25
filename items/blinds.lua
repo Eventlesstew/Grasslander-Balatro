@@ -33,6 +33,9 @@ SMODS.Enhancement {
     replace_base_card = true,
     no_rank = true,
     no_suit = true,
+    in_pool = function(self, args)
+        return false
+    end,
 }
 
 SMODS.Atlas({
