@@ -437,7 +437,7 @@ SMODS.Blind {
                     cards = cards + 1
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                            v:set_ability('m_grasslanders_gloom', nil, false)
                             v:juice_up()
                             return true
                         end
