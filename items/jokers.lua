@@ -692,7 +692,7 @@ SMODS.Atlas({
 SMODS.Joker{
     key = "anjellyze",
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 0, mult_mod = 4, poker_hand = 'High Card'}},
+    config = { extra = {poker_hand = 'High Card'}},
     pos = { x = 2, y = 2 },
     rarity = 1,
     cost = 5,
@@ -705,14 +705,14 @@ SMODS.Joker{
     soul_pos=nil,
 
     calculate = function(self,card,context)
+        if context.before and context.scoring_name == card.ability.extra.poker_hand then
+            return {
+                level_up = true,
+                message = localize('k_level_up_ex')
+            }
+        end
+
         if not context.blueprint then
-            if context.before and context.scoring_name == card.ability.extra.poker_hand then
-                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-                return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.MULT,
-                }
-            end
             if context.end_of_round and context.game_over == false and context.main_eval then
                 local _poker_hands = {}
                 for handname, _ in pairs(G.GAME.hands) do
@@ -720,17 +720,21 @@ SMODS.Joker{
                         _poker_hands[#_poker_hands + 1] = handname
                     end
                 end
-                card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'vremade_to_do')
+                card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
                 return {
                     message = localize('k_reset')
                 }
             end
         end
-        if context.joker_main then
-            return {
-                mult = card.ability.extra.mult
-            }
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        local _poker_hands = {}
+        for handname, _ in pairs(G.GAME.hands) do
+            if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
+                _poker_hands[#_poker_hands + 1] = handname
+            end
         end
+        card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -792,6 +796,9 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
 
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
 
     end,
@@ -926,7 +933,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.chips}, key = self.key }
     end
 }
 
@@ -1410,6 +1417,9 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'litabelle',
 
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
 
     end,
@@ -1428,7 +1438,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "erny",
-    config = { extra = {x_mult = 1, x_mult_mod = 1, hand1 = 'Straight', hand2 = 'Flush'}},
+    config = { extra = {x_mult = 1, x_mult_mod = 1, uphand = 'Straight Flush', hand1 = 'Straight', hand2 = 'Flush'}},
     pos = { x = 3, y = 5 },
     rarity = 2,
     cost = 7,
@@ -1443,7 +1453,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.before then
-            if next(context.poker_hands[card.ability.extra.hand1]) and next(context.poker_hands[card.ability.extra.hand2]) then
+            if next(context.poker_hands[card.ability.extra.uphand]) then
                 card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
                     message = localize('k_upgrade_ex'),
@@ -1470,7 +1480,8 @@ SMODS.Joker{
             card.ability.extra.x_mult,
             card.ability.extra.x_mult_mod,
             localize(card.ability.extra.hand1, 'poker_hands'),
-            localize(card.ability.extra.hand2, 'poker_hands')
+            localize(card.ability.extra.hand2, 'poker_hands'),
+            localize(card.ability.extra.uphand, 'poker_hands')
         }, key = self.key }
     end
 }
@@ -1739,6 +1750,9 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'vegebonion',
 
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
 
     end,
@@ -1769,6 +1783,10 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'deespirr',
+
+    in_pool = function(self, args)
+        return false
+    end,
 
     calculate = function(self,card,context)
 
@@ -1802,6 +1820,9 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'hyphilliacs',
 
+    in_pool = function(self, args)
+        return false
+    end,
     calculate = function(self,card,context)
         if context.before and not context.blueprint then
             for _, scored_card in ipairs(context.scoring_hand) do
@@ -1950,8 +1971,10 @@ SMODS.Joker{
     soul_pos={ x = 0, y = 9 },
     atlas = 'sugamimi',
 
+    in_pool = function()
+        return false
+    end,
     calculate = function(self,card,context)
-
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -2208,33 +2231,3 @@ SMODS.Joker{
     end
 }
 ]]
-
-SMODS.Atlas({
-    key = "pilumar",
-    path = "jokers.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Joker{
-    key = "pilumar",
-    config = { extra = {}},
-    pos = { x = 5, y = 4},
-    rarity = 1,
-    cost = 1,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=false,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'pilumar',
-
-    calculate = function(self,card,context)
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
-}

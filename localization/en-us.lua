@@ -377,12 +377,10 @@ return {
             j_grasslanders_anjellyze = {
                 name = "Anjellyze",
                 text = {
-                    "This {C:attention}Joker{} gains",
-                    "{C:mult}+#2#{} Mult if poker hand",
-                    "is a {C:attention}#3#",
+                    "Upgrades poker hand if it",
+                    "is a {C:attention}#3#{}",
                     "poker hand changes",
-                    "at end of round",
-                    "{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult)"
+                    "each hand"
                 },
             },
             j_grasslanders_logobreak = {
@@ -419,6 +417,7 @@ return {
                     "there are no other cards",
                     "that contain the same",
                     "{C:attention}enhancement{}",
+                    "{C:inactive}(No enhancement counts)"
                 },
             },
             j_grasslanders_hornetrix = {
@@ -450,7 +449,9 @@ return {
             j_grasslanders_santile = {
                 name = "Santile",
                 text = {
-                    "Stone cards give +150 chips when scored, but have a 1 in 4 chance to be destroyed",
+                    "Stone cards give {C:chips}+150{} chips",
+                    "when scored, but have a 1 in 4 chance",
+                    "to be destroyed",
                 },
             },
             j_grasslanders_penny = {
@@ -543,9 +544,9 @@ return {
                 name = "Erny",
                 text = {
                     "Gains {X:mult,C:white}X#2#{} Mult if played",
-                    "hand contains a {C:attention}#3#",
-                    "and a {C:attention}#4#{}, resets if",
-                    "hand contains neither",
+                    "hand contains a {C:attention}#5#",
+                    "Resets if hand does not contain a",
+                    "{C:attention}#3#{} or a {C:attention}#4#{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
