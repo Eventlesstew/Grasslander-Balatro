@@ -788,7 +788,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     config = { extra = {}},
     pos = { x = 3, y = 2 },
-    rarity = 2,
+    rarity = 3,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
@@ -875,7 +875,7 @@ SMODS.Joker{
     key = "tickini",
     config = { extra = {}},
     pos = { x = 1, y = 4},
-    rarity = 2,
+    rarity = 3,
     cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
@@ -1559,7 +1559,7 @@ SMODS.Atlas({
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {mult = 0, mult_mod = 2, chosen_joker = 0}},
+    config = { extra = {chips = 0, chip_mod = 5, chosen_joker = 0}},
     pos = { x = 1, y = 5 },
     rarity = 3,
     cost = 9,
@@ -1606,16 +1606,52 @@ SMODS.Joker{
             end
         end
 
-        local my_pos = nil
-        for i = 1, #G.jokers.cards do
-            if G.jokers.cards[i] == card then my_pos = i end
+        if context.before and not context.blueprint then
+            local cards = {}
+            for _,v in ipairs(G.jokers.cards) do
+                table.insert(cards, v)
+            end
+            for _,v in ipairs(G.hand.cards) do
+                table.insert(cards, v)
+            end
+            for _,v in ipairs(context.scoring_hand) do
+                table.insert(cards, v)
+            end
+
+            local debuffed_cards = {}
+            for _,v in ipairs(cards) do
+                if v.debuff then
+                    debuffed_cards[#debuffed_cards + 1] = v
+                end
+            end
+            if #debuffed_cards > 0 then
+                card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod * #debuffed_cards)
+
+                local effect = {}
+                for _,v in ipairs(debuffed_cards) do
+                    effect[#effect + 1] = {
+                        func = function()
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    v:juice_up()
+                                    return true
+                                end
+                            }))
+                        end,
+                    }
+                    effect[#effect + 1] = {
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.CHIPS,
+                        message_card = card,
+                    }
+                end
+                return SMODS.merge_effects(effect)
+            end
         end
-        local ret = SMODS.blueprint_effect(card, G.jokers.cards[my_pos + 1], context)
-        if ret then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.x_mult_mod
+
+        if context.joker_main then
             return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT
+                chips = card.ability.extra.chips
             }
         end
         --[[
@@ -1638,7 +1674,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.mult, card.ability.extra.mult_mod}, key = self.key }
+        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
     end
 }
 
@@ -1781,7 +1817,7 @@ SMODS.Joker{
     key = "deespirr",
     config = { extra = {}},
     pos = { x = 1, y = 7 },
-    rarity = 3,
+    rarity = 2,
     cost = 8,
     blueprint_compat=true,
     eternal_compat=true,

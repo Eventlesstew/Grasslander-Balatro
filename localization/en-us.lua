@@ -564,9 +564,10 @@ return {
                 name = "Edward",
                 text = {
                     "Disables {C:attention}Joker{} to the right",
-                    "and gains {C:mult}+#2#{} Mult if it",
-                    "attempts to trigger",
-                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
+                    "and gains {C:chips}+#2#{} Chips for each",
+                    "{C:attention}Joker{}, played card or held card",
+                    "for each hand",
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
 
@@ -721,6 +722,13 @@ return {
             k_sleep_ex="Sleep!",
             k_awake_ex="Awake!",
             --anjellyze_none = "None",
+
+            gl_options_grasslanders = 'Grasslander Jokers',
+            gl_options_hornetrix = 'Family Friendly Mode',
+            gl_options_clackerblindtitle = 'Clacker Blinds',
+            gl_options_clackerblind0 = 'Disabled',
+            gl_options_clackerblind1 = 'Enabled',
+            gl_options_clackerblind2 = 'Replace Base (WIP)',
         }
     }
 }
