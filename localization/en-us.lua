@@ -25,13 +25,17 @@ return {
         },
         Blind = {
             bl_grasslanders_clacker = {
-                name = "Small Blind",
+                name = "The Clacker",
                 text = {
+                    "INCOMPLETE",
+                    "Turns one random card held in hand",
+                    "to a gloom card when played",
                 },
             },
             bl_grasslanders_biter = {
-                name = "Big Blind",
+                name = "The Biter",
                 text = {
+                    "INCOMPLETE",
                 },
             },
             bl_grasslanders_spiker = {
@@ -377,7 +381,7 @@ return {
                 name = "Anjellyze",
                 text = {
                     "Upgrades poker hand",
-                    "if it is a {C:attention}#3#{}",
+                    "if it is a {C:attention}#1#{}",
                     "poker hand changes",
                     "each hand"
                 },

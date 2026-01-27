@@ -706,14 +706,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.before and context.scoring_name == card.ability.extra.poker_hand then
-            return {
-                level_up = true,
-                message = localize('k_level_up_ex')
-            }
-        end
-
-        if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval then
+            if not context.blueprint then
                 local _poker_hands = {}
                 for handname, _ in pairs(G.GAME.hands) do
                     if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
@@ -721,12 +714,15 @@ SMODS.Joker{
                     end
                 end
                 card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
-                return {
-                    message = localize('k_reset')
-                }
             end
+
+            return {
+                level_up = true,
+                message = localize('k_level_up_ex')
+            }
         end
     end,
+
     set_ability = function(self, card, initial, delay_sprites)
         local _poker_hands = {}
         for handname, _ in pairs(G.GAME.hands) do
@@ -738,7 +734,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
+        return {vars = {localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
     end
 }
 
