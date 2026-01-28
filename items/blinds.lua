@@ -94,11 +94,22 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 2},
     boss_colour = HEX("39405b"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
-        if not blind.disabled then
+        if context.after then
+            local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
+            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+            _card.playing_card = G.playing_card
+            table.insert(G.playing_cards, _card)
+
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.hand:emplace(_card)
+                    _card:start_materialize()
+                    G.hand:sort()
+                    SMODS.juice_up_blind()
+                    return true
+                end
+            }))
         end
     end,
 }
@@ -118,6 +129,7 @@ SMODS.Blind {
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            
         end
     end,
 }
@@ -845,11 +857,8 @@ SMODS.Blind {
     pos = {x = 0, y = 35},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {showdown = true},
     boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
         end
@@ -866,6 +875,10 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 1, max = 4},
     boss_colour = HEX("607f5c"),
+    in_pool = function()
+        local result = (1 <= G.GAME.round_resets.ante) and (G.GAME.round_resets.ante <= 4)
+        return result
+    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.before and not context.blueprint then

@@ -27,15 +27,15 @@ return {
             bl_grasslanders_clacker = {
                 name = "The Clacker",
                 text = {
-                    "INCOMPLETE",
-                    "Turns one random card held in hand",
-                    "to a gloom card when played",
+                    "Adds a Gloom Card to deck",
+                    "after each hand played",
                 },
             },
             bl_grasslanders_biter = {
                 name = "The Biter",
                 text = {
-                    "INCOMPLETE",
+                    "Debuffs 2 random cards held",
+                    "in hand after each hand",
                 },
             },
             bl_grasslanders_spiker = {
@@ -575,10 +575,11 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
+                    "At start of round",
                     "Disables {C:attention}Joker{} to the right",
                     "and gains {C:chips}+#2#{} Chips for each",
-                    "{C:attention}Joker{}, played card or held card",
-                    "for each hand",
+                    "{C:attention}Joker{}, played card or held",
+                    "card for each hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
@@ -693,6 +694,8 @@ return {
             k_awake_ex="Awake!",
             --anjellyze_none = "None",
 
+            grasslanders_drollfunny = "Drool Joker",
+
             gl_chonkreep = 'Reduced!',
 
             gl_options_grasslanders = 'Grasslander Jokers',
@@ -703,6 +706,7 @@ return {
             gl_options_clackerblind0 = 'Disabled',
             gl_options_clackerblind1 = 'Enabled',
             gl_options_clackerblind2 = 'Replace Base',
+            gl_options_funny = 'The funny option',
         }
     }
 }

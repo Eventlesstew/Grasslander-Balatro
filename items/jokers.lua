@@ -460,7 +460,7 @@ SMODS.Joker{
                     colour = G.C.MULT
                 }
             end
-            if context.other_card:get_edition() then
+            if context.other_card.edition == 'e_polychrome' then
                 SMODS.destroy_cards(card, nil, nil, true)
                 SMODS.add_card{key = "j_grasslanders_lumobonk"}
             end
@@ -761,10 +761,6 @@ SMODS.Joker{
             }
         end
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Joker{
@@ -1382,13 +1378,13 @@ end
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {chips = 0, chip_mod = 5, chosen_joker = 0}},
+    config = { extra = {chips = 0, chip_mod = 5, chosen_joker = 0, active = false}},
     pos = { x = 1, y = 5 },
     rarity = 3,
     cost = 9,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false, -- TODO: Test if Edward works with Perishable Jokers
     unlocked = true,
     discovered = true,
     effect=nil,
@@ -1399,76 +1395,84 @@ SMODS.Joker{
         if context.debuff_card and context.debuff_card.area == G.jokers and context.debuff_card == G.jokers.cards[card.ability.extra.chosen_joker] then
             return {debuff = true}
         end
-        
-        if 
-            (context.card_added and context.cardarea == G.jokers) or
-            (context.selling_card and context.cardarea == G.jokers) or
-            (context.grasslanders_stop_drag and context.cardarea == G.jokers) or
-            context.joker_type_destroyed
-        then
-            local old_pos = card.ability.extra.chosen_joker
-            for k, v in pairs(G.jokers.cards) do
-                if v == card then
-                    card.ability.extra.chosen_joker = k + 1
-                    break
-                end
+
+        if not context.blueprint then
+            if context.setting_blind then
+                card.ability.extra.active = true
             end
 
-            --[[
-            local target_jokers = {G.jokers.cards[card.ability.extra.chosen_joker]}
-            if old_pos ~= card.ability.extra.chosen_joker then
-                target_jokers[#target_jokers + 1] = G.jokers.cards[old_pos]
-            end
-            ]]
-            for _,v in pairs(G.jokers.cards) do
-                local debuffed = v.debuff
-                SMODS.recalc_debuff(v)
-                if v.debuff ~= debuffed then
-                    v:juice_up()
-                end
-            end
-        end
-
-        if context.before and not context.blueprint then
-            local cards = {}
-            for _,v in ipairs(G.jokers.cards) do
-                table.insert(cards, v)
-            end
-            for _,v in ipairs(G.hand.cards) do
-                table.insert(cards, v)
-            end
-            for _,v in ipairs(context.scoring_hand) do
-                table.insert(cards, v)
+            if context.end_of_round and context.game_over == false and context.main_eval then 
+                card.ability.extra.active = false
             end
 
-            local debuffed_cards = {}
-            for _,v in ipairs(cards) do
-                if v.debuff then
-                    debuffed_cards[#debuffed_cards + 1] = v
+            if 
+                (context.end_of_round and context.game_over == false and context.main_eval) or
+                context.setting_blind or
+                (context.card_added and context.cardarea == G.jokers) or
+                (context.selling_card and context.cardarea == G.jokers) or
+                (context.grasslanders_stop_drag and context.cardarea == G.jokers) or
+                context.joker_type_destroyed
+            then
+                if card.ability.extra.active then
+                    for k, v in pairs(G.jokers.cards) do
+                        if v == card then
+                            card.ability.extra.chosen_joker = k + 1
+                            break
+                        end
+                    end
+                else
+                    card.ability.extra.chosen_joker = 0
+                end
+
+                for _,v in pairs(G.jokers.cards) do
+                    local debuffed = v.debuff
+                    SMODS.recalc_debuff(v)
+                    if v.debuff ~= debuffed then
+                        v:juice_up()
+                    end
                 end
             end
-            if #debuffed_cards > 0 then
-                card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod * #debuffed_cards)
-
-                local effect = {}
-                for _,v in ipairs(debuffed_cards) do
-                    effect[#effect + 1] = {
-                        func = function()
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    v:juice_up()
-                                    return true
-                                end
-                            }))
-                        end,
-                    }
-                    effect[#effect + 1] = {
-                        message = localize('k_upgrade_ex'),
-                        colour = G.C.CHIPS,
-                        message_card = card,
-                    }
+            if context.before then
+                local cards = {}
+                for _,v in ipairs(G.jokers.cards) do
+                    table.insert(cards, v)
                 end
-                return SMODS.merge_effects(effect)
+                for _,v in ipairs(G.hand.cards) do
+                    table.insert(cards, v)
+                end
+                for _,v in ipairs(context.scoring_hand) do
+                    table.insert(cards, v)
+                end
+
+                local debuffed_cards = {}
+                for _,v in ipairs(cards) do
+                    if v.debuff then
+                        debuffed_cards[#debuffed_cards + 1] = v
+                    end
+                end
+                if #debuffed_cards > 0 then
+                    card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod * #debuffed_cards)
+
+                    local effect = {}
+                    for _,v in ipairs(debuffed_cards) do
+                        effect[#effect + 1] = {
+                            func = function()
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        v:juice_up()
+                                        return true
+                                    end
+                                }))
+                            end,
+                        }
+                        effect[#effect + 1] = {
+                            message = localize('k_upgrade_ex'),
+                            colour = G.C.CHIPS,
+                            message_card = card,
+                        }
+                    end
+                    return SMODS.merge_effects(effect)
+                end
             end
         end
 
