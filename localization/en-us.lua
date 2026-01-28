@@ -334,10 +334,11 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "If a {C:attention}Joker {}is sold or",
-                    "destroyed, creates an {C:attention}Eternal",
-                    "copy with a random",
-                    "{C:attention}enhancement",
+                    "If any other compatible",
+                    "{C:attention}Joker{} is sold or destroyed,",
+                    "create a copy with {C:attention}Eternal{}",
+                    "and a random {C:dark_edition}Edition{}",
+                    "{C:inactive,s:0.8}(Cannot copy expendable {C:attention,s:0.8}Jokers{C:inactive,s:0.8})"
                 },
             },
             j_grasslanders_frogobonk = {
@@ -404,13 +405,21 @@ return {
                     "are remaining"
                 },
             },
+            j_grasslanders_altjunklake = {
+                name = "Junklake",
+                text = {
+                    "Each discarded {C:attention}#2#",
+                    "of {V:1}#3#{} gives",
+                    "{C:money}$#1#{} and is destroyed",
+                    "{s:0.8}Card changes every round",
+                },
+            },
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "Gives {C:money}$#1# {}if all {C:attention}#2#s",
-                    "are {C:attention}played {}or {C:attention}discarded",
-                    "Rank changes every round",
-                    "{C:inactive}(Currently {C:attention}#3#{C:inactive}/{C:attention}#4#{C:inactive})"
+                    "If every {C:attention}#2#{} is discarded,",
+                    "destroy them and give {C:money}$#1#{}",
+                    "{C:inactive}(Currently {C:attention}#3#/#4#{C:inactive})"
                 },
             },
             j_grasslanders_pricklea = {
@@ -435,26 +444,29 @@ return {
             j_grasslanders_chonkreep = {
                 name = "Chonkreep",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Reduces {C:attention}Blind{} requirement",
+                    "by 25% after hand",
+                    "is played"
                 },
             },
 
             j_grasslanders_mossibug = {
                 name = "Mossibug",
                 text = {
-                    "{C:chips}+#1#{} Chips",
-                    "{C:chips}-#2#{} Chips after",
+                    "Gains {C:chips}+#3#{} Chips when",
+                    "{C:attention}Boss Blind{} is defeated",
+                    "Loses {C:chips}-#2#{} Chips after",
                     "played hand or discard",
-                    "{C:chips}+#3#{} Chips when",
-                    "{C:attention}Boss Blind{} is defeated"
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
             },
             j_grasslanders_santile = {
                 name = "Santile",
                 text = {
-                    "Stone cards give {C:chips}+150{} chips",
-                    "when scored, but have a 1 in 4 chance",
-                    "to be destroyed",
+                    "Played {C:attention}Stone{} cards give",
+                    "{C:chips}+#3#{} chips when scored",
+                    "{C:green}#1# in #2#{} chance to destroy",
+                    "played {C:attention}Stone{} cards",
                 },
             },
             j_grasslanders_penny = {
@@ -571,24 +583,11 @@ return {
                 },
             },
 
-            j_grasslanders_quad3 = {
+            j_grasslanders_ddquad = {
                 name = "???",
                 text = {
-                    "{X:black,C:white}UNDISCLOSED",
-                    "{C:inactive}It's revelation",
-                    "{C:inactive}is approaching..."
-                }
-            },
-            j_grasslanders_quad4 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
-            j_grasslanders_quad5 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
+                    "This {C:attention}Joker",
+                    "drools",
                 }
             },
 
@@ -614,19 +613,6 @@ return {
                 },
             },
 
-            j_grasslanders_bad4 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
-            j_grasslanders_bad5 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
-
             j_grasslanders_sugamimi = {
                 name = "Sugamimi",
                 text = {
@@ -636,32 +622,16 @@ return {
             j_grasslanders_vacomar = {
                 name = "Vacomar",
                 text = {
-                    "{C:red}+#4# {}discard if all", 
+                    "If {C:attention}first discard{} of round",
+                    "has only {C:attention}1{} card, store",
+                    "its {C:attention}rank{} and {C:attention}suit{}",
+                    "Grants {C:red}+#4#{} discard if all", 
                     "discarded cards match",
-                    "the {C:attention}suit {}or {C:attention}rank {}of",
-                    "first discarded card",
-                    "of round",
+                    "the stored {C:attention}rank{} or {C:attention}suit{}",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive}#2#{V:1}#3#{C:inactive})"
                 },
             },
-            j_grasslanders_synth3 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
-            j_grasslanders_synth4 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
-            j_grasslanders_synth5 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
-            },
+
             j_grasslanders_pilumar = {
                 name = "Pilumar",
                 text = {
@@ -723,12 +693,16 @@ return {
             k_awake_ex="Awake!",
             --anjellyze_none = "None",
 
+            gl_chonkreep = 'Reduced!',
+
             gl_options_grasslanders = 'Grasslander Jokers',
+
             gl_options_hornetrix = 'Family Friendly Mode',
+            gl_options_altjunklake = 'Alternate Junklake',
             gl_options_clackerblindtitle = 'Clacker Blinds',
             gl_options_clackerblind0 = 'Disabled',
             gl_options_clackerblind1 = 'Enabled',
-            gl_options_clackerblind2 = 'Replace Base (WIP)',
+            gl_options_clackerblind2 = 'Replace Base',
         }
     }
 }

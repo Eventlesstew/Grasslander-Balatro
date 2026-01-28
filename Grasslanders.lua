@@ -29,6 +29,7 @@ grasslanders.config_tab = function()
 		nodes =  {
             create_toggle({label = localize('gl_options_hornetrix'), ref_table = grasslanders.config, ref_value = "althornetrix", callback = function() grasslanders:save_config() end}),
             create_toggle({label = localize('gl_options_grasslanders'), ref_table = grasslanders.config, ref_value = "grasslanderJokers", callback = function() grasslanders:save_config() end}),
+            create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
             create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
                 current_option = grasslanders.config.clackerblinds,
                 label = localize('gl_options_clackerblindtitle'),
@@ -55,4 +56,14 @@ if grasslanders.config.grasslanderJokers == true then
 end
 if grasslanders.config.clackerblinds > 0 then
     assert(SMODS.load_file("items/blinds.lua"))()
+
+    if grasslanders.config.clackerblinds >= 2 then
+        local add_to_pool_ref = SMODS.add_to_pool
+        SMODS.add_to_pool = function(prototype_obj, args)
+            if prototype_obj.key:sub(1, 2) == "bl" and not prototype_obj.original_mod then
+                return false
+            end
+            return add_to_pool_ref(prototype_obj, args)
+        end
+    end
 end
