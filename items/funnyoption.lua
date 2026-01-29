@@ -35,3 +35,23 @@ SMODS.Joker:take_ownership('droll', {
         },
     }
 )]]
+
+SMODS.Joker{
+    key = "ddquad",
+    config = { extra = {}},
+    pos = { x = 0, y = 4 },
+    rarity = 4,
+    cost = 20,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    atlas = 'grasslanderJoker',
+
+    in_pool = function(self, args)
+        return false
+    end,
+}

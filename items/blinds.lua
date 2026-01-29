@@ -17,7 +17,6 @@ function shakeBlind(self)
             return true
         end)
     }))
-    delay(0.4)
 end
 
 SMODS.Atlas({
@@ -92,7 +91,7 @@ SMODS.Blind {
     pos = {x = 0, y = 0},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 1},
     boss_colour = HEX("39405b"),
     calculate = function(self, blind, context)
         if context.after then
@@ -122,14 +121,43 @@ SMODS.Blind {
     pos = {x = 0, y = 1},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 1},
     boss_colour = HEX("82444b"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
-            
+            if context.setting_blind then
+                blind.prepped = nil
+            end
+
+            -- Ensures the Blind will debuff cards next hand
+            if context.after then
+                blind.prepped = true
+            end
+
+            if context.hand_drawn and blind.prepped then
+                -- Debuffs cards
+                for i = 1, 2 do
+                    local valid_cards = {}
+                    for _, v in ipairs(G.hand.cards) do
+                        if not v.gl_biter_debuff then
+                            valid_cards[#valid_cards + 1] = v
+                        end
+                    end
+                    local target_card = pseudorandom_element(valid_cards, 'gl_biter')
+                    target_card:juice_up()
+                    target_card.gl_biter_debuff = true
+                    SMODS.recalc_debuff(target_card)
+                end
+                blind.prepped = nil
+                shakeBlind()
+                delay(0.4)
+            end
+
+            if context.debuff_card and context.debuff_card.gl_biter_debuff then
+                return {
+                    debuff = true
+                }
+            end
         end
     end,
 }
@@ -390,6 +418,7 @@ SMODS.Blind {
                 blind.var_penalty = blind.var_penalty + 1
                 G.hand:change_size(-1)
                 shakeBlind()
+                delay(0.4)
             end
         end
     end,
@@ -434,7 +463,7 @@ SMODS.Blind {
                 end
                 if cards > 0 then
                     shakeBlind()
-                    delay(0.4)
+                    delay(0.8)
                 end
             end
         end
@@ -593,12 +622,30 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 2},
     boss_colour = HEX("39545b"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.hand_drawn and not context.first_hand_drawn then
+                shakeBlind()
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.GAME.blind.chips = G.GAME.blind.chips + get_blind_amount(G.GAME.round_resets.ante)
+                        G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                        return true
+                    end
+                }))
+            end
         end
+    end,
+    disable = function(self)
+        G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante) * G.GAME.blind.mult
+        G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+    end,
+
+    loc_vars = function(self)
+        return { vars = {get_blind_amount(G.GAME.round_resets.ante)} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize('gl_deepwalker_x1')} }
     end,
 }
 
@@ -898,6 +945,7 @@ SMODS.Blind {
                 if faces > 0 then
                     return {
                         shakeBlind()
+                        delay(0.4)
                     }
                 end
             end

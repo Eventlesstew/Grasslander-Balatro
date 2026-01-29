@@ -139,9 +139,8 @@ return {
             bl_grasslanders_deepwalker = {
                 name = "The Deep Walker",
                 text = {
-                    "INCOMPLETE",
-                    "Increases requirement by [1X base]",
-                    "after each hand played"
+                    "Increases score requirement by",
+                    "#1# after each hand played"
                 },
             },
             bl_grasslanders_stigz = {
@@ -697,6 +696,7 @@ return {
             grasslanders_drollfunny = "Drool Joker",
 
             gl_chonkreep = 'Reduced!',
+            gl_deepwalker_x1 = '[X1 Base]',
 
             gl_options_grasslanders = 'Grasslander Jokers',
 

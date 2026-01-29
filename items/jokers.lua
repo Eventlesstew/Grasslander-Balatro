@@ -222,7 +222,10 @@ SMODS.Joker{
     effect=nil,
 
     calculate = function(self,card,context)
-        if (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) then
+        if 
+            (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and 
+            #G.jokers.cards + G.GAME.joker_buffer - 1 < G.jokers.config.card_limit 
+        then
             if context.card ~= card and context.card.config.center.eternal_compat then
                 local copied_joker = copy_card(context.card)
                 copied_joker:set_edition(poll_edition('grasslanders_trizap', 1, false, true), true)
@@ -409,26 +412,31 @@ SMODS.Joker{
     cost = 5,                                            --cost to buy the joker in shops.
     blueprint_compat=true,                               --does joker work with blueprint.
     eternal_compat=true,                                 --can joker be eternal.
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,                                     --is joker unlocked by default.
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.
 
-    calculate = function(self,card,context)              --define calculate functions here
-        if context.setting_blind then
+    calculate = function(self,card,context)
+        if not context.blueprint and context.discard then
             card.ability.extra.active = true
         end
-        if context.hand_drawn and G.GAME.current_round.discards_left == card.ability.extra.d_remaining and card.ability.extra.active then
-            card.ability.extra.active = false
-            return {
-                message = localize('k_erupt_ex'),
-                colour = G.C.RED,
-                sound = 'grasslanders_erupt',
-                func = function() -- This is for timing purposes, everything here runs after the message
-                    SMODS.draw_cards(card.ability.extra.draw)
-                end,
-            }
+
+        if context.hand_drawn and card.ability.extra.active then
+            if not context.blueprint then
+                card.ability.extra.active = false
+            end
+            if G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
+                return {
+                    message = localize('k_erupt_ex'),
+                    colour = G.C.RED,
+                    sound = 'grasslanders_erupt',
+                    func = function() -- This is for timing purposes, everything here runs after the message
+                        SMODS.draw_cards(card.ability.extra.draw)
+                    end,
+                }
+            end
         end
     end,
 
@@ -586,7 +594,7 @@ local function reset_grasslanders_junklake_card()
         end
     end
 
-    local idol_card = pseudorandom_element(valid_idol_cards, 'vremade_idol' .. G.GAME.round_resets.ante)
+    local idol_card = pseudorandom_element(valid_idol_cards, 'gl_junklake' .. G.GAME.round_resets.ante)
     if idol_card then
         G.GAME.current_round.grasslanders_junklake_card.rank = idol_card.base.value
         G.GAME.current_round.grasslanders_junklake_card.suit = idol_card.base.suit
@@ -654,7 +662,7 @@ SMODS.Joker{
     soul_pos=nil,
 
     calculate = function(self,card,context)
-        if context.before and context.scoring_name == card.ability.extra.poker_hand then
+        if context.before then
             if not context.blueprint then
                 local _poker_hands = {}
                 for handname, _ in pairs(G.GAME.hands) do
@@ -665,10 +673,12 @@ SMODS.Joker{
                 card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
             end
 
-            return {
-                level_up = true,
-                message = localize('k_level_up_ex')
-            }
+            if context.scoring_name == card.ability.extra.poker_hand then
+                return {
+                    level_up = true,
+                    message = localize('k_level_up_ex')
+                }
+            end
         end
     end,
 
@@ -712,7 +722,9 @@ SMODS.Joker{
                     mult = G.GAME.hands[card.ability.extra.poker_hand].mult, 
                 },
             }
-            card.ability.extra.poker_hand = context.scoring_name
+            if not context.blueprint then
+                card.ability.extra.poker_hand = context.scoring_name
+            end
             return SMODS.merge_effects(effects)
         end
     end,
@@ -823,7 +835,7 @@ SMODS.Joker{
     pos = { x = 1, y = 4},
     rarity = 3,
     cost = 7,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
@@ -831,13 +843,6 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
-
-    calculate = function(self,card,context)
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Sound ({
@@ -1105,25 +1110,26 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.discard then
-            card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
-            return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
-            }
-        end
-        if context.joker_main then
-            local effects = {
-                {
-                    x_mult = card.ability.extra.x_mult, 
-                },
-                {
+        if not context.blueprint then
+            if context.discard then
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                }
+            end
+            if context.after then
+                card.ability.extra.x_mult = 1
+                return {
                     message = localize('k_reset'),
                     colour = G.C.MULT,
                 }
+            end
+        end
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.x_mult
             }
-            card.ability.extra.x_mult = 1
-            return SMODS.merge_effects(effects)
         end
     end,
 
@@ -1502,34 +1508,6 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
-    end
-}
-
-SMODS.Joker{
-    key = "ddquad",
-    config = { extra = {}},
-    pos = { x = 0, y = 4 },
-    rarity = 4,
-    cost = 20,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,
-    effect=nil,
-    soul_pos=nil,
-    atlas = 'grasslanderJoker',
-
-    in_pool = function(self, args)
-        return false
-    end,
-
-    calculate = function(self,card,context)
-
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
     end
 }
 
