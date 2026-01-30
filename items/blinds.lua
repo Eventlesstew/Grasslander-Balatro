@@ -943,10 +943,8 @@ SMODS.Blind {
                     end
                 end
                 if faces > 0 then
-                    return {
-                        shakeBlind()
-                        delay(0.4)
-                    }
+                    shakeBlind()
+                    delay(0.4)
                 end
             end
         end
