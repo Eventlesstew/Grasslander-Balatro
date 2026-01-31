@@ -1,29 +1,6 @@
 grasslanders = SMODS.current_mod
 
--- you can have shared helper functions
-function shakecard(self) --visually shake a card
-    G.E_MANAGER:add_event(Event({
-        func = function()
-            self:juice_up(0.5, 0.5)
-            return true
-        end
-    }))
-end
-
-function return_JokerValues() -- not used, just here to demonstrate how you could return values from a joker
-    if context.joker_main and context.cardarea == G.jokers then
-        return {
-            chips = card.ability.extra.chips,       -- these are the 3 possible scoring effects any joker can return.
-            mult = card.ability.extra.mult,         -- adds mult (+)
-            x_mult = card.ability.extra.x_mult,     -- multiplies existing mult (*)
-            card = self,                            -- under which card to show the message
-            colour = G.C.CHIPS,                     -- colour of the message, Balatro has some predefined colours, (Balatro/globals.lua)
-            message = localize('k_upgrade_ex'),     -- this is the message that will be shown under the card when it triggers.
-            extra = { focus = self, message = localize('k_upgrade_ex') },
-        }
-    end
-end
-
+-- This Atlas is used by all of the Grasslander Jokers
 SMODS.Atlas({
     key = "grasslanderJoker",
     path = "jokers.png",
@@ -31,24 +8,30 @@ SMODS.Atlas({
     py = 95
 })
 
+-- I'll use Blowy as an example for the values shared by all other Jokers
 SMODS.Joker{
+    -- They key acts as the card's internal ID. 
+    -- Do note that SMODS appends j_(modprefix)_ to the key so Blowy's actual key for example is j_grasslanders_blowy
     key = "blowy",
-    atlas = 'grasslanderJoker',
-    config = {extra = {h_size = 0, h_mod = 1}},
-    pos = { x = 0, y = 0 },
-    soul_pos=nil,
-    rarity = 1,
-    cost = 5,
-    blueprint_compat=false,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
+    atlas = 'grasslanderJoker', -- The card refers to the Atlas listed.
+    pos = { x = 0, y = 0 }, -- Since the texture used is a spritesheet, this specifies which texture is used.
+    soul_pos=nil, -- This value is only relevant for things with an overlay such as Legendaries and the Soul. nil means it is invisible.
 
-    calculate = function(self,card,context)              --define calculate functions here
-        if not context.blueprint then
-            if context.after then
+    config = {extra = {h_size = 0, h_mod = 1}}, -- Extra variables stored by the Joker for use in calculate functions
+    rarity = 1, --Joker rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    cost = 5, -- How much the Joker costs
+    blueprint_compat=false, -- This only affects the "compatible" message in Blueprint or Brainstorm. You need to use context.blueprint to specify which stuff Blueprint can or can't do.
+    eternal_compat=true, -- Specifies if the Joker can have Eternal
+    perishable_compat=true, -- Specifies if the Joker can have Perishable
+    unlocked = true,
+    discovered = true, -- Need to disable this on release
+
+    calculate = function(self,card,context) --define calculate functions here
+        -- Context contains various different booleans that you can see in this link:
+        -- https://github.com/Steamodded/smods/wiki/Calculate-Functions#:~:text=Contexts,-A%20context
+
+        if not context.blueprint then -- This prevents Blueprint from doing anything
+            if context.after then -- Affects the hand size after played hand
                 card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
                 G.hand:change_size(-card.ability.extra.h_mod)
 
@@ -57,7 +40,7 @@ SMODS.Joker{
                     colour = G.C.FILTER
                 }
             end
-            if context.discard and context.other_card == context.full_hand[#context.full_hand] then
+            if context.discard and context.other_card == context.full_hand[#context.full_hand] then -- Affects the hand size after discard
                 if G.hand.config.card_limit > 0 then
                     card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
                     G.hand:change_size(card.ability.extra.h_mod)
@@ -69,7 +52,7 @@ SMODS.Joker{
                 end
             end
 
-            if context.end_of_round and context.game_over == false and context.main_eval then
+            if context.end_of_round and context.game_over == false and context.main_eval then -- Resets Hand size at end of round
                 G.hand:change_size(-card.ability.extra.h_size)
                 card.ability.extra.h_size = 0
                 return {
@@ -80,15 +63,15 @@ SMODS.Joker{
         end
     end,
 
-    add_to_deck = function(self, card, from_debuff)
+    add_to_deck = function(self, card, from_debuff) -- If Blowy was debuffed, this allows her to change the hand size back
         G.hand:change_size(card.ability.extra.h_size)
     end,
 
-    remove_from_deck = function(self, card, from_debuff)
+    remove_from_deck = function(self, card, from_debuff) -- Resets hand size when removed
         G.hand:change_size(-card.ability.extra.h_size)
     end,
 
-    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+    loc_vars = function(self, info_queue, card) --defines variables to use in the UI. you can use #1# for example to show the chips variable
         local operator = '+'
         if card.ability.extra.h_size < 0 then
             operator = ''
@@ -98,62 +81,57 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = "scorpibeat",                                  --name used by the joker.    
+    key = "scorpibeat",   
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 18} },    --variables used for abilities and effects.
-    pos = { x = 1, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
+    config = { extra = {mult = 18} },
+    pos = { x = 1, y = 0 },
+    rarity = 1,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
+    unlocked = true,
+    discovered = true, 
 
-    calculate = function(self,card,context)              --define calculate functions here
-        if context.joker_main and context.cardarea == G.jokers then
-            if G.GAME.blind.boss then
+    calculate = function(self,card,context)
+        if context.joker_main then -- Triggers when scored
+            if G.GAME.blind.boss then -- Checks if you're on a Boss Blind
                 return {
                     mult = card.ability.extra.mult, 
-                    colour = G.C.MULT
                 }
             end
         end
     end,
 
-    loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
+    loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.mult}, key = self.key }
     end
 }
 
 SMODS.Joker{
-    key = "sprinkle",                                  --name used by the joker.    
+    key = "sprinkle",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 20} },    --variables used for abilities and effects.
-    pos = { x = 2, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 1,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
-    perishable_compat=false,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
+    config = { extra = {chips = 50} },
+    pos = { x = 2, y = 0 },
+    rarity = 1,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
 
-    calculate = function(self,card,context)              --define calculate functions here
-        if context.individual and context.cardarea == G.play then
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play then -- Triggers when the card is played
             local valid = true
-            for _,v in ipairs(G.hand.cards) do
+            for _,v in ipairs(G.hand.cards) do -- This checks if held hand has any face cards
                 if v:is_face() then
                     valid = false
                     break
                 end
             end
             if valid then
-                return {
+                return { -- Gives Chips
                     chips = card.ability.extra.chips,
                     colour = G.C.CHIPS
                 }
@@ -167,24 +145,22 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = "molty",                                  --name used by the joker.    
+    key = "molty",
     atlas = 'grasslanderJoker',
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5} },    --variables used for abilities and effects.
-    pos = { x = 3, y = 0 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 7,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5} },
+    pos = { x = 3, y = 0 },
+    rarity = 2,
+    cost = 7,
+    blueprint_compat=true,
+    eternal_compat=true,
     perishable_compat=false,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
+    unlocked = true,
+    discovered = true,
 
-    calculate = function(self,card,context)              --define calculate functions here
-        if not context.blueprint then
-            if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then
-                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+    calculate = function(self,card,context)
+        if not context.blueprint then -- Prevents Blueprint from scaling
+            if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then -- Checks if hand is on fire
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod -- Increases Xmult Output
                 return {
                     message = localize('k_upgrade_ex'),
                     colour = G.C.MULT,
@@ -192,7 +168,8 @@ SMODS.Joker{
             end
         end
 
-        if context.joker_main and context.cardarea == G.jokers then
+        -- Giving Xmult
+        if context.joker_main then
             return {
                 x_mult = card.ability.extra.x_mult, 
                 colour = G.C.MULT
@@ -201,7 +178,7 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
+        info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" } -- Adds the popup to 
         return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
     end
 }
@@ -219,14 +196,13 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
 
     calculate = function(self,card,context)
         if 
-            (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and 
-            #G.jokers.cards + G.GAME.joker_buffer - 1 < G.jokers.config.card_limit 
+            (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
+            #G.jokers.cards + G.GAME.joker_buffer - 1 < G.jokers.config.card_limit -- Checks if there is sufficient space for Blueprint and duplicate Trizaps
         then
-            if context.card ~= card and context.card.config.center.eternal_compat then
+            if context.card ~= card and context.card.config.center.eternal_compat then -- Check for eternal compatibility
                 local copied_joker = copy_card(context.card)
                 copied_joker:set_edition(poll_edition('grasslanders_trizap', 1, false, true), true)
                 copied_joker:set_eternal(true)
@@ -234,32 +210,7 @@ SMODS.Joker{
                 G.jokers:emplace(copied_joker)
             end
         end
-        --[[
-        if not context.blueprint then
-            if (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) then
-                local odds = 1
-                for _,joker in ipairs(G.jokers.cards) do
-                    if joker.edition and joker.edition.negative and joker ~= card then
-                        odds = odds + 1
-                    end
-                end
-                if SMODS.pseudorandom_probability(card, 'trizap', 1, odds) then
-                    local copied_joker = copy_card(context.card)
-                    copied_joker:set_edition("e_negative", true)
-                    if card.config.center.eternal_compat then
-                        copied_joker:set_eternal(true)
-                    end
-                    copied_joker:add_to_deck()
-                    G.jokers:emplace(copied_joker)
-                end
-            end
-        end
-        ]]
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Joker{
@@ -280,13 +231,13 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if card.ability.extra.active then
             if not context.blueprint then
-                if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then
+                if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then -- Disables Loggy if hand is on fire
                     card.ability.extra.active = false
                 end
             end
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds) then
-                    G.E_MANAGER:add_event(Event({
+            if context.end_of_round and context.game_over == false and context.main_eval then -- Gives the Coupon Tag if active
+                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds) then -- Random chance
+                    G.E_MANAGER:add_event(Event({ -- Code to give the Coupon Tag
                         func = (function()
                             add_tag(Tag(card.ability.extra.tag))
                             play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
@@ -296,13 +247,13 @@ SMODS.Joker{
                     }))
                 end
             end
-        elseif context.setting_blind and not context.blueprint then
+        elseif context.setting_blind and not context.blueprint then -- Sets up Logobreak
             card.ability.extra.active = true
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak")
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
         info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
         return { vars = {numerator,denominator}, key = self.key }
     end
@@ -324,10 +275,10 @@ SMODS.Joker{
     soul_pos=nil,
 
     calculate = function(self,card,context)
-        if context.repetition and context.cardarea == G.play then
+        if context.repetition and context.cardarea == G.play then -- This is used for repeating cards
             local valid = true
 
-            for _, scored_card in ipairs(context.scoring_hand) do
+            for _, scored_card in ipairs(context.scoring_hand) do -- Checks if card is the only one in hand with it's enhancement.
                 if scored_card ~= context.other_card then
                     if next(SMODS.get_enhancements(context.other_card)) then
                         --print(SMODS.get_enhancements(context.other_card))
@@ -350,17 +301,13 @@ SMODS.Joker{
                 end
             end
 
-            if valid then
+            if valid then -- Repeats the card if valid
                 return {
                     repetitions = card.ability.extra.repetitions
                 }
             end
         end
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Joker{
@@ -375,56 +322,50 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.hand and not context.end_of_round then
-            if context.other_card.debuff then
+        if context.individual and context.cardarea == G.hand then -- Triggers for cards held in hand
+            if context.other_card.debuff then -- Prevents triggering if card is debuffed
                 return {
                     message = localize('k_debuffed'),
                     colour = G.C.RED
                 }
             else
+                -- Grants chips
                 return {
                     chips = context.other_card:get_chip_bonus()
                 }
             end
         end
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
+-- This is the sound used by Volcarox for eruption
 SMODS.Sound ({
     key = 'erupt',
     path = 'volc_explosion.ogg',
 })
 
 SMODS.Joker{
-    key = "volcarox",                                  --name used by the joker.  
+    key = "volcarox",
     atlas = 'grasslanderJoker',  
-    config = { extra = {draw = 10, active = false, d_remaining = 0} },    --variables used for abilities and effects.
-    pos = { x = 3, y = 1 },                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 2,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 5,                                            --cost to buy the joker in shops.
-    blueprint_compat=true,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
+    config = { extra = {draw = 10, active = false, d_remaining = 0} },
+    pos = { x = 3, y = 1 },
+    rarity = 2,
+    cost = 5,
+    blueprint_compat=true,
+    eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,                                     --is joker unlocked by default.
-    discovered = true,                                   --is joker discovered by default.    
-    effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
+    unlocked = true,
+    discovered = true,
 
     calculate = function(self,card,context)
-        if not context.blueprint and context.discard then
+        if not context.blueprint and context.discard then -- Activates Volcarox, ensures that Blueprint is not affected
             card.ability.extra.active = true
         end
 
-        if context.hand_drawn and card.ability.extra.active then
-            if not context.blueprint then
+        if context.hand_drawn and card.ability.extra.active then -- This is the code for drawing extra cards
+            if not context.blueprint then -- Ensures that Blueprint doesn't mess things up
                 card.ability.extra.active = false
             end
             if G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
@@ -457,8 +398,6 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
@@ -469,19 +408,18 @@ SMODS.Joker{
                 }
             end
             if context.other_card.edition == 'e_polychrome' then -- Check if card is Polychrome
-                SMODS.destroy_cards(card, nil, nil, true) -- Destroy Frogobonk
-                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Create Lumobonk
+                SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
+                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
             end
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        --info_queue[#info_queue+1] = {set = "Joker", key = "lumobonk" }
         return { vars = {card.ability.extra.mult}, key = self.key }
     end
 }
 
-if grasslanders.config.altjunklake then
+if grasslanders.config.altjunklake then -- Check for which Junklake to use.
     SMODS.Joker{
         key = "altjunklake",
         atlas = 'grasslanderJoker',
@@ -614,8 +552,6 @@ SMODS.Joker{
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     set_sprites = function(self, card, front)
         local alt = 1
@@ -629,8 +565,8 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.setting_blind and not context.blueprint then
             local eaten_card = pseudorandom_element(G.consumeables.cards, 'grasslanders_hornetrix')
-            if eaten_card then
-                card.ability.extra_value = card.ability.extra_value + card.ability.extra.dollars
+            if eaten_card then -- Checks if you do have a consumable card
+                card.ability.extra_value = card.ability.extra_value + card.ability.extra.dollars -- Increases Sell Value
                 card:set_cost()
                 SMODS.destroy_cards(eaten_card)
                 return {
@@ -658,22 +594,24 @@ SMODS.Joker{
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
+        -- Levels up the poker hand if it is correct
         if context.before then
-            -- Levels up the poker hand if it is correct
             if context.scoring_name == card.ability.extra.poker_hand then
                 return {
                     level_up = true,
                     message = localize('k_level_up_ex')
                 }
             end
+        end
 
-            -- Changes Poker Hand after scoring
+        -- Changes Poker Hand after scoring
+        if context.after then
             if not context.blueprint then
                 local _poker_hands = {}
+                -- This filters out all Poker hands that are invisible (Foak, Flush House and Flush Five) and the hand Anjellyze already has.
+                -- This prevents Anjellyze from rerolling to them
                 for handname, _ in pairs(G.GAME.hands) do
                     if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
                         _poker_hands[#_poker_hands + 1] = handname
@@ -701,7 +639,7 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = "concrab",
+    key = "concrab", -- Old name used here, it was only changed in the localisation file.
     atlas = 'grasslanderJoker',
     config = { extra = {poker_hand = 'High Card'}},
     pos = { x = 4, y = 1 },
@@ -712,11 +650,8 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
-
         -- Gives Chips and Mult
         if context.joker_main then
             local effects = {
@@ -764,8 +699,6 @@ SMODS.Joker{
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
         if context.after then
@@ -795,8 +728,6 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
 
     calculate = function(self,card,context)
         if not context.blueprint then
@@ -851,6 +782,8 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
+
+    -- Tickini's function is done through a hook
 }
 
 SMODS.Sound ({
@@ -1356,6 +1289,7 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'grasslanderJoker',
 
+    -- Emmie's function is done through a Hook, this specifies whether she is active or not
     calculate = function(self,card,context)
         if context.first_hand_drawn then
             card.ability.extra.active = true
@@ -1366,10 +1300,6 @@ SMODS.Joker{
             card.ability.extra.active = false
         end
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 local smods_shortcut_ref  = SMODS.shortcut
@@ -1398,11 +1328,9 @@ SMODS.Joker{
     cost = 9,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false, -- TODO: Test if Edward works with Perishable Jokers
+    perishable_compat=false, -- TODO: Test if Edward works when Perishable and with Perishable
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
@@ -1495,23 +1423,6 @@ SMODS.Joker{
                 chips = card.ability.extra.chips
             }
         end
-        --[[
-        if context.individual and context.cardarea == G.play then
-            if next(context.poker_hands[card.ability.extra.poker_hand]) then
-                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
-                return {
-                    message = localize('k_upgrade_ex'),
-                    card = self,
-                    colour = G.C.MULT
-                }
-            end
-        end
-        if context.joker_main and context.cardarea == G.jokers then
-            return {
-                x_mult = card.ability.extra.x_mult
-            }
-        end
-        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1678,15 +1589,15 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = "vacomar",                                  --name used by the joker.    
-    config = {extra = {card = {state = 'invalid', id = 0, rank = '', suit = ''}, discard_mod = 1, valid = false}},    --variables used for abilities and effects.
-    pos = { x = 1, y = 8},                              --pos in spritesheet 0,0 for single sprites or the first sprite in the spritesheet.
-    rarity = 4,                                          --rarity 1=common, 2=uncommen, 3=rare, 4=legendary
-    cost = 20,                                            --cost to buy the joker in shops.
-    blueprint_compat=false,                               --does joker work with blueprint.
-    eternal_compat=true,                                 --can joker be eternal.
+    key = "vacomar",  
+    config = {extra = {card = {state = 'invalid', id = 0, rank = '', suit = ''}, discard_mod = 1, valid = false}},
+    pos = { x = 1, y = 8},
+    rarity = 4,
+    cost = 20, -- This only affects the sell price, hence why it's listed here.
+    blueprint_compat=false,
+    eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,                                     --is joker unlocked by default.
+    unlocked = true,
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos=nil,                                        --pos of a soul sprite.

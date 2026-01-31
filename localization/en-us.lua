@@ -175,6 +175,7 @@ return {
             bl_grasslanders_wallkerip = {
                 name = "The Wallkerip",
                 text = {
+                    "INCOMPLETE",
                     "Cannot play hands with",
                     "3 different suits"
                 },
@@ -190,6 +191,7 @@ return {
             bl_grasslanders_screecher = {
                 name = "The Screecher",
                 text = {
+                    "INCOMPLETE",
                     "Playing a (Most played hand)",
                     "decreases it's level by 3",
                 },
@@ -237,6 +239,7 @@ return {
             bl_grasslanders_snaggler = {
                 name = "The Snaggler",
                 text = {
+                    "INCOMPLETE",
                     "Cannot draw more than 4 cards",
                     "after play or discard",
                 },

@@ -21,7 +21,7 @@ end
 
 SMODS.Atlas({
     key = "gloom",
-    path = "gloom.png",
+    path = "gloomOld.png",
     px = 71,
     py = 95
 })
@@ -32,6 +32,8 @@ SMODS.Enhancement {
     replace_base_card = true,
     no_rank = true,
     no_suit = true,
+    --display_size = {w = 71, h = 102},
+    --pixel_size = {w = 71, h = 102},
     in_pool = function(self, args)
         return false
     end,
@@ -626,7 +628,10 @@ SMODS.Blind {
     boss_colour = HEX("39545b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.hand_drawn and not context.first_hand_drawn then
+            if context.after then
+                blind.prepped = true
+            end
+            if blind.prepped and context.hand_drawn and not context.first_hand_drawn then
                 shakeBlind()
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -635,12 +640,14 @@ SMODS.Blind {
                         return true
                     end
                 }))
+                blind.prepped = nil
             end
         end
     end,
     disable = function(self)
         G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante) * G.GAME.blind.mult
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+        blind.prepped = nil
     end,
 
     loc_vars = function(self)
@@ -726,28 +733,29 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 3},
     boss_colour = HEX("543770"),
-    in_pool = function()
+    in_pool = function(self, args)
         return false
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.debuff_hand then
-                local suits = {}
-                for _, v in ipairs(context.full_hand) do
-                    local valid = true
-                    for _2, suit in ipairs(suits) do
-                        if suit == v.suit then
-                            valid = false
-                            break
+                local valid_suits = {}
+                for k, scored_card in pairs(context.full_hand) do
+
+                    -- WHY DOES THIS NOT WORK?!
+                    for _, scored_suit in ipairs(SMODS.Suits) do
+                        print(scored_suit)
+                        if scored_card:is_suit(scored_suit) then
+                            valid_suits[scored_suit] = true
                         end
                     end
-
-                    if valid then
-                        suits[#suits + 1] = v.suit
-                    end
                 end
-
-                return {debuff = (#suits >= 3)}
+                
+                local suit_count = 0
+                for _, v in pairs(valid_suits) do
+                    suit_count = suit_count + 1
+                end
+                return {debuff = (suit_count >= 3)}
             end
         end
     end,
@@ -1037,18 +1045,6 @@ SMODS.Blind {
         end
     end,
 }
-
-SMODS.current_mod.optional_features = function()
-    return {
-        post_trigger = true,
-        retrigger_joker = true,
-        quantum_enhancements = true,
-		cardareas = {
-            discard = true,
-            deck = true
-        }
-    }
-end
 
 SMODS.Blind {
     key = 'jawtrap',
