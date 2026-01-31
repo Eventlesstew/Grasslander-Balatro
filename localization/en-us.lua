@@ -154,7 +154,6 @@ return {
             bl_grasslanders_kyner = {
                 name = "The Kyner",
                 text = {
-                    "INCOMPLETE",
                     "All enhanced cards are",
                     "drawn face down"
                 },
@@ -162,9 +161,15 @@ return {
             bl_grasslanders_rockagnaw = {
                 name = "The Rockagnaw",
                 text = {
-                    "INCOMPLETE",
                     "Lose $1 per Joker triggered",
                     "during scoring or discarding"
+                },
+            },
+            bl_grasslanders_altrockagnaw = {
+                name = "The Rockagnaw",
+                text = {
+                    "Lose $1 per Joker when",
+                    "hand is played"
                 },
             },
             bl_grasslanders_wallkerip = {
@@ -698,15 +703,22 @@ return {
             gl_chonkreep = 'Reduced!',
             gl_deepwalker_x1 = '[X1 Base]',
 
+            gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',
 
             gl_options_hornetrix = 'Family Friendly Mode',
-            gl_options_altjunklake = 'Alternate Junklake',
             gl_options_clackerblindtitle = 'Clacker Blinds',
             gl_options_clackerblind0 = 'Disabled',
             gl_options_clackerblind1 = 'Enabled',
             gl_options_clackerblind2 = 'Replace Base',
             gl_options_funny = 'The funny option',
+
+            gl_options_performanceTitle = 'Performance',
+            gl_options_posttrigger = 'Enable Post Trigger',
+            gl_options_posttrigger_info = {"Required for Rockagnaw"},
+
+            gl_options_experimentalTitle = 'Experimental',
+            gl_options_altjunklake = 'Alternate Junklake',
         }
     }
 }

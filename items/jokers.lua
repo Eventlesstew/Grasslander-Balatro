@@ -462,15 +462,15 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
-            if next(SMODS.get_enhancements(context.other_card)) then
+            if next(SMODS.get_enhancements(context.other_card)) then -- Check if card has an enhancement
                 return {
                     mult = card.ability.extra.mult,
                     colour = G.C.MULT
                 }
             end
-            if context.other_card.edition == 'e_polychrome' then
-                SMODS.destroy_cards(card, nil, nil, true)
-                SMODS.add_card{key = "j_grasslanders_lumobonk"}
+            if context.other_card.edition == 'e_polychrome' then -- Check if card is Polychrome
+                SMODS.destroy_cards(card, nil, nil, true) -- Destroy Frogobonk
+                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Create Lumobonk
             end
         end
     end,
@@ -663,6 +663,15 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.before then
+            -- Levels up the poker hand if it is correct
+            if context.scoring_name == card.ability.extra.poker_hand then
+                return {
+                    level_up = true,
+                    message = localize('k_level_up_ex')
+                }
+            end
+
+            -- Changes Poker Hand after scoring
             if not context.blueprint then
                 local _poker_hands = {}
                 for handname, _ in pairs(G.GAME.hands) do
@@ -672,16 +681,10 @@ SMODS.Joker{
                 end
                 card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
             end
-
-            if context.scoring_name == card.ability.extra.poker_hand then
-                return {
-                    level_up = true,
-                    message = localize('k_level_up_ex')
-                }
-            end
         end
     end,
 
+    -- This sets the poker hand when Anjellyze spawns
     set_ability = function(self, card, initial, delay_sprites)
         local _poker_hands = {}
         for handname, _ in pairs(G.GAME.hands) do
@@ -713,7 +716,9 @@ SMODS.Joker{
     soul_pos=nil,
 
     calculate = function(self,card,context)
-        if context.joker_main and context.cardarea == G.jokers then
+
+        -- Gives Chips and Mult
+        if context.joker_main then
             local effects = {
                 {
                     chips = G.GAME.hands[card.ability.extra.poker_hand].chips, 
@@ -722,6 +727,8 @@ SMODS.Joker{
                     mult = G.GAME.hands[card.ability.extra.poker_hand].mult, 
                 },
             }
+
+            -- Changes Poker hand after scoring to current one
             if not context.blueprint then
                 card.ability.extra.poker_hand = context.scoring_name
             end
@@ -729,6 +736,7 @@ SMODS.Joker{
         end
     end,
 
+    -- Sets hand to last played Poker Hand this run
     set_ability = function(self, card, initial, delay_sprites)
         if G.GAME.current_round.last_played_hand then
             card.ability.extra.poker_hand = G.GAME.current_round.last_played_hand

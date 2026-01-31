@@ -94,21 +94,23 @@ SMODS.Blind {
     boss = {min = 1},
     boss_colour = HEX("39405b"),
     calculate = function(self, blind, context)
-        if context.after then
-            local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
-            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-            _card.playing_card = G.playing_card
-            table.insert(G.playing_cards, _card)
+        if not blind.disabled then
+            if context.after then
+                local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
+                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                _card.playing_card = G.playing_card
+                table.insert(G.playing_cards, _card)
 
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    G.hand:emplace(_card)
-                    _card:start_materialize()
-                    G.hand:sort()
-                    SMODS.juice_up_blind()
-                    return true
-                end
-            }))
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.hand:emplace(_card)
+                        _card:start_materialize()
+                        G.hand:sort()
+                        SMODS.juice_up_blind()
+                        return true
+                    end
+                }))
+            end
         end
     end,
 }
@@ -668,24 +670,128 @@ SMODS.Blind {
     end,
 }
 
-SMODS.Blind {
-    key = 'rockagnaw',
-    atlas = 'clackerblindplaceholder',
-    unlocked = true,
-    discovered = true,     
-    pos = {x = 0, y = 19},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
-    calculate = function(self, blind, context)
-        if not blind.disabled then
+if config.post_trigger then
+    -- Rockagnaw requires this setting to function
+    SMODS.current_mod.optional_features = function()
+        return {
+            post_trigger = true,
+        }
+    end
+
+    SMODS.Blind {  
+        key = 'rockagnaw',
+        atlas = 'clackerblindplaceholder',
+        unlocked = true,
+        discovered = true,     
+        pos = {x = 0, y = 19},
+        dollars = 5,
+        mult = 2,
+        boss = {min = 2},
+        boss_colour = HEX("916d53"),
+
+        calculate = function(self, blind, context)
+            if not blind.disabled then
+                -- Resets all Jokers on play or discard
+                if context.press_play or context.pre_discard then
+                    for _,v in G.jokers.cards do
+                        if v.gl_rockagnaw_trigger then
+                            v.gl_rockagnaw_trigger = nil
+                        end
+                    end
+                end
+
+                -- Adds triggered Jokers
+                if context.post_trigger and context.other_card then
+                    context.other_card.gl_rockagnaw_trigger = true
+                end
+
+                -- Blind effect
+                if context.after or (context.discard and context.other_card == context.full_hand[#context.full_hand]) then
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.2,
+                        func = function()
+                            for _,v in G.jokers.cards do
+                                if v.gl_rockagnaw_trigger then
+                                    G.E_MANAGER:add_event(Event({
+                                        func = function()
+                                            v:juice_up()
+                                            v.gl_rockagnaw_trigger = nil
+                                            return true
+                                        end,
+                                    }))
+                                end
+                                ease_dollars(-1)
+                                delay(0.23)
+                            end
+                            return true
+                        end
+                    }))
+                    blind.triggered = true
+                    shakeBlind()
+                    delay(0.4)
+                end
+            end
+        end,
+
+        -- Resets all Jokers when disabled
+        disable = function(self)
+            for _,v in G.jokers.cards do
+                if v.gl_rockagnaw_trigger then
+                    v.gl_rockagnaw_trigger = nil
+                end
+            end
+        end,
+
+        -- Resets all Jokers when defeated
+        defeat = function(self)
+            for _,v in G.jokers.cards do
+                if v.gl_rockagnaw_trigger then
+                    v.gl_rockagnaw_trigger = nil
+                end
+            end
         end
-    end,
-}
+    }
+else
+    -- If Post Trigger is disabled, 
+    SMODS.Blind {
+        key = 'altrockagnaw',
+        atlas = 'clackerblindplaceholder',
+        unlocked = true,
+        discovered = true,     
+        pos = {x = 0, y = 19},
+        dollars = 5,
+        mult = 2,
+        boss = {min = 2},
+        boss_colour = HEX("916d53"),
+        calculate = function(self, blind, context)
+            if not blind.disabled then
+                if context.press_play then
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.2,
+                        func = function()
+                            for _,v in G.jokers.cards do
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        v:juice_up()
+                                        return true
+                                    end,
+                                }))
+                                ease_dollars(-1)
+                                delay(0.23)
+                            end
+                            return true
+                        end
+                    }))
+                    blind.triggered = true
+                    shakeBlind()
+                    delay(0.4)
+                end
+            end
+        end,
+    }
+end
 
 SMODS.Blind {
     key = 'wallkerip',
@@ -989,6 +1095,18 @@ SMODS.Blind {
     end,
 }
 
+SMODS.current_mod.optional_features = function()
+    return {
+        post_trigger = true,
+        retrigger_joker = true,
+        quantum_enhancements = true,
+		cardareas = {
+            discard = true,
+            deck = true
+        }
+    }
+end
+
 SMODS.Blind {
     key = 'kyner',
     atlas = 'clackerblindplaceholder',
@@ -1000,10 +1118,32 @@ SMODS.Blind {
     boss = {min = 2},
     boss_colour = HEX("615852"),
     in_pool = function()
-        return false
+        local count = 0
+        for _,v in ipairs(G.playing_cards) do
+            if next(SMODS.get_enhancements(v)) then
+                count = count + 1
+            end
+        end
+        return (count >= 3)
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.stay_flipped and context.to_area == G.hand and
+                next(SMODS.get_enhancements(context.other_card)) then
+                return {
+                    stay_flipped = true
+                }
+            end
+        end
+    end,
+    disable = function(self)
+        for i = 1, #G.hand.cards do
+            if G.hand.cards[i].facing == 'back' then
+                G.hand.cards[i]:flip()
+            end
+        end
+        for _, playing_card in pairs(G.playing_cards) do
+            playing_card.ability.wheel_flipped = nil
         end
     end,
 }

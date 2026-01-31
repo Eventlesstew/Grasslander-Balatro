@@ -16,6 +16,7 @@ G.FUNCS.clacker_blind_config = function(option_node)
     grasslanders:save_config()
 end
 
+-- Config Tab
 grasslanders.config_tab = function()
 	return {
 		n = G.UIT.ROOT,
@@ -27,38 +28,63 @@ grasslanders.config_tab = function()
 			colour = G.C.BLACK
 		},
 		nodes =  {
-            create_toggle({label = localize('gl_options_hornetrix'), ref_table = grasslanders.config, ref_value = "althornetrix", callback = function() grasslanders:save_config() end}),
-            create_toggle({label = localize('gl_options_grasslanders'), ref_table = grasslanders.config, ref_value = "grasslanderJokers", callback = function() grasslanders:save_config() end}),
-            create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
-            --create_toggle({label = localize('gl_options_funny'), ref_table = grasslanders.config, ref_value = "funny", callback = function() grasslanders:save_config() end}),
-            create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
-                current_option = grasslanders.config.clackerblinds,
-                label = localize('gl_options_clackerblindtitle'),
-                options = {
-                    localize('gl_options_clackerblind0'),
-                    localize('gl_options_clackerblind1'),
-                    localize('gl_options_clackerblind2'),
-                },
-            }),
-            UIBox_button({
-                align = "tl",
-                label = { "Apply Changes" }, 
-                minw = 3.5,
-                button = 'restart_game_smods'
-			}),
+            {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
+                create_toggle({label = localize('gl_options_hornetrix'), ref_table = grasslanders.config, ref_value = "althornetrix", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_grasslanders'), ref_table = grasslanders.config, ref_value = "grasslanderJokers", callback = function() grasslanders:save_config() end}),
+                --create_toggle({label = localize('gl_options_funny'), ref_table = grasslanders.config, ref_value = "funny", callback = function() grasslanders:save_config() end}),
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
+                    current_option = grasslanders.config.clackerblinds,
+                    label = localize('gl_options_clackerblindtitle'),
+                    options = {
+                        localize('gl_options_clackerblind0'),
+                        localize('gl_options_clackerblind1'),
+                        localize('gl_options_clackerblind2'),
+                    },
+                }),
+                UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
+            }},
 		}
 	}
 end
 
+grasslanders.extra_tabs = function()
+	return {
+
+        -- Performance Tab
+        {label = localize('gl_options_performanceTitle'), tab_definition_function = function()
+            return {n=G.UIT.ROOT, config = {padding = 0.0, colour = G.C.BLACK}, nodes = {
+                {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
+                    create_toggle({label = localize('gl_options_posttrigger'), info = localize('gl_options_posttrigger_info'), ref_table = grasslanders.config, ref_value = "post_trigger", callback = function() grasslanders:save_config() end}),
+                    UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
+                }},
+            }}
+        end},
+
+        -- Experimental Tab
+        {label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
+            return {n=G.UIT.ROOT, config = {padding = 0.0, colour = G.C.BLACK}, nodes = {
+                {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
+                    create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
+                    UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
+                }},
+            }}
+        end},
+    }
+end
+
 assert(SMODS.load_file("items/icon.lua"))()
 
+-- Loads Jokers
 if grasslanders.config.grasslanderJokers == true then
     assert(SMODS.load_file("items/jokers.lua"))()
 end
+
+-- Loads Clacker Blinds
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
 end
 
+-- Disables Base Blinds
 if grasslanders.config.clackerblinds >= 3 then
     local add_to_pool_ref = SMODS.add_to_pool
     SMODS.add_to_pool = function(prototype_obj, args)
