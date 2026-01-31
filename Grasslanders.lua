@@ -50,26 +50,44 @@ end
 grasslanders.extra_tabs = function()
 	return {
 
-        -- Performance Tab
-        {label = localize('gl_options_performanceTitle'), tab_definition_function = function()
-            return {n=G.UIT.ROOT, config = {padding = 0.0, colour = G.C.BLACK}, nodes = {
-                {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                    create_toggle({label = localize('gl_options_posttrigger'), info = localize('gl_options_posttrigger_info'), ref_table = grasslanders.config, ref_value = "post_trigger", callback = function() grasslanders:save_config() end}),
-                    UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
-                }},
-            }}
-        end},
+    -- Performance Tab
+    {label = localize('gl_options_performanceTitle'), tab_definition_function = function()
+    return {
+        n=G.UIT.ROOT, 
+        config = {
+            emboss = 0.05,
+            r = 0.1,
+            align = "tl",
+            padding = 0.2,
+            colour = G.C.BLACK
+        }, 
+        nodes = {
+            {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
+                create_toggle({label = localize('gl_options_posttrigger'), info = localize('gl_options_posttrigger_info'), ref_table = grasslanders.config, ref_value = "post_trigger", callback = function() grasslanders:save_config() end}),
+                UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
+            }},
+        }
+    }end},
 
-        -- Experimental Tab
-        {label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
-            return {n=G.UIT.ROOT, config = {padding = 0.0, colour = G.C.BLACK}, nodes = {
-                {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                    create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
-                    UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
-                }},
-            }}
-        end},
-    }
+    -- Experimental Tab
+    {label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
+    return {
+        n=G.UIT.ROOT, 
+        config = {
+            emboss = 0.05,
+            r = 0.1,
+            align = "tl",
+            padding = 0.2,
+            colour = G.C.BLACK
+        }, 
+        nodes = {
+            {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
+                create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
+                UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
+            }},
+        }
+    }end},
+}
 end
 
 assert(SMODS.load_file("items/icon.lua"))()
