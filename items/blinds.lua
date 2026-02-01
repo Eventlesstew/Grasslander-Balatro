@@ -733,24 +733,21 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 3},
     boss_colour = HEX("543770"),
-    in_pool = function(self, args)
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.debuff_hand then
                 local valid_suits = {}
                 for k, scored_card in pairs(context.full_hand) do
 
-                    -- WHY DOES THIS NOT WORK?!
-                    for _, scored_suit in ipairs(SMODS.Suits) do
-                        print(scored_suit)
-                        if scored_card:is_suit(scored_suit) then
+                    -- This has to be pairs specifically as it is an unindexed table.
+                    for _, scored_suit in pairs(SMODS.Suits) do
+                        if scored_card:is_suit(scored_suit.key) then
                             valid_suits[scored_suit] = true
                         end
                     end
                 end
                 
+                -- Check if the hand is debuffed.
                 local suit_count = 0
                 for _, v in pairs(valid_suits) do
                     suit_count = suit_count + 1
@@ -826,13 +823,24 @@ SMODS.Blind {
     pos = {x = 0, y = 27},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 5},
+    boss_colour = HEX("b4a270"),
+    modifies_draw = true,
     calculate = function(self, blind, context)
+        if context.setting_blind then
+            blind.prepped = nil
+        end
+
         if not blind.disabled then
+            if context.before then
+                blind.prepped = true
+            end
+            if context.drawing_cards and blind.prepped then
+                blind.prepped = nil
+                return {
+                    cards_to_draw = 1
+                }
+            end
         end
     end,
 }
@@ -847,15 +855,15 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 5},
     boss_colour = HEX("70673d"),
-    in_pool = function()
-        return false
-    end,
+    modifies_draw = true, -- This is necessary for boss blinds like the Serpent for hand modification
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.drawing_cards and (G.GAME.current_round.hands_played ~= 0 or G.GAME.current_round.discards_used ~= 0) and (context.amount >= 4) then
-                return {
-                    cards_to_draw = 4
-                }
+            if context.drawing_cards and (G.GAME.current_round.hands_played ~= 0 or G.GAME.current_round.discards_used ~= 0) then
+                if (context.amount >= 4) then
+                    return {
+                        cards_to_draw = 4
+                    }
+                end
             end
         end
     end,
@@ -1054,13 +1062,42 @@ SMODS.Blind {
     pos = {x = 0, y = 26},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 4},
+    boss_colour = HEX("70242e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind then
+                blind.hands = {}
+                for _, poker_hand in ipairs(G.handlist) do
+                    blind.hands[poker_hand] = false
+                end
+            end
+            if context.debuff_hand then
+                if not context.check then
+                    if blind.hands[context.scoring_name] then
+                        local destructable_jokers = {}
+                        for i = 1, #G.jokers.cards do
+                            if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                                destructable_jokers[#destructable_jokers + 1] =
+                                G.jokers.cards[i]
+                            end
+                        end
+                        local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
+
+                        if joker_to_destroy then
+                            joker_to_destroy.getting_sliced = true
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+                                    return true
+                                end
+                            }))
+                            shakeBlind()
+                        end
+                    end
+                    blind.hands[context.scoring_name] = true
+                end
+            end
         end
     end,
 }
@@ -1216,6 +1253,9 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 3},
     boss_colour = HEX("35414c"),
+    in_pool = function()
+        return false
+    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.debuff_hand then
@@ -1225,10 +1265,6 @@ SMODS.Blind {
                     if not context.check then
                         local penalty = 3
 
-                        if G.GAME.hands[context.scoring_name].level < 3 then
-                            penalty = #G.GAME.hands[context.scoring_name].level
-                        end
-
                         return {
                             level_up = -penalty
                         }
@@ -1236,5 +1272,11 @@ SMODS.Blind {
                 end
             end
         end
+    end,
+    loc_vars = function(self)
+        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { localize('ph_most_played') } }
     end,
 }

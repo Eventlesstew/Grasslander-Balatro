@@ -175,7 +175,6 @@ return {
             bl_grasslanders_wallkerip = {
                 name = "The Wallkerip",
                 text = {
-                    "INCOMPLETE",
                     "Cannot play hands with",
                     "3 different suits"
                 },
@@ -192,7 +191,7 @@ return {
                 name = "The Screecher",
                 text = {
                     "INCOMPLETE",
-                    "Playing a (Most played hand)",
+                    "Playing a #1#",
                     "decreases it's level by 3",
                 },
             },
@@ -222,26 +221,22 @@ return {
             bl_grasslanders_jawtrap = {
                 name = "The Jawtrap",
                 text = {
-                    "INCOMPLETE",
-                    "Destroys a random Joker if",
-                    "more than one hand type is played",
-                    "this round"
+                    "If Poker Hand is repeated,",
+                    "Destroy a random Joker",
                 },
             },
             bl_grasslanders_silentflash = {
                 name = "The Silent Flash",
                 text = {
-                    "INCOMPLETE",
-                    "After play, always draw",
-                    "1 card",
+                    "After play, always",
+                    "draw 1 card",
                 },
             },
             bl_grasslanders_snaggler = {
                 name = "The Snaggler",
                 text = {
-                    "INCOMPLETE",
-                    "Cannot draw more than 4 cards",
-                    "after play or discard",
+                    "After Play or Discard, only",
+                    "draw up to 4 cards",
                 },
             },
             bl_grasslanders_bumpohorn = {
@@ -337,11 +332,11 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "If any other compatible",
-                    "{C:attention}Joker{} is sold or destroyed,",
-                    "create a copy with {C:attention}Eternal{}",
-                    "and a random {C:dark_edition}Edition{}",
-                    "{C:inactive,s:0.8}(Cannot copy expendable {C:attention,s:0.8}Jokers{C:inactive,s:0.8})"
+                    "When any other {C:attention}Joker{} is sold",
+                    "or destroyed, {C:green}#1# in #2#{} chance",
+                    "to set money to {C:money}$0",
+                    "Otherwise, create a {C:dark_edition}Negative{}",
+                    "copy of that Joker"
                 },
             },
             j_grasslanders_frogobonk = {
@@ -699,6 +694,8 @@ return {
 
             grasslanders_drollfunny = "Drool Joker",
 
+            gl_trizap_fail = 'Unlucky!',
+            gl_deespirr = 'Glass',
             gl_chonkreep = 'Reduced!',
             gl_deepwalker_x1 = '[X1 Base]',
 

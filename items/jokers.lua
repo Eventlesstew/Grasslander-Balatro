@@ -186,7 +186,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "trizap",
     atlas = 'grasslanderJoker',
-    config = { extra = {}},
+    config = { extra = {odds = 2}},
     pos = { x = 4, y = 0 },
     soul_pos={ x = 5, y = 0 },
     rarity = 3,
@@ -200,17 +200,23 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if 
             (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
-            #G.jokers.cards + G.GAME.joker_buffer - 1 < G.jokers.config.card_limit -- Checks if there is sufficient space for Blueprint and duplicate Trizaps
+            (context.card ~= card) -- So Trizap doesn't copy itself even though it can do that.
         then
-            if context.card ~= card and context.card.config.center.eternal_compat then -- Check for eternal compatibility
+            if SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) then -- Chance
+                ease_dollars(-G.GAME.dollars)
+            else
                 local copied_joker = copy_card(context.card)
-                copied_joker:set_edition(poll_edition('grasslanders_trizap', 1, false, true), true)
-                copied_joker:set_eternal(true)
+                copied_joker:set_edition({ negative = true })
                 copied_joker:add_to_deck()
                 G.jokers:emplace(copied_joker)
             end
         end
     end,
+
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
+        return { vars = {numerator,denominator}, key = self.key }
+    end
 }
 
 SMODS.Joker{
@@ -236,7 +242,7 @@ SMODS.Joker{
                 end
             end
             if context.end_of_round and context.game_over == false and context.main_eval then -- Gives the Coupon Tag if active
-                if SMODS.pseudorandom_probability(card, "logobreak", 1, card.ability.extra.odds) then -- Random chance
+                if SMODS.pseudorandom_probability(card, "gl_logobreak", 1, card.ability.extra.odds) then -- Random chance
                     G.E_MANAGER:add_event(Event({ -- Code to give the Coupon Tag
                         func = (function()
                             add_tag(Tag(card.ability.extra.tag))
@@ -585,7 +591,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "anjellyze",
     atlas = 'grasslanderJoker',
-    config = { extra = {poker_hand = 'High Card'}},
+    config = { extra = {}},
     pos = { x = 2, y = 2 },
     rarity = 1,
     cost = 5,
@@ -598,50 +604,25 @@ SMODS.Joker{
     calculate = function(self,card,context)
         -- Levels up the poker hand if it is correct
         if context.before then
-            if context.scoring_name == card.ability.extra.poker_hand then
+            if context.scoring_name == G.GAME.current_round.anjellyze_hand then
                 return {
                     level_up = true,
                     message = localize('k_level_up_ex')
                 }
             end
         end
-
-        -- Changes Poker Hand after scoring
-        if context.after then
-            if not context.blueprint then
-                local _poker_hands = {}
-                -- This filters out all Poker hands that are invisible (Foak, Flush House and Flush Five) and the hand Anjellyze already has.
-                -- This prevents Anjellyze from rerolling to them
-                for handname, _ in pairs(G.GAME.hands) do
-                    if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
-                        _poker_hands[#_poker_hands + 1] = handname
-                    end
-                end
-                card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
-            end
-        end
-    end,
-
-    -- This sets the poker hand when Anjellyze spawns
-    set_ability = function(self, card, initial, delay_sprites)
-        local _poker_hands = {}
-        for handname, _ in pairs(G.GAME.hands) do
-            if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
-                _poker_hands[#_poker_hands + 1] = handname
-            end
-        end
-        card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
     end,
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
+        local hand = G.GAME.current_round.anjellyze_hand or 'High Card'
+        return {vars = {localize(hand, 'poker_hands')}, key = self.key }
     end
 }
 
 SMODS.Joker{
     key = "concrab", -- Old name used here, it was only changed in the localisation file.
     atlas = 'grasslanderJoker',
-    config = { extra = {poker_hand = 'High Card'}},
+    config = { extra = {}},
     pos = { x = 4, y = 1 },
     rarity = 2,
     cost = 7,
@@ -656,33 +637,22 @@ SMODS.Joker{
         if context.joker_main then
             local effects = {
                 {
-                    chips = G.GAME.hands[card.ability.extra.poker_hand].chips, 
+                    chips = G.GAME.hands[G.GAME.current_round.plingit_hand].chips, 
                 },
                 {
-                    mult = G.GAME.hands[card.ability.extra.poker_hand].mult, 
+                    mult = G.GAME.hands[G.GAME.current_round.plingit_hand].mult, 
                 },
             }
-
-            -- Changes Poker hand after scoring to current one
-            if not context.blueprint then
-                card.ability.extra.poker_hand = context.scoring_name
-            end
             return SMODS.merge_effects(effects)
         end
     end,
 
-    -- Sets hand to last played Poker Hand this run
-    set_ability = function(self, card, initial, delay_sprites)
-        if G.GAME.current_round.last_played_hand then
-            card.ability.extra.poker_hand = G.GAME.current_round.last_played_hand
-        end
-    end,
-
     loc_vars = function(self, info_queue, card)
+        local hand = G.GAME.current_round.plingit_hand or 'High Card' -- Allows Plingit to be viewable in collection
         return { vars = {
-            localize(card.ability.extra.poker_hand, 'poker_hands'),
-            G.GAME.hands[card.ability.extra.poker_hand].chips,
-            G.GAME.hands[card.ability.extra.poker_hand].mult
+            localize(hand, 'poker_hands'),
+            G.GAME.hands[hand].chips,
+            G.GAME.hands[hand].mult
         }, key = self.key }
     end
 }
@@ -1081,7 +1051,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "axonitta",
-    config = { extra = {mult = 0, mult_mod = 5, poker_hand = 'High Card'}},
+    config = { extra = {}},
     pos = { x = 2, y = 4 },
     rarity = 2,
     cost = 6,
@@ -1090,43 +1060,15 @@ SMODS.Joker{
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.before and not context.blueprint then
-            if context.scoring_name == card.ability.extra.poker_hand then
-                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-                return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.MULT,
-                }
-            else
-                card.ability.extra.mult = 0
-                card.ability.extra.poker_hand = context.scoring_name
-                return {
-                    message = localize('k_reset'),
-                    colour = G.C.MULT,
-                }
+        if not context.blueprint then
+            if context.after then
+
             end
         end
-        if context.joker_main then
-            return {
-                mult = card.ability.extra.mult
-            }
-        end
     end,
-
-    set_ability = function(self, card, initial, delay_sprites)
-        if G.GAME.current_round.last_played_hand then
-            card.ability.extra.poker_hand = G.GAME.current_round.last_played_hand
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.mult, card.ability.extra.mult_mod, localize(card.ability.extra.poker_hand, 'poker_hands')}, key = self.key }
-    end
 }
 
 SMODS.Joker{
@@ -1468,20 +1410,33 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
 
-    in_pool = function(self, args)
-        return false
-    end,
-
-    calculate = function(self,card,context)
-
-    end,
-
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+    end,
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            local faces = 0
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if scored_card:is_face() then
+                    faces = faces + 1
+                    scored_card:set_ability('m_glass', nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            return true
+                        end
+                    }))
+                end
+            end
+            if faces > 0 then
+                return {
+                    message = localize('gl_deespirr'),
+                    colour = G.C.CHIPS
+                }
+            end
+        end
     end
 }
 
@@ -1689,16 +1644,33 @@ SMODS.Joker{
     end
 }
 
+-- Changes the hand used by all Anjellyze and Concrab Jokers
+local function gl_reroll_hands(plingit_hand)
+    G.GAME.current_round.plingit_hand = plingit_hand
+
+    local _poker_hands = {}
+
+    -- This filters out all Poker hands that are invisible (Foak, Flush House and Flush Five) and the hand Anjellyze already has.
+    -- This prevents Anjellyze from rerolling to them
+    for handname, _ in pairs(G.GAME.hands) do
+        if SMODS.is_poker_hand_visible(handname) and handname ~= G.GAME.current_round.anjellyze_hand then
+            _poker_hands[#_poker_hands + 1] = handname
+        end
+    end
+
+    G.GAME.current_round.anjellyze_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
+end
+
 function SMODS.current_mod.reset_game_globals(run_start)
     if run_start then
-        G.GAME.current_round.last_played_hand = 'High Card'
+        gl_reroll_hands('High Card') -- Plingit defaults to High Card at the start of the run
     end
 
     reset_grasslanders_junklake_card()
 end
 
 function SMODS.current_mod.calculate(self, context)
-    if context.before then
-        G.GAME.current_round.last_played_hand = context.scoring_name
+    if context.after then
+        gl_reroll_hands(context.scoring_name)
     end
 end
