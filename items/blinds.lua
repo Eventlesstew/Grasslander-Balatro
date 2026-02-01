@@ -1067,35 +1067,36 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.setting_blind then
-                blind.hands = {}
-                for _, poker_hand in ipairs(G.handlist) do
-                    blind.hands[poker_hand] = false
-                end
+                blind.only_hand = false
             end
             if context.debuff_hand then
                 if not context.check then
-                    if blind.hands[context.scoring_name] then
-                        local destructable_jokers = {}
-                        for i = 1, #G.jokers.cards do
-                            if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
-                                destructable_jokers[#destructable_jokers + 1] =
-                                G.jokers.cards[i]
+                    if blind.only_hand then
+                        if blind.only_hand ~= context.scoring_name then
+                            blind.triggered = true
+                            local destructable_jokers = {}
+                            for i = 1, #G.jokers.cards do
+                                if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                                    destructable_jokers[#destructable_jokers + 1] =
+                                    G.jokers.cards[i]
+                                end
+                            end
+                            local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
+
+                            if joker_to_destroy then
+                                joker_to_destroy.getting_sliced = true
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+                                        return true
+                                    end
+                                }))
+                                shakeBlind()
                             end
                         end
-                        local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
-
-                        if joker_to_destroy then
-                            joker_to_destroy.getting_sliced = true
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                                    return true
-                                end
-                            }))
-                            shakeBlind()
-                        end
+                    else
+                        blind.only_hand = context.scoring_name
                     end
-                    blind.hands[context.scoring_name] = true
                 end
             end
         end

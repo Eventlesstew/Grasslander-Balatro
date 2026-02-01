@@ -221,8 +221,8 @@ return {
             bl_grasslanders_jawtrap = {
                 name = "The Jawtrap",
                 text = {
-                    "If Poker Hand is repeated,",
-                    "Destroy a random Joker",
+                    "If more than one hand type is",
+                    "played, destroy a random Joker",
                 },
             },
             bl_grasslanders_silentflash = {
@@ -502,10 +502,8 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "{C:mult}+#2#{} Mult for each",
-                    "consecutive poker hand",
-                    "{C:inactive}(Currently {C:attention}#3#{}",
-                    "{C:inactive}at {C:mult}+#1#{C:inactive} Mult)"
+                    "After scoring, returns leftmost",
+                    "played {C:attention}card{} to hand",
                 },
             },
             j_grasslanders_wisplasm = {
@@ -609,7 +607,9 @@ return {
             j_grasslanders_deespirr = {
                 name = "Deespirr",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "All played {C:attention}face{} cards",
+                    "become {C:attention}Glass{} cards",
+                    "when scored",
                 },
             },
             j_grasslanders_hyphilliacs = {
