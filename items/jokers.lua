@@ -183,41 +183,79 @@ SMODS.Joker{
     end
 }
 
-SMODS.Joker{
-    key = "trizap",
-    atlas = 'grasslanderJoker',
-    config = { extra = {odds = 2}},
-    pos = { x = 4, y = 0 },
-    soul_pos={ x = 5, y = 0 },
-    rarity = 3,
-    cost = 8,
-    blueprint_compat=true,
-    eternal_compat=true,
-    perishable_compat=true,
-    unlocked = true,
-    discovered = true,
+if grasslanders.config.alttrizap then
+    SMODS.Joker{
+        key = "trizap",
+        atlas = 'grasslanderJoker',
+        config = { extra = {odds = 3}},
+        pos = { x = 4, y = 0 },
+        soul_pos={ x = 5, y = 0 },
+        rarity = 3,
+        cost = 8,
+        blueprint_compat=true,
+        eternal_compat=true,
+        perishable_compat=true,
+        unlocked = true,
+        discovered = true,
 
-    calculate = function(self,card,context)
-        if 
-            (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
-            (context.card ~= card) -- So Trizap doesn't copy itself even though it can do that.
-        then
-            if SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) then -- Chance
-                ease_dollars(-G.GAME.dollars)
-            else
-                local copied_joker = copy_card(context.card)
-                copied_joker:set_edition({ negative = true })
-                copied_joker:add_to_deck()
-                G.jokers:emplace(copied_joker)
+        calculate = function(self,card,context)
+            if 
+                (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
+                (context.card ~= card) -- So Trizap doesn't copy itself even though it can do that.
+            then
+                if SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) then -- Chance
+                    local copied_joker = copy_card(context.card)
+                    copied_joker:set_edition({ negative = true })
+                    copied_joker:add_to_deck()
+                    G.jokers:emplace(copied_joker)
+                else
+                    ease_dollars(-G.GAME.dollars)
+                end
             end
-        end
-    end,
+        end,
 
-    loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
-        return { vars = {numerator,denominator}, key = self.key }
-    end
-}
+        loc_vars = function(self, info_queue, card)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_trizap") -- Gives the chances for Trizap. Modified by Oops All Sixes
+            return { vars = {numerator,denominator}, key = self.key }
+        end
+    }
+else
+    SMODS.Joker{
+        key = "trizap",
+        atlas = 'grasslanderJoker',
+        config = { extra = {odds = 2}},
+        pos = { x = 4, y = 0 },
+        soul_pos={ x = 5, y = 0 },
+        rarity = 3,
+        cost = 8,
+        blueprint_compat=true,
+        eternal_compat=true,
+        perishable_compat=true,
+        unlocked = true,
+        discovered = true,
+
+        calculate = function(self,card,context)
+            if 
+                (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
+                (context.card ~= card) -- So Trizap doesn't copy itself even though it can do that.
+            then
+                if SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) then -- Chance
+                    ease_dollars(-G.GAME.dollars)
+                else
+                    local copied_joker = copy_card(context.card)
+                    copied_joker:set_edition({ negative = true })
+                    copied_joker:add_to_deck()
+                    G.jokers:emplace(copied_joker)
+                end
+            end
+        end,
+
+        loc_vars = function(self, info_queue, card)
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_trizap") -- Gives the chances for Trizap. Modified by Oops All Sixes
+            return { vars = {numerator,denominator}, key = self.key }
+        end
+    }
+end
 
 SMODS.Joker{
     key = "logobreak",

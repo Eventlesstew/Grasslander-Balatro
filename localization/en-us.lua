@@ -334,6 +334,16 @@ return {
                 text = {
                     "When any other {C:attention}Joker{} is sold",
                     "or destroyed, {C:green}#1# in #2#{} chance",
+                    "to create a {C:dark_edition}Negative{} copy",
+                    "of that Joker. Otherwise,",
+                    "set money to {C:money}$0",
+                },
+            },
+            j_grasslanders_alttrizap = {
+                name = "Trizap",
+                text = {
+                    "When any other {C:attention}Joker{} is sold",
+                    "or destroyed, {C:green}#1# in #2#{} chance",
                     "to set money to {C:money}$0",
                     "Otherwise, create a {C:dark_edition}Negative{}",
                     "copy of that Joker"
@@ -715,6 +725,17 @@ return {
 
             gl_options_experimentalTitle = 'Experimental',
             gl_options_altjunklake = 'Alternate Junklake',
+            gl_options_altjunklake_info = {
+                'Full rework of Junklake, making',
+                'him less RNG dependent',
+                'Proposed by Eventlesstew',
+            },
+            gl_options_alttrizap = 'Alternate Trizap',
+            gl_options_alttrizap_info = {
+                'Trizap changes for positive synergy',
+                'with the Oops! All Sixes Joker',
+                'Proposed by Terrozei'
+            },
         }
     }
 }

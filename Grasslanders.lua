@@ -82,7 +82,8 @@ grasslanders.extra_tabs = function()
         }, 
         nodes = {
             {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                create_toggle({label = localize('gl_options_altjunklake'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_altjunklake'), info = localize('gl_options_altjunklake_info'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_alttrizap'), info = localize('gl_options_alttrizap_info'), ref_table = grasslanders.config, ref_value = "alttrizap", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
         }
