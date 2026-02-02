@@ -672,7 +672,7 @@ SMODS.Blind {
         if not blind.disabled then
             if context.before and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
                 local count = 0
-                for _,v in context.full_hand do
+                for _,v in ipairs(context.full_hand) do
                     v:set_ability('m_grasslanders_gloom', nil, false)
                     G.E_MANAGER:add_event(Event({
                         func = function()
@@ -705,7 +705,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss_colour = HEX("433e57"),
     in_pool = function()
         local valid = false
         if (G.GAME.round_resets.ante >= 3) then
@@ -791,7 +791,7 @@ SMODS.Blind {
         if not blind.disabled then
             if context.before and #context.scoring_hand <= 1 then
                 local count = 0
-                for _,v in context.full_hand do
+                for _,v in ipairs(context.full_hand) do
                     v:set_ability('m_grasslanders_gloom', nil, false)
                     G.E_MANAGER:add_event(Event({
                         func = function()
@@ -818,7 +818,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss_colour = HEX("a96c8e"),
     in_pool = function()
         return false
     end,
@@ -837,7 +837,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss_colour = HEX("6d7f5c"),
     in_pool = function()
         return false
     end,
@@ -909,7 +909,7 @@ SMODS.Blind {
     pos = {x = 0, y = 29},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 6},
     boss_colour = HEX("7c2d35"),
     calculate = function(self, blind, context)
         if not blind.disabled then
@@ -942,7 +942,7 @@ SMODS.Blind {
     dollars = 8,
     mult = 2,
     boss = {showdown = true},
-    boss_colour = HEX("fffded"),
+    boss_colour = HEX("a2ab8e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.debuff_card and context.debuff_card.area == G.jokers then
@@ -958,12 +958,13 @@ SMODS.Blind {
                 local target_joker = pseudorandom_element(valid_jokers, 'gl_twinckler')
 
                 target_joker.ability.gl_twinckled = true
-                SMODS.recalc_debuff(target_joker)
                 shakeBlind()
+                target_joker:juice_up()
+                SMODS.recalc_debuff(target_joker)
             end
 
             if context.hand_drawn then
-                for _,v in G.jokers.cards do
+                for _,v in ipairs(G.jokers.cards) do
                     if v.ability.gl_twinckled then
                         v.ability.gl_twinckled = nil
                         SMODS.recalc_debuff(v)
@@ -993,21 +994,24 @@ SMODS.Blind {
     dollars = 8,
     mult = 2,
     boss = {showdown = true},
-    boss_colour = HEX("ff9946"),
+    boss_colour = HEX("a33829"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after and SMODS.calculate_round_score() < (G.GAME.blind.chips * 0.25) then
-                -- Potential Bug: This might trigger after the mult and chips are added
+            if context.after and SMODS.calculate_round_score() < (get_blind_amount(G.GAME.round_resets.ante) * 0.5) then
                 blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
-                mult = 0
-                hand_chips = 0
-                G.GAME.chips = 0
-                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.GAME.chips = 0
+                        return true
+                    end
+                }))
+                ease_chips(0)
+                shakeBlind()
             end
         end
     end,
     loc_vars = function(self)
-        return { vars = {(G.GAME.blind.chips * 0.25)} }
+        return { vars = {get_blind_amount(G.GAME.round_resets.ante) * 0.5} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_maw_collection')} }
@@ -1023,7 +1027,7 @@ SMODS.Blind {
     dollars = 8,
     mult = 2,
     boss = {showdown = true},
-    boss_colour = HEX("ff5146"),
+    boss_colour = HEX("a3293a"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.setting_blind or context.pre_discard then
@@ -1068,7 +1072,7 @@ SMODS.Blind {
     dollars = 8,
     mult = 2,
     boss = {showdown = true},
-    boss_colour = HEX("ffef49"),
+    boss_colour = HEX("b48f43"),
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.debuff_card and context.debuff_card.area == G.jokers then
@@ -1124,19 +1128,28 @@ SMODS.Blind {
     dollars = 8,
     mult = 2,
     boss = {showdown = true},
-    boss_colour = HEX("615852"),
+    boss_colour = HEX("97467b"),
+    -- This crashes if Molty is there.
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after and (G.GAME.chips > G.GAME.blind.chips) then
+            if context.final_scoring_step and (G.GAME.chips + SMODS.calculate_round_score() >= G.GAME.blind.chips) then
                 blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
-                G.GAME.chips = 0
+                mult = 0
+                update_hand_text({ sound = 'chips2', modded = true }, {mult = mult })
                 G.E_MANAGER:add_event(Event({
-                    trigger = 'immediate',
+                    func = function()
+                        G.GAME.chips = 0
+                        return true
+                    end
+                }))
+                ease_chips(0)
+                G.E_MANAGER:add_event(Event({
                     func = function()
                         blind:disable()
                         return true
                     end
                 }))
+                shakeBlind()
             end
         end
     end,
@@ -1190,7 +1203,7 @@ SMODS.Blind {
     dollars = 5,
     mult = 2,
     boss = {min = 2},
-    boss_colour = HEX("615852"),
+    boss_colour = HEX("a96c75"),
     in_pool = function()
         return false
     end,

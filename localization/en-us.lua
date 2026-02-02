@@ -252,22 +252,22 @@ return {
             bl_grasslanders_twinckler = {
                 name = "Twinckler",
                 text = {
-                    "INCOMPLETE",
-                    "Disables your leftmost or rightmost Jokers",
+                    "Disables your leftmost or",
+                    "rightmost Joker before hand",
                 },
             },
             bl_grasslanders_maw = {
                 name = "M.A.W",
                 text = {
-                    "Resets score if",
-                    "hand scores less than #1#"
+                    "Resets score if hand",
+                    "scores less than #1#"
                 },
             },
             bl_grasslanders_persecutor = {
                 name = "Persecutor",
                 text = {
-                    "Forces 2 cards to be selected",
-                    "after each hand"
+                    "Forces 2 cards to be",
+                    "selected after each hand"
                 },
             },
             bl_grasslanders_radiochomper = {
