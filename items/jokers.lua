@@ -368,7 +368,7 @@ SMODS.Joker{
     discovered = true,
 
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.hand then -- Triggers for cards held in hand
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then -- Triggers for cards held in hand
             if context.other_card.debuff then -- Prevents triggering if card is debuffed
                 return {
                     message = localize('k_debuffed'),
@@ -377,7 +377,7 @@ SMODS.Joker{
             else
                 -- Grants chips
                 return {
-                    chips = context.other_card:get_chip_bonus()
+                    chips = context.other_card:get_chip_bonus() * 2
                 }
             end
         end
@@ -727,40 +727,38 @@ SMODS.Joker{
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 100}},
+    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 200}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
 
     calculate = function(self,card,context)
         if not context.blueprint then
-            if
-                (context.discard and context.other_card == context.full_hand[#context.full_hand]) or
-                context.after
-            then
-                if G.GAME.blind.boss and (G.GAME.chips + SMODS.calculate_round_score()) >= G.GAME.blind.chips then
-                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                    return {
-                        message = localize('k_awake_ex'),
-                        colour = G.C.CHIPS
-                    }
-                else
-                    if card.ability.extra.chips > 0 then
-                        if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
-                            card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
-                        else
-                            card.ability.extra.chips = 0
-                        end
-                        return {
-                            message = localize('k_sleep_ex'),
-                            colour = G.C.CHIPS
-                        } 
+            if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                return {
+                    message = localize('k_awake_ex'),
+                    colour = G.C.CHIPS
+                }
+            end
+
+            if context.pre_discard or (context.after and G.GAME.chips < G.GAME.blind.chips) then
+                if card.ability.extra.chips > 0 then
+                    if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                        card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+                    else
+                        card.ability.extra.chips = 0
                     end
+
+                    return {
+                        message = localize('k_sleep_ex'),
+                        colour = G.C.CHIPS
+                    } 
                 end
             end
         end
@@ -1619,7 +1617,7 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,                                   --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
-    soul_pos=nil,                                        --pos of a soul sprite.
+    soul_pos={ x = 1, y = 9},
     atlas = 'grasslanderJoker',                                --atlas name, single sprites are deprecated.
 
     calculate = function(self,card,context)              --define calculate functions here

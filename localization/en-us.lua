@@ -365,7 +365,7 @@ return {
                 name = "Reeflet",
                 text = {
                     "All {C:attention}cards {}held in",
-                    "hand give their",
+                    "hand give {C:attention}double{} their",
                     "base chip value"
                 },
             },

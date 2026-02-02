@@ -1054,9 +1054,11 @@ SMODS.Blind {
                             end
                         end
                         local forced_card = pseudorandom_element(valid_cards, 'gl_persecutor')
-                        forced_card.ability.forced_selection = true
+                        if forced_card then
+                            forced_card.ability.forced_selection = true
+                            G.hand:add_to_highlighted(forced_card)
+                        end
                     end
-                    G.hand:add_to_highlighted(forced_card)
                 end
             end
         end
