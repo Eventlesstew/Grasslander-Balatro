@@ -146,7 +146,6 @@ return {
             bl_grasslanders_stigz = {
                 name = "The Stigz",
                 text = {
-                    "INCOMPLETE",
                     "Adds a Gloom Card to hand",
                     "after each hand played"
                 },
@@ -182,9 +181,8 @@ return {
             bl_grasslanders_clacteriophage = {
                 name = "The Clacteriophage",
                 text = {
-                    "INCOMPLETE",
-                    "One random card in hand becomes a",
-                    "Gloom Card after each hand played",
+                    "All played cards become Gloom",
+                    "if only one card scores",
                 },
             },
             bl_grasslanders_screecher = {
@@ -198,7 +196,6 @@ return {
             bl_grasslanders_leaper = {
                 name = "The Leaper",
                 text = {
-                    "INCOMPLETE",
                     "1 in 10 cards drawn become",
                     "Gloom cards",
                 },
@@ -213,9 +210,8 @@ return {
             bl_grasslanders_chomper = {
                 name = "The Chomper",
                 text = {
-                    "INCOMPLETE",
-                    "Disables a random Joker for each hand",
-                    "Enables a random Joker for each discard"
+                    "Disables a random Joker after each hand",
+                    "Enables a random Joker after each discard"
                 },
             },
             bl_grasslanders_jawtrap = {
@@ -250,28 +246,26 @@ return {
                 name = "The Wartumorr",
                 text = {
                     "INCOMPLETE",
-                    "Gloom Cards cannot be selected",
+                    "Gloom Cards return to deck after play or discard",
                 },
             },
             bl_grasslanders_twinckler = {
                 name = "Twinckler",
                 text = {
                     "INCOMPLETE",
-                    "Disables your leftmost and rightmost Jokers",
+                    "Disables your leftmost or rightmost Jokers",
                 },
             },
             bl_grasslanders_maw = {
                 name = "M.A.W",
                 text = {
-                    "INCOMPLETE",
-                    "Resets your score if hand scores",
-                    "less than (25% of required)"
+                    "Resets score if",
+                    "hand scores less than #1#"
                 },
             },
             bl_grasslanders_persecutor = {
                 name = "Persecutor",
                 text = {
-                    "INCOMPLETE",
                     "Forces 2 cards to be selected",
                     "after each hand"
                 },
@@ -279,16 +273,14 @@ return {
             bl_grasslanders_radiochomper = {
                 name = "Radiochomper",
                 text = {
-                    "INCOMPLETE",
                     "Disables all Jokers",
                     "After play or discard",
                     "enable one random Joker"
                 },
             },
             bl_grasslanders_matriarch = {
-                name = "The Matriarch",
+                name = "Matriarch",
                 text = {
-                    "INCOMPLETE",
                     "Resets score when you",
                     "beat it the first time",
                 },
@@ -707,7 +699,8 @@ return {
             gl_trizap_fail = 'Unlucky!',
             gl_deespirr = 'Glass',
             gl_chonkreep = 'Reduced!',
-            gl_deepwalker_x1 = '[X1 Base]',
+            gl_deepwalker_collection = '[X1 Base]',
+            gl_maw_collection = '[25% Requirement]',
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',

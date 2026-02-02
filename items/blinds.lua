@@ -654,7 +654,7 @@ SMODS.Blind {
         return { vars = {get_blind_amount(G.GAME.round_resets.ante)} }
     end,
     collection_loc_vars = function(self)
-        return { vars = {localize('gl_deepwalker_x1')} }
+        return { vars = {localize('gl_deepwalker_collection')} }
     end,
 }
 
@@ -666,14 +666,33 @@ SMODS.Blind {
     pos = {x = 0, y = 17},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 3},
+    boss_colour = HEX("697359"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.before and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
+                local count = 0
+                for _,v in context.full_hand do
+                    v:set_ability('m_grasslanders_gloom', nil, false)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    count = count + 1
+                end
+                if count > 0 then
+                    shakeBlind()
+                end
+            end
         end
+    end,
+    loc_vars = function(self)
+        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { localize('ph_most_played') } }
     end,
 }
 
@@ -766,13 +785,26 @@ SMODS.Blind {
     pos = {x = 0, y = 21},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {min = 3},
+    boss_colour = HEX("ab4f58"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.before and #context.scoring_hand <= 1 then
+                local count = 0
+                for _,v in context.full_hand do
+                    v:set_ability('m_grasslanders_gloom', nil, false)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    count = count + 1
+                end
+                if count > 0 then
+                    shakeBlind()
+                end
+            end
         end
     end,
 }
@@ -907,7 +939,7 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 31},
-    dollars = 5,
+    dollars = 8,
     mult = 2,
     boss = {min = 2},
     boss_colour = HEX("615852"),
@@ -926,19 +958,27 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 32},
-    dollars = 5,
+    dollars = 8,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {showdown = true},
+    boss_colour = HEX("ff9946"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after then
-                
+            if context.after and SMODS.calculate_round_score() < (G.GAME.blind.chips * 0.25) then
+                -- Potential Bug: This might trigger after the mult and chips are added
+                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                mult = 0
+                hand_chips = 0
+                G.GAME.chips = 0
+                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
             end
         end
+    end,
+    loc_vars = function(self)
+        return { vars = {(G.GAME.blind.chips * 0.25)} }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {localize('gl_maw_collection')} }
     end,
 }
 
@@ -948,15 +988,41 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 33},
-    dollars = 5,
+    dollars = 8,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {showdown = true},
+    boss_colour = HEX("ff5146"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind or context.pre_discard then
+                blind.prepped = nil
+            end
+            if context.before then
+                blind.prepped = true
+            end
+
+            if context.hand_drawn and blind.prepped then
+                local forced_count = 2
+                for _, playing_card in ipairs(G.hand.cards) do
+                    if playing_card.ability.forced_selection then
+                        forced_count = forced_count - 1
+                    end
+                end
+                if forced_count > 0 then
+                    G.hand:unhighlight_all()
+                    for i=1,forced_count do
+                        local valid_cards = {}
+                        for _, playing_card in ipairs(G.hand.cards) do
+                            if not playing_card.ability.forced_selection then
+                                valid_cards[#valid_cards + 1] = playing_card
+                            end
+                        end
+                        local forced_card = pseudorandom_element(valid_cards, 'gl_persecutor')
+                        forced_card.ability.forced_selection = true
+                    end
+                    G.hand:add_to_highlighted(forced_card)
+                end
+            end
         end
     end,
 }
@@ -967,17 +1033,54 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 34},
-    dollars = 5,
+    dollars = 8,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {showdown = true},
+    boss_colour = HEX("ffef49"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.debuff_card and context.debuff_card.area == G.jokers then
+                if context.debuff_card.ability.gl_chonked then
+                    return {
+                        debuff = true
+                    }
+                end
+            end
+
+            if context.first_hand_drawn then
+                for _,v in ipairs(G.jokers.cards) do
+                    v.ability.gl_chonked = true
+                    SMODS.recalc_debuff(v)
+                end
+            elseif context.hand_drawn then
+                blind.triggered = true
+                local debuffed_jokers = {}
+                for _,v in ipairs(G.jokers.cards) do
+                    if v.ability.gl_chonked then
+                        debuffed_jokers[#debuffed_jokers + 1] = v
+                    end
+                end
+
+                local target_joker = pseudorandom_element(debuffed_jokers, 'gl_radiochomper')
+                if target_joker then
+                    target_joker.ability.gl_chonked = nil
+                    SMODS.recalc_debuff(target_joker)
+                    target_joker:juice_up()
+                    blind:wiggle()
+                end
+            end
         end
     end,
+    disable = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chonked = nil
+        end
+    end,
+    defeat = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chonked = nil
+        end
+    end
 }
 
 SMODS.Blind {
@@ -986,12 +1089,23 @@ SMODS.Blind {
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 35},
-    dollars = 5,
+    dollars = 8,
     mult = 2,
     boss = {showdown = true},
     boss_colour = HEX("615852"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.after and (G.GAME.chips > G.GAME.blind.chips) then
+                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                G.GAME.chips = 0
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                        blind:disable()
+                        return true
+                    end
+                }))
+            end
         end
     end,
 }
@@ -1111,15 +1225,78 @@ SMODS.Blind {
     pos = {x = 0, y = 25},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 4},
     boss_colour = HEX("a3444c"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.debuff_card and context.debuff_card.area == G.jokers then
+                if context.debuff_card.ability.gl_chomped then
+                    return {
+                        debuff = true
+                    }
+                end
+            end
+
+            if context.setting_blind then
+                blind.state = nil
+            end
+            if context.before then
+                blind.state = 'hand'
+            end
+            if context.pre_discard then
+                blind.state = 'discard'
+            end
+
+            if context.hand_drawn then
+                blind.triggered = true
+
+                if blind.state == 'hand' then
+                    local valid_jokers = {}
+                    for _,v in ipairs(G.jokers.cards) do
+                        if not v.ability.gl_chomped then
+                            valid_jokers[#valid_jokers + 1] = v
+                        end
+                    end
+
+                    local target_joker = pseudorandom_element(valid_jokers, 'gl_chomper_debuff')
+                    if target_joker then
+                        target_joker.ability.gl_chomped = true
+                        SMODS.recalc_debuff(target_joker)
+                        target_joker:juice_up()
+                        blind:wiggle()
+                    end
+                    blind.state = nil
+                
+                elseif blind.state == 'discard' then
+                    local debuffed_jokers = {}
+                    for _,v in ipairs(G.jokers.cards) do
+                        if v.ability.gl_chomped then
+                            debuffed_jokers[#debuffed_jokers + 1] = v
+                        end
+                    end
+
+                    local target_joker = pseudorandom_element(debuffed_jokers, 'gl_chomper_rebuff')
+                    if target_joker then
+                        target_joker.ability.gl_chomped = nil
+                        SMODS.recalc_debuff(target_joker)
+                        target_joker:juice_up()
+                        blind:wiggle()
+                    end
+                    blind.state = nil
+                end
+            end
         end
     end,
+    disable = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chomped = nil
+        end
+    end,
+    defeat = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chomped = nil
+        end
+    end
 }
 
 if grasslanders.config.post_trigger then
