@@ -941,15 +941,47 @@ SMODS.Blind {
     pos = {x = 0, y = 31},
     dollars = 8,
     mult = 2,
-    boss = {min = 2},
-    boss_colour = HEX("615852"),
-    in_pool = function()
-        return false
-    end,
+    boss = {showdown = true},
+    boss_colour = HEX("fffded"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.debuff_card and context.debuff_card.area == G.jokers then
+                if context.debuff_card.ability.gl_twinckled then
+                    return {
+                        debuff = true
+                    }
+                end
+            end
+
+            if context.before and G.jokers.cards then
+                local valid_jokers = {G.jokers.cards[1], G.jokers.cards[#G.jokers.cards]}
+                local target_joker = pseudorandom_element(valid_jokers, 'gl_twinckler')
+
+                target_joker.ability.gl_twinckled = true
+                SMODS.recalc_debuff(target_joker)
+                shakeBlind()
+            end
+
+            if context.hand_drawn then
+                for _,v in G.jokers.cards do
+                    if v.ability.gl_twinckled then
+                        v.ability.gl_twinckled = nil
+                        SMODS.recalc_debuff(v)
+                    end
+                end
+            end
         end
     end,
+    disable = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_twinckled = nil
+        end
+    end,
+    defeat = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_twinckled = nil
+        end
+    end
 }
 
 SMODS.Blind {
