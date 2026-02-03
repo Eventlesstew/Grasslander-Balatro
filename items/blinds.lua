@@ -1208,10 +1208,10 @@ SMODS.Blind {
     boss_colour = HEX("a96c75"),
     in_pool = function()
         local valid = false
-        if (G.GAME.round_resets.ante >= 3) then
+        if (G.GAME.round_resets.ante >= 6) then
             local count = 0
             for _,v in ipairs(G.playing_cards or {}) do
-                if next(SMODS.has_enhancement(v, 'm_grasslanders_gloom')) then
+                if SMODS.has_enhancement(v, 'm_grasslanders_gloom') then
                     count = count + 1
                 end
             end

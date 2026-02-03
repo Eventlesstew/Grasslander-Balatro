@@ -31,7 +31,7 @@ SMODS.Joker{
         -- https://github.com/Steamodded/smods/wiki/Calculate-Functions#:~:text=Contexts,-A%20context
 
         if not context.blueprint then -- This prevents Blueprint from doing anything
-            if context.after then -- Affects the hand size after played hand
+            if context.discard and context.other_card == context.full_hand[#context.full_hand] then -- Affects the hand size after played hand
                 card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
                 G.hand:change_size(-card.ability.extra.h_mod)
 
@@ -40,7 +40,7 @@ SMODS.Joker{
                     colour = G.C.FILTER
                 }
             end
-            if context.discard and context.other_card == context.full_hand[#context.full_hand] then -- Affects the hand size after discard
+            if context.after then -- Affects the hand size after discard
                 if G.hand.config.card_limit > 0 then
                     card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
                     G.hand:change_size(card.ability.extra.h_mod)

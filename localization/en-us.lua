@@ -306,8 +306,8 @@ return {
             j_grasslanders_blowy = {
                 name = "Blowy",
                 text = {
-                    "{C:attention}+#1# {}Hand size per discard",
-                    "{C:attention}-#1# {}Hand size per hand played",
+                    "{C:attention}+#1#{} Hand size per hand played",
+                    "{C:attention}-#1#{} Hand size per discard",
                     "this round",
                     "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
