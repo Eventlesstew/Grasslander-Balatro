@@ -673,9 +673,9 @@ SMODS.Blind {
             if context.before and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
                 local count = 0
                 for _,v in ipairs(context.full_hand) do
-                    v:set_ability('m_grasslanders_gloom', nil, false)
                     G.E_MANAGER:add_event(Event({
                         func = function()
+                            v:set_ability('m_grasslanders_gloom', nil, false)
                             v:juice_up()
                             return true
                         end
@@ -792,9 +792,9 @@ SMODS.Blind {
             if context.before and #context.scoring_hand <= 1 then
                 local count = 0
                 for _,v in ipairs(context.full_hand) do
-                    v:set_ability('m_grasslanders_gloom', nil, false)
                     G.E_MANAGER:add_event(Event({
                         func = function()
+                            v:set_ability('m_grasslanders_gloom', nil, false)
                             v:juice_up()
                             return true
                         end
@@ -1207,14 +1207,25 @@ SMODS.Blind {
     boss = {min = 6},
     boss_colour = HEX("a96c75"),
     in_pool = function()
-        return false
+        local valid = false
+        if (G.GAME.round_resets.ante >= 3) then
+            local count = 0
+            for _,v in ipairs(G.playing_cards or {}) do
+                if next(SMODS.has_enhancement(v, 'm_grasslanders_gloom')) then
+                    count = count + 1
+                end
+            end
+
+            valid = (count >= 3)
+        end
+        return valid
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.discard then
                 local scored_card = context.other_card
 
-                if scored_card.has_enhancement('m_grasslanders_gloom') then
+                if SMODS.has_enhancement(scored_card, 'm_grasslanders_gloom') then
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                     local copied_card = copy_card(scored_card, nil, nil, G.playing_card)
                     copied_card:add_to_deck()
@@ -1228,8 +1239,8 @@ SMODS.Blind {
             end
 
             if context.after then
-                for _,scored_card in ipairs(context.scoring_hand) do
-                    if scored_card.has_enhancement('m_grasslanders_gloom') then
+                for _,scored_card in ipairs(context.full_hand) do
+                    if SMODS.has_enhancement(scored_card, 'm_grasslanders_gloom') then
                         G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                         local copied_card = copy_card(scored_card, nil, nil, G.playing_card)
                         copied_card:add_to_deck()

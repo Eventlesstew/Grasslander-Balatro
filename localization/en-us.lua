@@ -146,8 +146,8 @@ return {
             bl_grasslanders_stigz = {
                 name = "The Stigz",
                 text = {
-                    "Adds a Gloom Card to hand",
-                    "after each hand played"
+                    "Played cards become Gloom cards",
+                    "if poker hand isn't #1#"
                 },
             },
             bl_grasslanders_kyner = {
@@ -245,8 +245,8 @@ return {
             bl_grasslanders_wartumorr = {
                 name = "The Wartumorr",
                 text = {
-                    "INCOMPLETE",
-                    "Gloom Cards return to deck after play or discard",
+                    "Gloom Cards return to",
+                    "deck after play or discard",
                 },
             },
             bl_grasslanders_twinckler = {
@@ -445,8 +445,8 @@ return {
                 name = "Chonkreep",
                 text = {
                     "Reduces {C:attention}Blind{} requirement",
-                    "by 25% after hand",
-                    "is played"
+                    "by {C:attention}#1#%{} for each scoring",
+                    "card after played hand"
                 },
             },
 

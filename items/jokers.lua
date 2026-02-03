@@ -698,7 +698,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "chonkreep",
     atlas = 'grasslanderJoker',
-    config = { extra = {}},
+    config = { extra = {reduction = 0.05}},
     pos = { x = 3, y = 2 },
     rarity = 3,
     cost = 8,
@@ -710,18 +710,26 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.after then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    G.GAME.blind.chips = G.GAME.blind.chips * (1 - (0.05 * #G.scoring_hand))
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                    return true
-                end
-            }))
-            return {
+            local reduction = G.GAME.blind.chips * card.ability.extra.reduction
+            for _, v in ipairs(context.scoring_hand) do
+                G.E_MANAGER:add_event(Event({
+                    delay = 0.4,
+                    func = function()
+                        G.GAME.blind.chips = G.GAME.blind.chips - reduction
+                        G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                        v:juice_up()
+                        return true
+                    end
+                }))
+            end
+            --[[return {
                 message = localize('gl_chonkreep'),
-            }
+            }]]
         end
     end,
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.reduction * 100}, key = self.key }
+    end
 }
 
 SMODS.Joker{
