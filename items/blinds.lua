@@ -1204,13 +1204,44 @@ SMODS.Blind {
     pos = {x = 0, y = 30},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 6},
     boss_colour = HEX("a96c75"),
     in_pool = function()
         return false
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.discard then
+                local scored_card = context.other_card
+
+                if scored_card.has_enhancement('m_grasslanders_gloom') then
+                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                    local copied_card = copy_card(scored_card, nil, nil, G.playing_card)
+                    copied_card:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    table.insert(G.playing_cards, copied_card)
+                    G.deck:emplace(copied_card)
+                    copied_card.states.visible = nil
+
+                    SMODS.destroy_cards(scored_card)
+                end
+            end
+
+            if context.after then
+                for _,scored_card in ipairs(context.scoring_hand) do
+                    if scored_card.has_enhancement('m_grasslanders_gloom') then
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local copied_card = copy_card(scored_card, nil, nil, G.playing_card)
+                        copied_card:add_to_deck()
+                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                        table.insert(G.playing_cards, copied_card)
+                        G.deck:emplace(copied_card)
+                        copied_card.states.visible = nil
+
+                        SMODS.destroy_cards(scored_card)
+                    end
+                end
+            end
         end
     end,
 }

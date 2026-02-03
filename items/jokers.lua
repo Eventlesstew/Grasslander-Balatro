@@ -1101,19 +1101,19 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.after then
             G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-            local copy_card = copy_card(context.full_hand[1], nil, nil, G.playing_card)
-            copy_card:add_to_deck()
+            local copied_card = copy_card(context.full_hand[1], nil, nil, G.playing_card)
+            copied_card:add_to_deck()
             G.deck.config.card_limit = G.deck.config.card_limit + 1
-            table.insert(G.playing_cards, copy_card)
-            G.hand:emplace(copy_card)
-            copy_card.states.visible = nil
+            table.insert(G.playing_cards, copied_card)
+            G.hand:emplace(copied_card)
+            copied_card.states.visible = nil
 
             if not context.blueprint then
                 SMODS.destroy_cards(context.full_hand[1])
             end
             G.E_MANAGER:add_event(Event({
                 func = function()
-                    copy_card:start_materialize()
+                    copied_card:start_materialize()
                     return true
                 end
             }))
@@ -1123,7 +1123,7 @@ SMODS.Joker{
                 func = function() -- This is for timing purposes, it runs after the message
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            SMODS.calculate_context({ playing_card_added = true, cards = { copy_card } })
+                            SMODS.calculate_context({ playing_card_added = true, cards = { copied_card } })
                             return true
                         end
                     }))
@@ -1481,7 +1481,7 @@ SMODS.Joker{
         if context.before and not context.blueprint then
             local faces = 0
             for _, scored_card in ipairs(context.scoring_hand) do
-                if scored_card:is_face() then
+                if G.GAME.current_round.hands_left == 0 and G.GAME.current_round.discards_left == 0 then
                     faces = faces + 1
                     scored_card:set_ability('m_glass', nil, true)
                     G.E_MANAGER:add_event(Event({

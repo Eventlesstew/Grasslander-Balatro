@@ -599,9 +599,10 @@ return {
             j_grasslanders_deespirr = {
                 name = "Deespirr",
                 text = {
-                    "All played {C:attention}face{} cards",
-                    "become {C:attention}Glass{} cards",
-                    "when scored",
+                    "All played cards",
+                    "become {C:attention}Glass{} cards on",
+                    "last hand of round",
+                    "with 0 discards remaining",
                 },
             },
             j_grasslanders_hyphilliacs = {
@@ -658,6 +659,14 @@ return {
             -- do note that when using messages such as: 
             -- message = localize{type='variable',key='a_xmult',vars={current_xmult}},
             -- that the key 'a_xmult' will use provided values from vars={} in that order to replace #1#, #2# etc... in the localization file
+
+        challenge_names = {
+            c_grasslanders_gloom = "Gloomy Days",
+            c_grasslanders_gloom_kaizo = "Avvaerugo's Ultimatum",
+            c_grasslanders_hyphilliacs = "Cursed Love",
+            c_grasslanders_sugamimi = "Sugar Rush",
+            c_grasslanders_vacomar = "Scrapyard Shenanigans",
+        },
 
         dictionary = {
             a_chips="+#1#",
