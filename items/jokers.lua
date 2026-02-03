@@ -712,7 +712,7 @@ SMODS.Joker{
         if context.after then
             G.E_MANAGER:add_event(Event({
                 func = function()
-                    G.GAME.blind.chips = G.GAME.blind.chips * 0.75
+                    G.GAME.blind.chips = G.GAME.blind.chips * (1 - (0.05 * #G.scoring_hand))
                     G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                     return true
                 end
@@ -727,7 +727,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 200}},
+    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 150}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 5,
