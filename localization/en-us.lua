@@ -608,8 +608,7 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "{C:attention}Kings{} and {C:attention}Queens{} are",
-                    "considered the same rank",
+                    "Played {C:attention}Kings{} and {C:attention}Queens{} are retriggered",
                     "{C:attention}Kings{} are debuffed if played hand",
                     "does not contain any {C:attention}Queens{}",
                     "{C:attention}Queens{} are debuffed if played hand",
@@ -668,6 +667,9 @@ return {
             c_grasslanders_hyphilliacs = "Cursed Love",
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
+        },
+        v_text = {
+            ch_c_gl_hyphilliacs = '{C:red}X2{} base Blind size',
         },
 
         dictionary = {

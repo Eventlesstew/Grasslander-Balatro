@@ -67,6 +67,23 @@ SMODS.Challenge {
     jokers = {
         { id = 'j_grasslanders_hyphilliacs', eternal = true },
     },
+    rules = {
+        custom = {
+            {id = 'gl_hyphilliacs', value = true},
+        }
+    },
+    restrictions = {
+        banned_cards = {
+            {id = 'j_ride_the_bus'},
+            {id = 'j_grasslanders_sprinkle'},
+            {id = 'j_pareidolia'},
+        },
+        banned_other = {
+            {id = 'bl_plant', type = 'blind'},
+            {id = 'bl_mark', type = 'blind'},
+            {id = 'bl_grasslanders_veguar', type = 'blind'},
+        },
+    },
     deck = {
         type = 'Challenge Deck',
         cards = {
@@ -137,6 +154,14 @@ SMODS.Challenge {
         }
     }
 }
+
+function SMODS.current_mod.reset_game_globals(run_start)
+    if run_start then
+        if G.GAME.modifiers.gl_hyphilliacs then
+            G.GAME.starting_params.ante_scaling = 2
+        end
+    end
+end
 
 SMODS.Challenge {
     key = 'sugamimi',
@@ -155,63 +180,6 @@ SMODS.Challenge {
 SMODS.Challenge {
     key = 'gloom_kaizo',
     deck = {
-        type = 'Challenge Deck',
-        cards = {
-            { s = 'S', r = 'K', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = 'Q', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = 'J', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = 'T', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '9', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '8', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '7', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '6', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '5', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '4', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '3', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = '2', e = 'm_grasslanders_gloom' },
-            { s = 'S', r = 'A', e = 'm_grasslanders_gloom' },
-
-            { s = 'H', r = 'K', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = 'Q', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = 'J', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = 'T', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '9', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '8', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '7', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '6', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '5', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '4', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '3', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = '2', e = 'm_grasslanders_gloom' },
-            { s = 'H', r = 'A', e = 'm_grasslanders_gloom' },
-
-            { s = 'C', r = 'K', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = 'Q', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = 'J', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = 'T', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '9', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '8', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '7', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '6', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '5', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '4', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '3', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = '2', e = 'm_grasslanders_gloom' },
-            { s = 'C', r = 'A', e = 'm_grasslanders_gloom' },
-
-            { s = 'D', r = 'K', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = 'Q', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = 'J', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = 'T', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '9', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '8', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '7', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '6', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '5', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '4', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '3', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = '2', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = 'A', e = 'm_grasslanders_gloom' },
-        }
+        enhancement = 'm_grasslanders_gloom',
     }
 }

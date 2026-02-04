@@ -1521,10 +1521,9 @@ SMODS.Joker{
     end
 }
 
--- BUG: Hyphilliac debuffing doesn't work right
 SMODS.Joker{
     key = "hyphilliacs",
-    config = { extra = {}},
+    config = { extra = {repetitions = 1}},
     pos = { x = 2, y = 7 },
     rarity = 3,
     cost = 8,
@@ -1536,10 +1535,7 @@ SMODS.Joker{
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
-
-    in_pool = function(self, args)
-        return false
-    end,
+    
     calculate = function(self,card,context)
         if not context.blueprint then
             if context.debuff_card and context.debuff_card.gl_hyphilliacs_debuff then
@@ -1587,6 +1583,13 @@ SMODS.Joker{
                     other_card.gl_hyphilliacs_debuff = nil
                     SMODS.recalc_debuff(other_card)
                 end
+            end
+        end
+        if context.repetition and context.cardarea == G.play then
+            if context.other_card:get_id() == 13 or context.other_card:get_id() == 12 then
+                return {
+                    repetitions = card.ability.extra.repetitions
+                }
             end
         end
     end,
