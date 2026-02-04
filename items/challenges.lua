@@ -4,7 +4,7 @@ SMODS.Challenge {
         type = 'Challenge Deck',
         cards = {
             { s = 'S', r = 'K' },
-            { s = 'D', r = 'Q' },
+            { s = 'S', r = 'Q' },
             { s = 'S', r = 'J' },
             { s = 'S', r = 'T' },
             { s = 'S', r = '9' },
@@ -158,7 +158,7 @@ SMODS.Challenge {
         type = 'Challenge Deck',
         cards = {
             { s = 'S', r = 'K', e = 'm_grasslanders_gloom' },
-            { s = 'D', r = 'Q', e = 'm_grasslanders_gloom' },
+            { s = 'S', r = 'Q', e = 'm_grasslanders_gloom' },
             { s = 'S', r = 'J', e = 'm_grasslanders_gloom' },
             { s = 'S', r = 'T', e = 'm_grasslanders_gloom' },
             { s = 'S', r = '9', e = 'm_grasslanders_gloom' },

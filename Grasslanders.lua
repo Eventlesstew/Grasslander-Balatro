@@ -96,12 +96,14 @@ assert(SMODS.load_file("items/icon.lua"))()
 -- Loads Jokers
 if grasslanders.config.grasslanderJokers == true then
     assert(SMODS.load_file("items/jokers.lua"))()
+    assert(SMODS.load_file("items/challenges.lua"))()
 end
 
 -- Loads Clacker Blinds
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
 end
+
 
 -- Disables Base Blinds
 if grasslanders.config.clackerblinds >= 3 then

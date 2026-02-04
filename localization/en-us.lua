@@ -608,10 +608,12 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "Played {C:attention}Kings {}trigger all",
-                    "{C:attention}Queens {}of the same suit,",
-                    "but are debuffed if none",
-                    "are played and {C:attention}vice versa",
+                    "{C:attention}Kings{} and {C:attention}Queens{} are",
+                    "considered the same rank",
+                    "{C:attention}Kings{} are debuffed if played hand",
+                    "does not contain any {C:attention}Queens{}",
+                    "{C:attention}Queens{} are debuffed if played hand",
+                    "does not contain any {C:attention}Kings{}",
                 },
             },
 

@@ -1541,61 +1541,55 @@ SMODS.Joker{
         return false
     end,
     calculate = function(self,card,context)
-        if context.before and not context.blueprint then
-            for _, scored_card in ipairs(context.scoring_hand) do
-                local second_id = (scored_card:get_id() == 13 and 12) or (scored_card:get_id() == 12 and 13) or 0
+        if not context.blueprint then
+            if context.debuff_card and context.debuff_card.gl_hyphilliacs_debuff then
+                return {
+                    debuff = true
+                }
+            end
 
-                if second_id ~= 0 then
-                    local valid = false
+            if context.debuff_hand and not context.check then
+                local count = 0
+                for _, other_card in ipairs(context.full_hand) do
+                    if other_card:get_id() == 13 or other_card:get_id() == 12 then
+                        local second_id = (other_card:get_id() == 12 and 13) or 12
+                        
+                        local debuff = true
+                        for _, second_card in ipairs(context.full_hand) do
+                            if second_card:get_id() == second_id then
+                                debuff = false
+                                break
+                            end
+                        end
 
-                    for _, second_card in ipairs(context.scoring_hand) do
-                        if second_card:get_id() == second_id and (scored_card:is_suit(second_card.base.suit) or second_card:is_suit(scored_card.base.suit)) then
-                            valid = true
-                            break
+                        if debuff then
+                            count = count + 1
+                            other_card.gl_hyphilliacs_debuff = true
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    SMODS.recalc_debuff(other_card)
+                                    other_card:juice_up()
+                                    return true
+                                end
+                            }))
                         end
                     end
-                    if not valid then
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                scored_card:juice_up()
-                                scored_card:set_debuff(true)
-                                --MODS.recalc_debuff(scored_card)
-                                return true
-                            end
-                        }))
-                        return {
-                            message = localize('k_debuffed'),
-                            colour = G.C.RED
-                        }
-                    end
+                end
+                if count > 0 then
+                    return {
+                        message = localize("k_debuffed_ex"),
+                        colour = G.C.RED
+                    }
+                end
+            end
+            if context.after then
+                for _, other_card in ipairs(G.playing_cards) do
+                    other_card.gl_hyphilliacs_debuff = nil
+                    SMODS.recalc_debuff(other_card)
                 end
             end
         end
-        if context.repetition and context.cardarea == G.play then
-            local second_id = (context.other_card:get_id() == 13 and 12) or (context.other_card:get_id() == 12 and 13) or 0
-
-            if second_id ~= 0 then
-                local effects = {}
-                for _, second_card in ipairs(context.scoring_hand) do
-                    if second_card:get_id() == second_id and (context.other_card:is_suit(second_card.base.suit) or second_card:is_suit(context.other_card.base.suit)) then
-                        effects[#effects + 1] = {
-                            repetitions = 1,
-                            card = second_card
-                        }
-                    end
-                end
-                if effects then
-                    return SMODS.merge_effects(effects)
-                end
-            end
-        end
-
-
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Joker{
