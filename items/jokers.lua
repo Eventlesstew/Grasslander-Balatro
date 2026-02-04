@@ -541,8 +541,15 @@ else
                         end]]
 
                         if card.ability.extra.count >= threshold then
+                            local target_cards = {}
+                            for _, counted_card in ipairs(G.playing_cards) do
+                                if counted_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                                    target_cards[#target_cards + 1] = counted_card
+                                    counted_card:start_dissolve()
+                                    G.deck.config.card_limit = G.deck.config.card_limit - 1
+                                end
+                            end
                             card.ability.extra.active = false
-                            SMODS.destroy_cards(target_cards)
                             return {
                                 dollars = card.ability.extra.dollars
                             }

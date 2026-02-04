@@ -417,7 +417,7 @@ return {
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "If {C:attention}3 #2#s{} are discarded,",
+                    "If 3 {C:attention}#2#s{} are discarded,",
                     "destroy them and give {C:money}$#1#{}",
                     "{C:inactive}(Currently {C:attention}#3#/#4#{C:inactive})"
                 },
