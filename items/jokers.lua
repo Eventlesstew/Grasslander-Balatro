@@ -438,22 +438,22 @@ SMODS.Joker{
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
-    eternal_compat=true,
+    eternal_compat=false,
     perishable_compat=true,
     unlocked = true,
     discovered = true,
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
+            if context.other_card.edition.polychrome then -- Check if card is Polychrome
+                SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
+                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
+            end
             if next(SMODS.get_enhancements(context.other_card)) then -- Check if card has an enhancement
                 return {
                     mult = card.ability.extra.mult,
                     colour = G.C.MULT
                 }
-            end
-            if context.other_card.edition == 'e_polychrome' then -- Check if card is Polychrome
-                SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
-                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
             end
         end
     end,
@@ -530,14 +530,17 @@ else
                     end
 
                     if context.other_card == context.full_hand[#context.full_hand] and card.ability.extra.active then
+                        local threshold = 3
+
+                        --[[
                         local target_cards = {}
                         for _, counted_card in ipairs(G.playing_cards) do
                             if counted_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
                                 target_cards[#target_cards + 1] = counted_card
                             end
-                        end
+                        end]]
 
-                        if card.ability.extra.count >= #target_cards then
+                        if card.ability.extra.count >= threshold then
                             card.ability.extra.active = false
                             SMODS.destroy_cards(target_cards)
                             return {
@@ -551,7 +554,8 @@ else
         loc_vars = function(self, info_queue, card)
             local idol_card = G.GAME.current_round.grasslanders_junklake_card or { id = 1, rank = 'Ace', suit = 'Spades' }
 
-            local amount = 0
+            local amount = 3
+            --[[
             if G.playing_cards then
                 for _, counted_card in ipairs(G.playing_cards) do
                     if counted_card:get_id() == idol_card.id then
@@ -560,7 +564,7 @@ else
                 end
             else
                 amount = 4
-            end
+            end]]
 
             return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), card.ability.extra.count, amount} }
         end,
