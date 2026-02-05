@@ -593,7 +593,10 @@ return {
             j_grasslanders_vegebonion = {
                 name = "Vegebonion",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Steal {C:money}$#1#{} of {C:attention}sell value{} from every",
+                    "{C:attention}Joker{} and {C:attention}Consumable{} at end of round",
+                    "Add {C:attention}double{} of taken sell value to {C:mult}Mult{}",
+                    "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_deespirr = {

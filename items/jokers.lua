@@ -1455,28 +1455,44 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "vegebonion",
-    config = { extra = {}},
+    config = { extra = {sell_value = 1, mult = 0, mult_mod = 2}},
     pos = { x = 0, y = 7 },
-    rarity = 2,
+    rarity = 3,
     cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
-
-    in_pool = function(self, args)
-        return false
-    end,
     calculate = function(self,card,context)
-
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            local count = 0
+            for _, area in ipairs({ G.jokers, G.consumeables }) do for _, other_card in ipairs(area.cards) do
+                    if other_card.sell_cost > 0 then
+                        other_card.ability.extra_value = (other_card.ability.extra_value or 0) -
+                            card.ability.extra.sell_value
+                        other_card:set_cost()
+                        count = count + card.ability.extra.sell_value
+                    end
+            end end
+            card.ability.extra.mult = card.ability.extra.mult + (card.ability.extra.mult_mod * count)
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.RED
+            }
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.sell_value, card.ability.extra.mult_mod, card.ability.extra.mult}, key = self.key }
     end
 }
 
