@@ -593,9 +593,10 @@ return {
             j_grasslanders_vegebonion = {
                 name = "Vegebonion",
                 text = {
-                    "Steal {C:money}$#1#{} of {C:attention}sell value{} from every",
-                    "{C:attention}Joker{} and {C:attention}Consumable{} at end of round",
-                    "Add {C:attention}double{} of taken sell value to {C:mult}Mult{}",
+                    "Steal {C:money}$#1#{} of {C:attention}sell value{} from",
+                    "every other {C:attention}Joker{} and {C:attention}Consumable{}",
+                    "at end of round and add {C:attention}double{}",
+                    "of taken sell value to {C:mult}Mult{}",
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
                 },
             },
@@ -667,12 +668,14 @@ return {
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
             c_grasslanders_gloom_kaizo = "Avvaerugo's Ultimatum",
+            c_grasslanders_vegebonion = "Everything Decays...",
+            c_grasslanders_deespirr = "Chilling Fate",
             c_grasslanders_hyphilliacs = "Cursed Love",
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
         },
         v_text = {
-            ch_c_gl_hyphilliacs = '{C:red}X2{} base Blind size',
+            ch_c_gl_hyphilliacs = {'{C:red}X2{} base Blind size'},
         },
 
         dictionary = {

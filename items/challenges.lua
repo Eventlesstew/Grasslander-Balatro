@@ -63,6 +63,20 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'vegebonion',
+    jokers = {
+        { id = 'j_grasslanders_vegebonion', eternal = true },
+    }
+}
+
+SMODS.Challenge {
+    key = 'deespirr',
+    jokers = {
+        { id = 'j_grasslanders_deespirr', eternal = true },
+    }
+}
+
+SMODS.Challenge {
     key = 'hyphilliacs',
     jokers = {
         { id = 'j_grasslanders_hyphilliacs', eternal = true },

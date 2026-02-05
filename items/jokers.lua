@@ -445,7 +445,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.edition.polychrome then -- Check if card is Polychrome
+            if context.other_card.edition and context.other_card.edition.polychrome then -- Check if card is Polychrome
                 SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
                 SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
             end
@@ -1471,7 +1471,7 @@ SMODS.Joker{
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
             local count = 0
             for _, area in ipairs({ G.jokers, G.consumeables }) do for _, other_card in ipairs(area.cards) do
-                    if other_card.sell_cost > 0 then
+                    if other_card.sell_cost > 0 and other_card ~= card then
                         other_card.ability.extra_value = (other_card.ability.extra_value or 0) -
                             card.ability.extra.sell_value
                         other_card:set_cost()
@@ -1577,24 +1577,26 @@ SMODS.Joker{
                         if debuff then
                             count = count + 1
                             other_card.gl_hyphilliacs_debuff = true
+                            SMODS.recalc_debuff(other_card)
+                            --[[
                             G.E_MANAGER:add_event(Event({
                                 func = function()
                                     SMODS.recalc_debuff(other_card)
                                     other_card:juice_up()
                                     return true
                                 end
-                            }))
+                            }))]]
                         end
                     end
                 end
                 if count > 0 then
                     return {
-                        message = localize("k_debuffed_ex"),
+                        message = localize("k_debuffed"),
                         colour = G.C.RED
                     }
                 end
             end
-            if context.after then
+            if context.hand_drawn then
                 for _, other_card in ipairs(G.playing_cards) do
                     other_card.gl_hyphilliacs_debuff = nil
                     SMODS.recalc_debuff(other_card)
