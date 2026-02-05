@@ -111,13 +111,13 @@ SMODS.Joker{
 SMODS.Joker{
     key = "sprinkle",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 50} },
+    config = { extra = {chips = 0, chip_mod = 3} },
     pos = { x = 2, y = 0 },
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=true,
+    perishable_compat=false,
     unlocked = true,
     discovered = true,
 
@@ -130,17 +130,25 @@ SMODS.Joker{
                     break
                 end
             end
+
             if valid then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
                 return { -- Gives Chips
-                    chips = card.ability.extra.chips,
+                    message = localize('k_upgrade_ex'),
+                    message_card = card,
                     colour = G.C.CHIPS
                 }
             end
         end
+        if context.joker_main then
+            return { -- Gives Chips
+                chips = card.ability.extra.chips,
+            }
+        end
     end,
 
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.chips}, key = self.key }
+        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
     end
 }
 

@@ -290,10 +290,10 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Played cards give",
-                    "{C:chips}+#1# {}Chips if no",
-                    "{C:attention}face {}cards are",
-                    "held in hand",
+                    "Gains {C:chips}+#2#{} Chips for each",
+                    "card scored if no {C:attention}face",
+                    "cards are held in hand",
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
             },
             j_grasslanders_scorpibeat = {
@@ -667,7 +667,7 @@ return {
 
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
-            c_grasslanders_gloom_kaizo = "Avvaerugo's Ultimatum",
+            c_grasslanders_gloom_kaizo = "Nah, I'd Win",
             c_grasslanders_vegebonion = "Everything Decays...",
             c_grasslanders_deespirr = "Chilling Fate",
             c_grasslanders_hyphilliacs = "Cursed Love",
@@ -747,6 +747,11 @@ return {
                 'Trizap changes for positive synergy',
                 'with the Oops! All Sixes Joker',
                 'Proposed by Terrozei'
+            },
+            gl_options_kaizochallenges = 'Extreme Challenges',
+            gl_options_kaizochallenges_info = {
+                'This option is only for',
+                'the insane.'
             },
         }
     }

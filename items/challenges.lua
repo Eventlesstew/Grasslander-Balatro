@@ -191,9 +191,11 @@ SMODS.Challenge {
     }
 }
 
-SMODS.Challenge {
-    key = 'gloom_kaizo',
-    deck = {
-        enhancement = 'm_grasslanders_gloom',
+if SMODS.current_mod.config.kaizochallenges then
+    SMODS.Challenge {
+        key = 'gloom_kaizo',
+        deck = {
+            enhancement = 'm_grasslanders_gloom',
+        }
     }
-}
+end
