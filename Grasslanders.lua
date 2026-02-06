@@ -50,7 +50,7 @@ end
 grasslanders.extra_tabs = function()
 	return {
 
-    -- Performance Tab
+    -- Advanced Tab
     {label = localize('gl_options_performanceTitle'), tab_definition_function = function()
     return {
         n=G.UIT.ROOT, 
@@ -92,7 +92,8 @@ grasslanders.extra_tabs = function()
 }
 end
 
-assert(SMODS.load_file("items/icon.lua"))()
+assert(SMODS.load_file("items/game_globals.lua"))()
+assert(SMODS.load_file("items/multirank.lua"))()
 
 -- Loads Jokers
 if grasslanders.config.grasslanderJokers == true then

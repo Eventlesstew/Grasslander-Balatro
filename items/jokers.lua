@@ -509,7 +509,7 @@ else
     SMODS.Joker{
         key = "junklake",
         atlas = 'grasslanderJoker',
-        config = { extra = {dollars = 20, count = 0, active = true}},
+        config = { extra = {dollars = 20, count = 0, threshold = 3, active = true}},
         pos = { x = 1, y = 1 },
         rarity = 1,
         cost = 5,
@@ -520,7 +520,9 @@ else
         discovered = true,
         effect=nil,
         soul_pos=nil,
-
+        in_pool = function(self, args)
+            return false
+        end,
         calculate = function(self, card, context)
             if not context.blueprint then
                 if context.end_of_round and context.main_eval then
@@ -536,71 +538,43 @@ else
                     if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
                         card.ability.extra.count = card.ability.extra.count + 1
                     end
-
-                    if context.other_card == context.full_hand[#context.full_hand] and card.ability.extra.active then
-                        local threshold = 3
-
-                        --[[
+                end
+                if context.discard and context.other_card == context.full_hand[#context.full_hand] then
+                    if card.ability.extra.count >= card.ability.extra.threshold then
                         local target_cards = {}
-                        for _, counted_card in ipairs(G.playing_cards) do
-                            if counted_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                                target_cards[#target_cards + 1] = counted_card
+                        for _, v in ipairs(G.playing_cards) do
+                            if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                                target_cards[#target_cards + 1] = v
                             end
-                        end]]
-
-                        if card.ability.extra.count >= threshold then
-                            local target_cards = {}
-                            for _, counted_card in ipairs(G.playing_cards) do
-                                if counted_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                                    target_cards[#target_cards + 1] = counted_card
-                                    counted_card:start_dissolve()
-                                    G.deck.config.card_limit = G.deck.config.card_limit - 1
-                                end
-                            end
-                            card.ability.extra.active = false
-                            return {
-                                dollars = card.ability.extra.dollars
-                            }
                         end
+                        for _, v in ipairs(target_cards) do
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    draw_card(v, G.hand)
+                                    return true
+                                end
+                            }))
+                        end
+                        return {
+                            dollars = card.ability.extra.dollars,
+                            func = function() -- This is for timing purposes, everything here runs after the message
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        SMODS.destroy_cards(target_cards)
+                                        return true
+                                    end
+                                }))
+                            end
+                        }
                     end
                 end
             end
         end,
         loc_vars = function(self, info_queue, card)
             local idol_card = G.GAME.current_round.grasslanders_junklake_card or { id = 1, rank = 'Ace', suit = 'Spades' }
-
-            local amount = 3
-            --[[
-            if G.playing_cards then
-                for _, counted_card in ipairs(G.playing_cards) do
-                    if counted_card:get_id() == idol_card.id then
-                        amount = amount + 1
-                    end
-                end
-            else
-                amount = 4
-            end]]
-
-            return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), card.ability.extra.count, amount} }
+            return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), card.ability.extra.count, card.ability.extra.threshold} }
         end,
     }
-end
-
-local function reset_grasslanders_junklake_card()
-    G.GAME.current_round.grasslanders_junklake_card = { rank = 'Ace', suit = 'Spades' }
-    local valid_idol_cards = {}
-    for _, playing_card in ipairs(G.playing_cards) do
-        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
-            valid_idol_cards[#valid_idol_cards + 1] = playing_card
-        end
-    end
-
-    local idol_card = pseudorandom_element(valid_idol_cards, 'gl_junklake' .. G.GAME.round_resets.ante)
-    if idol_card then
-        G.GAME.current_round.grasslanders_junklake_card.rank = idol_card.base.value
-        G.GAME.current_round.grasslanders_junklake_card.suit = idol_card.base.suit
-        G.GAME.current_round.grasslanders_junklake_card.id = idol_card.base.id
-    end
 end
 
 SMODS.Joker{
@@ -723,15 +697,16 @@ SMODS.Joker{
     cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
 
     calculate = function(self,card,context)
-        if context.after then
+        if context.before then
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
             for _, v in ipairs(context.scoring_hand) do
                 G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
                     delay = 0.4,
                     func = function()
                         G.GAME.blind.chips = G.GAME.blind.chips - reduction
@@ -774,7 +749,7 @@ SMODS.Joker{
                 }
             end
 
-            if context.pre_discard or (context.after and G.GAME.chips < G.GAME.blind.chips) then
+            if context.after and G.GAME.chips < G.GAME.blind.chips then
                 if card.ability.extra.chips > 0 then
                     if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
                         card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
@@ -1547,7 +1522,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "hyphilliacs",
-    config = { extra = {repetitions = 1}},
+    config = { extra = {repetitions = 2}},
     pos = { x = 2, y = 7 },
     rarity = 3,
     cost = 8,
@@ -1571,12 +1546,14 @@ SMODS.Joker{
             if context.debuff_hand and not context.check then
                 local count = 0
                 for _, other_card in ipairs(context.full_hand) do
-                    if other_card:get_id() == 13 or other_card:get_id() == 12 then
-                        local second_id = (other_card:get_id() == 12 and 13) or 12
+                    local card_id = other_card:get_id()
+                    if card_id == 13 or card_id == 12 then
+                        local second_id = (card_id == 12 and 13) or 12
                         
                         local debuff = true
                         for _, second_card in ipairs(context.full_hand) do
-                            if second_card:get_id() == second_id then
+                            local actual_second_id = second_card:get_id()
+                            if actual_second_id == second_id then
                                 debuff = false
                                 break
                             end
@@ -1611,13 +1588,14 @@ SMODS.Joker{
                 end
             end
         end
+        --[[
         if context.repetition and context.cardarea == G.play then
             if context.other_card:get_id() == 13 or context.other_card:get_id() == 12 then
                 return {
                     repetitions = card.ability.extra.repetitions
                 }
             end
-        end
+        end]]
     end,
 }
 
@@ -1748,32 +1726,7 @@ SMODS.Joker{
     end
 }
 
--- Changes the hand used by all Anjellyze and Concrab Jokers
-local function gl_reroll_hands(plingit_hand)
-    G.GAME.current_round.plingit_hand = plingit_hand
-
-    local _poker_hands = {}
-
-    -- This filters out all Poker hands that are invisible (Foak, Flush House and Flush Five) and the hand Anjellyze already has.
-    -- This prevents Anjellyze from rerolling to them
-    for handname, _ in pairs(G.GAME.hands) do
-        if SMODS.is_poker_hand_visible(handname) and handname ~= G.GAME.current_round.anjellyze_hand then
-            _poker_hands[#_poker_hands + 1] = handname
-        end
-    end
-
-    G.GAME.current_round.anjellyze_hand = pseudorandom_element(_poker_hands, 'gl_anjellyze')
-end
-
-function SMODS.current_mod.reset_game_globals(run_start)
-    if run_start then
-        gl_reroll_hands('High Card') -- Plingit defaults to High Card at the start of the run
-    end
-
-    reset_grasslanders_junklake_card()
-end
-
-function SMODS.current_mod.calculate(self, context)
+function grasslanders.calculate(self, context)
     if context.after then
         gl_reroll_hands(context.scoring_name)
     end

@@ -609,10 +609,21 @@ return {
                     "with 0 discards remaining",
                 },
             },
-            j_grasslanders_hyphilliacs = {
+            j_grasslanders_althyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
                     "Played {C:attention}Kings{} and {C:attention}Queens{} are retriggered",
+                    "{C:attention}Kings{} are debuffed if played hand",
+                    "does not contain any {C:attention}Queens{}",
+                    "{C:attention}Queens{} are debuffed if played hand",
+                    "does not contain any {C:attention}Kings{}",
+                },
+            },
+            j_grasslanders_hyphilliacs = {
+                name = "Hyphilliacs",
+                text = {
+                    "Played {C:attention}Kings{} and {C:attention}Queens",
+                    "are considered the same rank",
                     "{C:attention}Kings{} are debuffed if played hand",
                     "does not contain any {C:attention}Queens{}",
                     "{C:attention}Queens{} are debuffed if played hand",
@@ -731,9 +742,21 @@ return {
             gl_options_clackerblind2 = 'Replace Base',
             gl_options_funny = 'The funny option',
 
-            gl_options_performanceTitle = 'Performance',
+            gl_options_performanceTitle = 'Advanced',
             gl_options_posttrigger = 'Enable Post Trigger',
-            gl_options_posttrigger_info = {"Required for Rockagnaw"},
+            gl_options_posttrigger_info = {
+                "Used by Rockagnaw, but this",
+                "May impact performance",
+                "If disabled, uses an",
+                "alternate function"
+            },
+            gl_options_multirank = 'Multirank',
+            gl_options_multirank_info = {
+                "Used by Hyphilliacs, but this",
+                "may cause compatibility issues",
+                "If disabled, uses an alternate",
+                "function to maximise compatibility"
+            },
 
             gl_options_experimentalTitle = 'Experimental',
             gl_options_altjunklake = 'Alternate Junklake',

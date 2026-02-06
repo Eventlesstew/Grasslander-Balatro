@@ -101,10 +101,30 @@ SMODS.Challenge {
     deck = {
         type = 'Challenge Deck',
         cards = {
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
+            { s = 'C', r = 'J' },
+            { s = 'D', r = 'J' },
+            { s = 'H', r = 'J' },
+            { s = 'S', r = 'J' },
+
+            { s = 'C', r = 'J' },
+            { s = 'D', r = 'J' },
+            { s = 'H', r = 'J' },
+            { s = 'S', r = 'J' },
+
+            { s = 'C', r = 'J' },
+            { s = 'D', r = 'J' },
+            { s = 'H', r = 'J' },
+            { s = 'S', r = 'J' },
+
+            { s = 'C', r = 'J' },
+            { s = 'D', r = 'J' },
+            { s = 'H', r = 'J' },
+            { s = 'S', r = 'J' },
+
+            { s = 'C', r = 'J' },
+            { s = 'D', r = 'J' },
+            { s = 'H', r = 'J' },
+            { s = 'S', r = 'J' },
 
             { s = 'C', r = 'K' },
             { s = 'D', r = 'K' },
@@ -135,26 +155,6 @@ SMODS.Challenge {
             { s = 'D', r = 'K' },
             { s = 'H', r = 'K' },
             { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'Q' },
-            { s = 'D', r = 'Q' },
-            { s = 'H', r = 'Q' },
-            { s = 'S', r = 'Q' },
 
             { s = 'C', r = 'Q' },
             { s = 'D', r = 'Q' },
@@ -168,14 +168,6 @@ SMODS.Challenge {
         }
     }
 }
-
-function SMODS.current_mod.reset_game_globals(run_start)
-    if run_start then
-        if G.GAME.modifiers.gl_hyphilliacs then
-            G.GAME.starting_params.ante_scaling = 2
-        end
-    end
-end
 
 SMODS.Challenge {
     key = 'sugamimi',

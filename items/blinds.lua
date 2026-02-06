@@ -936,6 +936,29 @@ SMODS.Blind {
     end,
 }
 
+SMODS.Sound {
+    key = 'gloom_music',
+    path = 'gloom_theme.ogg',
+    pitch = 1,
+    select_music_track = function() 
+        local valid = nil
+        if G.GAME.blind then
+            if G.GAME.blind.config.blind.key == 'bl_grasslanders_twinckler' then
+                valid = true
+            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_maw' then
+                valid = true
+            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_persecutor' then
+                valid = true
+            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_radiochomper' then
+                valid = true
+            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_matriarch' then
+                valid = true
+            end
+        end
+        return valid
+    end,
+}
+
 SMODS.Blind {
     key = 'twinckler',
     atlas = 'clackerblindplaceholder',
@@ -1421,35 +1444,18 @@ if grasslanders.config.post_trigger then
                 end
 
                 -- Adds triggered Jokers
-                if context.post_trigger then
-                    context.other_card.gl_rockagnaw_trigger = true
-                end
-
-                -- Blind effect
-                if context.after or (context.discard and context.other_card == context.full_hand[#context.full_hand]) then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.2,
-                        func = function()
-                            for _,v in ipairs(G.jokers.cards) do
-                                if v.gl_rockagnaw_trigger then
-                                    G.E_MANAGER:add_event(Event({
-                                        func = function()
-                                            v:juice_up()
-                                            v.gl_rockagnaw_trigger = nil
-                                            return true
-                                        end,
-                                    }))
-                                end
-                                ease_dollars(-1)
+                if context.post_trigger and context.other_ret then
+                    if context.other_card.ability.set == 'Joker' and not context.other_card.gl_rockagnaw_trigger then
+                        context.other_card.gl_rockagnaw_trigger = true
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                context.other_card:juice_up()
                                 delay(0.23)
+                                return true
                             end
-                            return true
-                        end
-                    }))
-                    blind.triggered = true
-                    shakeBlind()
-                    delay(0.4)
+                        }))
+                        ease_dollars(-1)
+                    end
                 end
             end
         end,
