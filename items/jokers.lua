@@ -741,7 +741,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
+            if context.end_of_round and context.game_over == false and context.main_eval then
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_penalty
                 if context.beat_boss then
                     card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
