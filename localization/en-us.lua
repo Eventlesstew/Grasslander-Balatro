@@ -456,7 +456,7 @@ return {
                     "Gains {C:chips}+#3#{} Chips when",
                     "{C:attention}Boss Blind{} is defeated",
                     "Loses {C:chips}-#2#{} Chips after",
-                    "played hand or discard",
+                    "played non-winning hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
             },

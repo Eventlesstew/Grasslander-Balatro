@@ -742,14 +742,17 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if not context.blueprint then
             if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                return {
-                    message = localize('k_awake_ex'),
-                    colour = G.C.CHIPS
-                }
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_penalty
+                if context.beat_boss then
+                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                    return {
+                        message = localize('k_awake_ex'),
+                        colour = G.C.CHIPS
+                    }
+                end
             end
 
-            if context.after and G.GAME.chips < G.GAME.blind.chips then
+            if context.after then--and G.GAME.chips < G.GAME.blind.chips then
                 if card.ability.extra.chips > 0 then
                     if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
                         card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
@@ -1725,9 +1728,3 @@ SMODS.Joker{
         return { vars = {rank, msg, suit, card.ability.extra.discard_mod, colours={col}}, key = self.key }
     end
 }
-
-function grasslanders.calculate(self, context)
-    if context.after then
-        gl_reroll_hands(context.scoring_name)
-    end
-end

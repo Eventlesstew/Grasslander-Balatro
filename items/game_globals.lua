@@ -50,3 +50,9 @@ function grasslanders.reset_game_globals(run_start)
 
     reset_grasslanders_junklake_card()
 end
+
+function grasslanders.calculate(self, context)
+    if context.after then
+        gl_reroll_hands(context.scoring_name)
+    end
+end
