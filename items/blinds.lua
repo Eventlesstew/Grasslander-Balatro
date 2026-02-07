@@ -605,11 +605,8 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.setting_blind then
-                blind.hands_sub = math.max(math.floor(G.GAME.round_resets.hands * 0.5), 1)
-                ease_hands_played(-blind.hands_sub)
-
-                blind.discards_sub = math.max(math.floor(G.GAME.current_round.discards_left * 0.5), 0)
-                ease_discard(-blind.discards_sub)
+                ease_hands_played(-1)
+                ease_discard(-1)
             end
         end
     end,
@@ -1167,6 +1164,9 @@ SMODS.Blind {
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         G.GAME.chips = 0
+                        hand_chips = 0
+                        mult = 0
+                        update_hand_text({ sound = 'chips2', modded = true }, {mult = mult })
                         return true
                     end
                 }))
@@ -1248,6 +1248,29 @@ SMODS.Blind {
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.hand_drawn then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                        local gloom_cards = {}
+                        local discard_count = #G.discard.cards
+                        for i=1, discard_count do --draw cards from deck
+                            if SMODS.has_enhancement(G.discard.cards[i], 'm_grasslanders_gloom') then
+                                gloom_cards[#gloom_cards + 1] = G.discard.cards[i]
+                            end
+                        end
+                        
+                        local gloom_count = #gloom_cards
+                        for i=1, #gloom_cards do
+                            draw_card(G.discard, G.deck, i*100/gloom_count,'up', nil ,gloom_cards[i], 0.005, i%2==0, nil, math.max((21-i)/20,0.7))
+                            --pseudorandom('gl_wartumorr', 1, #G.deck.cards)
+                        end
+                            --draw_card(G.discard, G.deck, i*100/discard_count,'up', nil ,nil, 0.005, i%2==0, nil, math.max((21-i)/20,0.7))
+                        return true
+                    end
+                }))
+            end
+            --[[
             if context.discard then
                 local scored_card = context.other_card
 
@@ -1278,7 +1301,7 @@ SMODS.Blind {
                         SMODS.destroy_cards(scored_card)
                     end
                 end
-            end
+            end]]
         end
     end,
 }
@@ -1414,26 +1437,19 @@ SMODS.Blind {
     end
 }
 
-if grasslanders.config.post_trigger then
-    -- Rockagnaw requires this setting to function
-    SMODS.current_mod.optional_features = function()
-        return {
-            post_trigger = true,
-        }
-    end
-
-    SMODS.Blind {  
-        key = 'rockagnaw',
-        atlas = 'clackerblindplaceholder',
-        unlocked = true,
-        discovered = true,     
-        pos = {x = 0, y = 19},
-        dollars = 5,
-        mult = 2,
-        boss = {min = 3},
-        boss_colour = HEX("916d53"),
-        calculate = function(self, blind, context)
-            if not blind.disabled then
+SMODS.Blind {  
+    key = 'rockagnaw',
+    atlas = 'clackerblindplaceholder',
+    unlocked = true,
+    discovered = true,     
+    pos = {x = 0, y = 19},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("916d53"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if grasslanders.config.post_trigger then
                 -- Resets all Jokers on play or discard
                 if context.press_play or context.pre_discard then
                     for _,v in ipairs(G.jokers.cards) do
@@ -1457,41 +1473,7 @@ if grasslanders.config.post_trigger then
                         ease_dollars(-1)
                     end
                 end
-            end
-        end,
-
-        -- Resets all Jokers when disabled
-        disable = function(self)
-            for _,v in ipairs(G.jokers.cards) do
-                if v.gl_rockagnaw_trigger then
-                    v.gl_rockagnaw_trigger = nil
-                end
-            end
-        end,
-
-        -- Resets all Jokers when defeated
-        defeat = function(self)
-            for _,v in ipairs(G.jokers.cards) do
-                if v.gl_rockagnaw_trigger then
-                    v.gl_rockagnaw_trigger = nil
-                end
-            end
-        end
-    }
-else
-    -- If Post Trigger is disabled, 
-    SMODS.Blind {
-        key = 'altrockagnaw',
-        atlas = 'clackerblindplaceholder',
-        unlocked = true,
-        discovered = true,     
-        pos = {x = 0, y = 19},
-        dollars = 5,
-        mult = 2,
-        boss = {min = 3},
-        boss_colour = HEX("916d53"),
-        calculate = function(self, blind, context)
-            if not blind.disabled then
+            else
                 if context.press_play then
                     G.E_MANAGER:add_event(Event({
                         trigger = 'after',
@@ -1515,9 +1497,43 @@ else
                     delay(0.4)
                 end
             end
-        end,
-    }
-end
+        end
+    end,
+
+    -- Resets all Jokers when disabled
+    disable = function(self)
+        for _,v in ipairs(G.jokers.cards) do
+            if v.gl_rockagnaw_trigger then
+                v.gl_rockagnaw_trigger = nil
+            end
+        end
+    end,
+
+    -- Resets all Jokers when defeated
+    defeat = function(self)
+        for _,v in ipairs(G.jokers.cards) do
+            if v.gl_rockagnaw_trigger then
+                v.gl_rockagnaw_trigger = nil
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        local blindkey = self.key
+        if not grasslanders.config.post_trigger then
+            blindkey = 'bl_grasslanders_altrockagnaw'
+        end
+        return { key = blindkey }
+    end,
+
+    collection_loc_vars = function(self)
+        local blindkey = self.key
+        if not grasslanders.config.post_trigger then
+            blindkey = 'bl_grasslanders_altrockagnaw'
+        end
+        return { key = blindkey }
+    end,
+}
 
 SMODS.Blind {
     key = 'screecher',

@@ -39,6 +39,12 @@ local function reset_grasslanders_junklake_card()
     end
 end
 
+grasslanders.optional_features = function()
+    return {
+        post_trigger = grasslanders.config.post_trigger,
+    }
+end
+
 function grasslanders.reset_game_globals(run_start)
     if run_start then
         if G.GAME.modifiers.gl_hyphilliacs then

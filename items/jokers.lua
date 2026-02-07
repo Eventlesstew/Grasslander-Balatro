@@ -155,7 +155,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "molty",
     atlas = 'grasslanderJoker',
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5} },
+    config = { extra = {mult = 0, mult_mod = 10} },
     pos = { x = 3, y = 0 },
     rarity = 2,
     cost = 7,
@@ -168,7 +168,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if not context.blueprint then -- Prevents Blueprint from scaling
             if context.after and SMODS.calculate_round_score() >= G.GAME.blind.chips then -- Checks if hand is on fire
-                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod -- Increases Xmult Output
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod -- Increases Xmult Output
                 return {
                     message = localize('k_upgrade_ex'),
                     colour = G.C.MULT,
@@ -176,10 +176,10 @@ SMODS.Joker{
             end
         end
 
-        -- Giving Xmult
+        -- Giving Mult
         if context.joker_main then
             return {
-                x_mult = card.ability.extra.x_mult, 
+                mult = card.ability.extra.mult, 
                 colour = G.C.MULT
             }
         end
@@ -187,7 +187,7 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" } -- Adds the popup to 
-        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod}, key = self.key }
+        return { vars = {card.ability.extra.mult, card.ability.extra.mult_mod}, key = self.key }
     end
 }
 
@@ -477,7 +477,7 @@ if grasslanders.config.altjunklake then -- Check for which Junklake to use.
         atlas = 'grasslanderJoker',
         config = { extra = {dollars = 10}},
         pos = { x = 1, y = 1 },
-        rarity = 1,
+        rarity = 2,
         cost = 5,
         blueprint_compat=false,
         eternal_compat=true,
@@ -520,9 +520,6 @@ else
         discovered = true,
         effect=nil,
         soul_pos=nil,
-        in_pool = function(self, args)
-            return false
-        end,
         calculate = function(self, card, context)
             if not context.blueprint then
                 if context.end_of_round and context.main_eval then
@@ -582,11 +579,11 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     config = { extra = {dollars = 5}},
     pos = { x = 1, y = 2 },
-    rarity = 2,
+    rarity = 1,
     cost = 6,
     blueprint_compat=false,
-    eternal_compat=true,
-    perishable_compat=false,
+    eternal_compat=false,
+    perishable_compat=true,
     unlocked = true,
     discovered = true,
 
@@ -729,7 +726,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 150}},
+    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 100}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 5,
@@ -1208,28 +1205,38 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "litabelle",
-    config = { extra = {}},
+    config = { extra = {dollars = 0}},
     pos = { x = 0, y = 5 },
-    rarity = 2,
-    cost = 5,
-    blueprint_compat=true,
+    rarity = 3,
+    cost = 7,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
-
-    in_pool = function(self, args)
-        return false
-    end,
     calculate = function(self,card,context)
-
+        if not context.blueprint then
+            if context.selling_card and not context.selling_self then
+                card.ability.extra.dollars = card.ability.extra.dollars + (context.card.sell_cost * 2)
+                ease_dollars(-context.card.sell_cost, true)
+                return {
+                    message = localize("k_upgrade_ex"),
+                    color = G.C.MONEY
+                }
+            end
+        end
+    end,
+    calc_dollar_bonus = function(self, card)
+        if G.GAME.blind.boss then
+            local dollars = card.ability.extra.dollars
+            card.ability.extra.dollars = 0
+            return dollars
+        end
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
+        return { vars = {card.ability.extra.dollars}, key = self.key }
     end
 }
 

@@ -132,8 +132,7 @@ return {
             bl_grasslanders_strider = {
                 name = "The Strider",
                 text = {
-                    "Halves your hands",
-                    "and discards"
+                    "-1 hand, -1 discard",
                 },
             },
             bl_grasslanders_deepwalker = {
@@ -316,9 +315,9 @@ return {
                 name = "Molty",
                 text = {
                     "This Joker gains",
-                    "{X:mult,C:white}X#2#{} Mult if played",
+                    "{C:mult}+#2#{} Mult if played",
                     "hand is on {C:attention}fire",
-                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_trizap = {
@@ -547,7 +546,11 @@ return {
             j_grasslanders_litabelle = {
                 name = "Litabelle",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Takes the {C:attention}sell value{} from",
+                    "each card {C:attention}sold{} and stores",
+                    "{C:money}double{} the amount",
+                    "Earn {C:money}$#1#{} and reset when",
+                    "{C:attention}Boss Blind{} is defeated",
                 },
             },
             
@@ -613,21 +616,17 @@ return {
                 name = "Hyphilliacs",
                 text = {
                     "Played {C:attention}Kings{} and {C:attention}Queens{} are retriggered",
-                    "{C:attention}Kings{} are debuffed if played hand",
-                    "does not contain any {C:attention}Queens{}",
-                    "{C:attention}Queens{} are debuffed if played hand",
-                    "does not contain any {C:attention}Kings{}",
+                    "{C:attention}Kings{} are debuffed if played",
+                    "without any {C:attention}Queens{} and vice versa",
                 },
             },
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "Played {C:attention}Kings{} and {C:attention}Queens",
-                    "are considered the same rank",
-                    "{C:attention}Kings{} are debuffed if played hand",
-                    "does not contain any {C:attention}Queens{}",
-                    "{C:attention}Queens{} are debuffed if played hand",
-                    "does not contain any {C:attention}Kings{}",
+                    "Played {C:attention}Kings{} and {C:attention}Queens{} are",
+                    "considered the same rank",
+                    "{C:attention}Kings{} are debuffed if played",
+                    "without any {C:attention}Queens{} and vice versa",
                 },
             },
 
