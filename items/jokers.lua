@@ -155,7 +155,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "molty",
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 0, mult_mod = 10} },
+    config = { extra = {mult = 0, mult_mod = 5} },
     pos = { x = 3, y = 0 },
     rarity = 2,
     cost = 7,
