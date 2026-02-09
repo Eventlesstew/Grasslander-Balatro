@@ -209,8 +209,10 @@ return {
             bl_grasslanders_chomper = {
                 name = "The Chomper",
                 text = {
-                    "Disables a random Joker after each hand",
-                    "Enables a random Joker after each discard"
+                    "Disables a random Joker",
+                    "after each hand",
+                    "Enables a random Joker",
+                    "after each discard",
                 },
             },
             bl_grasslanders_jawtrap = {
@@ -244,8 +246,8 @@ return {
             bl_grasslanders_wartumorr = {
                 name = "The Wartumorr",
                 text = {
-                    "Gloom Cards return to",
-                    "deck after play or discard",
+                    "Forces 1 Gloom Card",
+                    "to be selected",
                 },
             },
             bl_grasslanders_twinckler = {
@@ -606,10 +608,9 @@ return {
             j_grasslanders_deespirr = {
                 name = "Deespirr",
                 text = {
-                    "All played cards",
-                    "become {C:attention}Glass{} cards on",
-                    "last hand of round",
-                    "with 0 discards remaining",
+                    "Each played {C:attention}card has a",
+                    "{C:green}1 in 4{} chance to be",
+                    "destroyed after scoring",
                 },
             },
             j_grasslanders_althyphilliacs = {
@@ -728,6 +729,7 @@ return {
             gl_trizap_fail = 'Unlucky!',
             gl_deespirr = 'Glass',
             gl_chonkreep = 'Reduced!',
+            gl_axonitta = 'Returned!',
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
 

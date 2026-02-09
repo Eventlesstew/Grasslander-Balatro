@@ -1123,6 +1123,12 @@ SMODS.Blind {
             end
         end
     end,
+
+    disable = function(self)
+        for _, playing_card in ipairs(G.playing_cards) do
+            playing_card.ability.forced_selection = nil
+        end
+    end
 }
 
 SMODS.Blind {
@@ -1278,12 +1284,37 @@ SMODS.Blind {
                 end
             end
 
-            valid = (count >= 3)
+            valid = (count >= 1)
         end
         return valid
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.hand_drawn then
+                local forced_count = 1
+                for _, playing_card in ipairs(G.hand.cards) do
+                    if playing_card.ability.forced_selection then
+                        forced_count = forced_count - 1
+                    end
+                end
+                if forced_count > 0 then
+                    G.hand:unhighlight_all()
+                    for i=1,forced_count do
+                        local valid_cards = {}
+                        for _, playing_card in ipairs(G.hand.cards) do
+                            if SMODS.has_enhancement(playing_card, "m_grasslanders_gloom") and not playing_card.ability.forced_selection then
+                                valid_cards[#valid_cards + 1] = playing_card
+                            end
+                        end
+                        local forced_card = pseudorandom_element(valid_cards, 'gl_wartumorr')
+                        if forced_card then
+                            forced_card.ability.forced_selection = true
+                            G.hand:add_to_highlighted(forced_card)
+                        end
+                    end
+                end
+            end
+            --[[
             if context.hand_drawn then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'immediate',
@@ -1306,7 +1337,7 @@ SMODS.Blind {
                     end
                 }))
             end
-            --[[
+            
             if context.discard then
                 local scored_card = context.other_card
 
@@ -1340,6 +1371,12 @@ SMODS.Blind {
             end]]
         end
     end,
+
+    disable = function(self)
+        for _, playing_card in ipairs(G.playing_cards) do
+            playing_card.ability.forced_selection = nil
+        end
+    end
 }
 
 SMODS.Blind {
