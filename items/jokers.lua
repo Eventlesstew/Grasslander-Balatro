@@ -1045,7 +1045,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "fortromtoise",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.25}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.2}},
     pos = { x = 3, y = 4 },
     rarity = 2,
     cost = 5,

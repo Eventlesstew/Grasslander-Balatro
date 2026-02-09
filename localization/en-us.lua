@@ -187,7 +187,6 @@ return {
             bl_grasslanders_screecher = {
                 name = "The Screecher",
                 text = {
-                    "INCOMPLETE",
                     "Playing a #1#",
                     "decreases it's level by 3",
                 },
@@ -195,15 +194,16 @@ return {
             bl_grasslanders_leaper = {
                 name = "The Leaper",
                 text = {
-                    "1 in 10 cards drawn become",
-                    "Gloom cards",
+                    "Cannot play or discard",
+                    "2 times in a row",
+                    "(Unless you run out)",
                 },
             },
             bl_grasslanders_glumplesk = {
                 name = "The Glumplesk",
                 text = {
-                    "INCOMPLETE",
-                    "Cannot rearrange any cards",
+                    "Cannot rearrange",
+                    "any cards"
                 },
             },
             bl_grasslanders_chomper = {

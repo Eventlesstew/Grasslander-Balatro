@@ -90,7 +90,7 @@ SMODS.Atlas({
 
 SMODS.Blind {
     key = 'clacker',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 0},
@@ -122,7 +122,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'biter',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 1},
@@ -171,7 +171,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'spiker',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 2},
@@ -249,7 +249,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'wondertraps',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 4},
@@ -288,7 +288,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'cruncher',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 5},
@@ -386,7 +386,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'fangatusk',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 8},
@@ -407,7 +407,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'crawler',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 9},
@@ -446,7 +446,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'woeslop',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 10},
@@ -479,7 +479,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'crusher',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 12},
@@ -514,7 +514,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'ripted',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 13},
@@ -555,7 +555,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'shifter',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 14},
@@ -594,7 +594,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'strider',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 15},
@@ -618,7 +618,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'deepwalker',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 16},
@@ -660,7 +660,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'stigz',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 17},
@@ -698,7 +698,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'kyner',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 18},
@@ -744,7 +744,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'wallkerip',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 20},
@@ -779,7 +779,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'clacteriophage',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 21},
@@ -811,45 +811,82 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'glumplesk',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 24},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 4},
     boss_colour = HEX("a96c8e"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.hand_drawn then
+                for k, v in pairs(G.hand.cards) do
+                    v.states.drag.can = false
+                end
+            end
         end
     end,
 }
 
 SMODS.Blind {
     key = 'leaper',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 23},
     dollars = 5,
     mult = 2,
-    boss = {min = 2},
+    boss = {min = 4},
     boss_colour = HEX("6d7f5c"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind then
+                blind.effect.state = 'inactive'
+            end
+            if context.pre_discard then
+                if G.GAME.current_round.discards_left <= 1 then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            blind:disable()
+                            return true
+                        end
+                    }))
+                else
+                    blind.effect.state = 'discard'
+                end
+            end
+            if context.press_play then
+                blind.effect.state = 'play'
+            end
         end
     end,
 }
 
+local can_play_ref = G.FUNCS.can_play
+G.FUNCS.can_play = function(e)
+    can_play_ref(e)
+
+    if (not G.GAME.blind.disabled) and G.GAME.blind.config.blind.key == 'bl_grasslanders_leaper' and G.GAME.blind.effect.state == 'play' then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
+local can_discard_ref = G.FUNCS.can_discard
+G.FUNCS.can_discard = function(e)
+    can_discard_ref(e)
+
+    if (not G.GAME.blind.disabled) and G.GAME.blind.config.blind.key == 'bl_grasslanders_leaper' and G.GAME.blind.effect.state == 'discard' then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
 SMODS.Blind {
     key = 'silentflash',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 27},
@@ -879,7 +916,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'snaggler',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 28},
@@ -903,7 +940,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'bumpohorn',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 29},
@@ -958,7 +995,7 @@ SMODS.Sound {
 
 SMODS.Blind {
     key = 'twinckler',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 31},
@@ -1010,7 +1047,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'maw',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 32},
@@ -1043,7 +1080,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'persecutor',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 33},
@@ -1090,7 +1127,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'radiochomper',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 34},
@@ -1146,7 +1183,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'matriarch',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 35},
@@ -1154,7 +1191,6 @@ SMODS.Blind {
     mult = 2,
     boss = {showdown = true},
     boss_colour = HEX("97467b"),
-    -- This crashes if Molty is there.
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.final_scoring_step and (G.GAME.chips + SMODS.calculate_round_score() >= G.GAME.blind.chips) then
@@ -1185,7 +1221,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'veguar',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 11},
@@ -1224,7 +1260,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'wartumorr',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 30},
@@ -1308,7 +1344,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'jawtrap',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 26},
@@ -1357,7 +1393,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'chomper',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 25},
@@ -1439,7 +1475,7 @@ SMODS.Blind {
 
 SMODS.Blind {  
     key = 'rockagnaw',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 19},
@@ -1537,7 +1573,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = 'screecher',
-    atlas = 'clackerblindplaceholder',
+    atlas = 'clackerblind',
     unlocked = true,
     discovered = true,     
     pos = {x = 0, y = 22},
@@ -1545,22 +1581,21 @@ SMODS.Blind {
     mult = 2,
     boss = {min = 3},
     boss_colour = HEX("35414c"),
-    in_pool = function()
-        return false
-    end,
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.debuff_hand then
+            if context.debuff_hand and not context.check then
                 blind.triggered = false
-                if #G.GAME.hands[context.scoring_name].level > 1 and context.scoring_name == G.GAME.current_round.most_played_poker_hand then
+                if G.GAME.hands[context.scoring_name].level > to_big(1) and context.scoring_name == G.GAME.current_round.most_played_poker_hand then
                     blind.triggered = true
-                    if not context.check then
-                        local penalty = 3
-
-                        return {
-                            level_up = -penalty
-                        }
+                    local penalty
+                    if G.GAME.hands[context.scoring_name].level > to_big(3) then
+                        penalty = 3
+                    else
+                        penalty = to_number(G.GAME.hands[context.scoring_name].level) - 1
                     end
+                    return {
+                        level_up = -penalty
+                    }
                 end
             end
         end

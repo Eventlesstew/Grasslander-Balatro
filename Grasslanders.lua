@@ -1,6 +1,8 @@
 local lovely = require("lovely")
 
 grasslanders = SMODS.current_mod
+to_big = to_big or function(x) return x end
+to_number = to_number or function(x) return x end
 local config = grasslanders.config
 
 function grasslanders.save_config(self)
