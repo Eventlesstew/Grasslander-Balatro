@@ -325,21 +325,10 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "When any other {C:attention}Joker{} is sold",
-                    "or destroyed, {C:green}#1# in #2#{} chance",
-                    "to create a {C:dark_edition}Negative{} copy",
-                    "of that Joker. Otherwise,",
-                    "set money to {C:money}$0",
-                },
-            },
-            j_grasslanders_alttrizap = {
-                name = "Trizap",
-                text = {
-                    "When any other {C:attention}Joker{} is sold",
-                    "or destroyed, {C:green}#1# in #2#{} chance",
-                    "to set money to {C:money}$0",
-                    "Otherwise, create a {C:dark_edition}Negative{}",
-                    "copy of that Joker"
+                    "When any other {C:attention}Joker{} is sold or",
+                    "destroyed, {C:green}#1# in #2#{} chance to",
+                    "create a {C:dark_edition}Negative{} copy with",
+                    "{C:attention}Eternal{}, {C:attention}Perishable{} or {C:attention}Rental{}",
                 },
             },
             j_grasslanders_frogobonk = {
@@ -729,6 +718,7 @@ return {
             gl_trizap_fail = 'Unlucky!',
             gl_deespirr = 'Glass',
             gl_chonkreep = 'Reduced!',
+            gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',

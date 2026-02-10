@@ -210,22 +210,31 @@ SMODS.Joker{
             (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
             (context.card ~= card) and -- So Trizap doesn't copy itself even though it can do that.
             not (context.card.edition and context.card.edition.negative) and -- Prevents Negatives from being copied
-            SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds)
+            SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) -- Probability
         then
             local copied_joker = copy_card(context.card)
             copied_joker:set_edition({ negative = true })
 
-            --[[
             local valid_stickers = {}
-            for _, v in SMODS.Sticker do
-                print(v)
-                if v:should_apply(context.card, nil, nil, true) then
-                    valid_stickers[#valid_stickers + 1] = v
-                end
-            end
 
-            local chosen_sticker = pseudorandom_element(G.consumeables.cards, 'gl_triazp_stickers')
-            chosen_sticker:apply(context.card)]]
+            if copied_joker.config.center.eternal_compat and not(copied_joker.ability.perishable) then
+                valid_stickers[#valid_stickers+1] = 'eternal'
+            end
+            if copied_joker.config.center.perishable_compat and not(copied_joker.ability.eternal) then
+                valid_stickers[#valid_stickers+1] = 'perishable'
+            end
+            valid_stickers[#valid_stickers+1] = 'rental'
+
+            local chosen_sticker = pseudorandom_element(valid_stickers, 'gl_trizap_stickers')
+            if chosen_sticker == 'eternal' then
+                copied_joker:set_eternal(true)
+            end
+            if chosen_sticker == 'perishable' then
+                copied_joker:set_perishable(true)
+            end
+            if chosen_sticker == 'rental' then
+                copied_joker:set_rental(true)
+            end
             
             copied_joker:add_to_deck()
             G.jokers:emplace(copied_joker)
@@ -233,6 +242,11 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+        info_queue[#info_queue + 1] = { key = "eternal", set = "Other" }
+        info_queue[#info_queue + 1] = { key = "perishable", set = "Other" }
+        info_queue[#info_queue + 1] = { key = "rental", set = "Other" }
+
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_trizap") -- Gives the chances for Trizap. Modified by Oops All Sixes
         return { vars = {numerator,denominator}, key = self.key }
     end
@@ -711,30 +725,29 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_penalty
-                if context.beat_boss then
-                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                    return {
-                        message = localize('k_awake_ex'),
-                        colour = G.C.CHIPS
-                    }
-                end
+            if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.CHIPS
+                }
             end
 
-            if context.after then--and G.GAME.chips < G.GAME.blind.chips then
-                if card.ability.extra.chips > 0 then
-                    if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
-                        card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
-                    else
-                        card.ability.extra.chips = 0
-                    end
-
-                    return {
-                        message = localize('k_sleep_ex'),
-                        colour = G.C.CHIPS
-                    } 
+            if 
+                context.final_scoring_step and 
+                G.GAME.chips + SMODS.calculate_round_score() < G.GAME.blind.chips and 
+                card.ability.extra.chips > 0 
+            then
+                if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+                else
+                    card.ability.extra.chips = 0
                 end
+
+                return {
+                    message = localize('gl_mossibug'),
+                    colour = G.C.CHIPS
+                }
             end
         end
         if context.joker_main then
@@ -1647,24 +1660,18 @@ SMODS.Joker{
 
                     for _,discarded_card in ipairs(context.full_hand) do
                         if card.ability.extra.card.state == 'stone' then
-                            if not(SMODS.has_enhancement(discarded_card, 'm_stone')) then
-                                valid = false
-                            end
+                            valid = SMODS.has_enhancement(discarded_card, 'm_stone')
                         else
-                            if context.other_card:get_id() ~= card.ability.extra.card.id and not(discarded_card:is_suit(card.ability.extra.card.suit)) then
-                                valid = false
-                            end
+                            valid = (discarded_card:get_id() == card.ability.extra.card.id) and discarded_card:is_suit(card.ability.extra.card.suit)
                         end
                     end
 
                     if valid then
-                        if context.other_card == context.full_hand[#context.full_hand] then
-                            ease_discard(card.ability.extra.discard_mod, nil, true)
-                            return {
-                                message = localize('a_discard_one'),
-                                colour = G.C.RED
-                            }
-                        end
+                        ease_discard(card.ability.extra.discard_mod, nil, true)
+                        return {
+                            message = localize('a_discard_one'),
+                            colour = G.C.RED
+                        }
                     end
                 end
             end
