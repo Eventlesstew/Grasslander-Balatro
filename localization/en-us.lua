@@ -203,7 +203,7 @@ return {
                 name = "The Glumplesk",
                 text = {
                     "Cannot rearrange",
-                    "any cards"
+                    "any Cards or Jokers"
                 },
             },
             bl_grasslanders_chomper = {
@@ -328,7 +328,7 @@ return {
                     "When any other {C:attention}Joker{} is sold or",
                     "destroyed, {C:green}#1# in #2#{} chance to",
                     "create a {C:dark_edition}Negative{} copy with",
-                    "{C:attention}Eternal{}, {C:attention}Perishable{} or {C:attention}Rental{}",
+                    "a random {C:attention}sticker",
                 },
             },
             j_grasslanders_frogobonk = {
@@ -598,7 +598,7 @@ return {
                 name = "Deespirr",
                 text = {
                     "Each played {C:attention}card has a",
-                    "{C:green}1 in 4{} chance to be",
+                    "{C:green}#1# in #2#{} chance to be",
                     "destroyed after scoring",
                 },
             },
@@ -668,6 +668,8 @@ return {
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
             c_grasslanders_gloom_kaizo = "Nah, I'd Win",
+            c_grasslanders_santile = "Sandcastle",
+            c_grasslanders_trizap = "YOU WANT FUN?",
             c_grasslanders_vegebonion = "Everything Decays...",
             c_grasslanders_deespirr = "Chilling Fate",
             c_grasslanders_hyphilliacs = "Cursed Love",

@@ -63,6 +63,59 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'santile',
+    jokers = {
+        { id = 'j_grasslanders_santile', eternal = true },
+        { id = 'j_oops', eternal = true, edition = 'negative' },
+        { id = 'j_oops', eternal = true, edition = 'negative' },
+    },
+    restrictions = {
+        banned_cards = {
+            { id = 'j_marble' },
+            { id = 'j_vampire' },
+            { id = 'j_midas_mask' },
+            { id = 'j_certificate' },
+            { id = 'c_magician' },
+            { id = 'c_empress' },
+            { id = 'c_heirophant' },
+            { id = 'c_chariot' },
+            { id = 'c_devil' },
+            { id = 'c_justice' },
+            { id = 'c_lovers' },
+            { id = 'c_incantation' },
+            { id = 'c_grim' },
+            { id = 'c_familiar' },
+            { id = 'v_magic_trick' },
+            { id = 'v_illusion' },
+            { id = 'p_standard_normal_1', ids = {
+                'p_standard_normal_1', 'p_standard_normal_2',
+                'p_standard_normal_3', 'p_standard_normal_4',
+                'p_standard_jumbo_1', 'p_standard_jumbo_2',
+                'p_standard_mega_1', 'p_standard_mega_2' }
+            },
+        },
+        banned_tags = {
+            { id = 'tag_standard' },
+        }
+    },
+    deck = {
+        type = 'Challenge Deck',
+        enhancement = 'm_stone'
+    }
+}
+
+SMODS.Challenge {
+    key = 'trizap',
+    jokers = {
+        { id = 'j_grasslanders_trizap', eternal = true, edition = 'negative' },
+        { id = 'j_oops', eternal = true, edition = 'negative' },
+    },
+     modifiers = {
+        { id = 'joker_slots', value = 1},
+    }
+}
+
+SMODS.Challenge {
     key = 'vegebonion',
     jokers = {
         { id = 'j_grasslanders_vegebonion', eternal = true },
@@ -73,6 +126,7 @@ SMODS.Challenge {
     key = 'deespirr',
     jokers = {
         { id = 'j_grasslanders_deespirr', eternal = true },
+        { id = 'j_oops', eternal = true, edition = 'negative' },
     }
 }
 

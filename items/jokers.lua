@@ -217,23 +217,19 @@ SMODS.Joker{
 
             local valid_stickers = {}
 
-            if copied_joker.config.center.eternal_compat and not(copied_joker.ability.perishable) then
-                valid_stickers[#valid_stickers+1] = 'eternal'
+            for _, v in pairs(SMODS.Stickers) do
+                v:apply(copied_joker,v.key)
+                local result = copied_joker.ability[v.key]
+                v:apply(copied_joker, false)
+
+                if result then
+                    valid_stickers[#valid_stickers+1] = v
+                end
             end
-            if copied_joker.config.center.perishable_compat and not(copied_joker.ability.eternal) then
-                valid_stickers[#valid_stickers+1] = 'perishable'
-            end
-            valid_stickers[#valid_stickers+1] = 'rental'
 
             local chosen_sticker = pseudorandom_element(valid_stickers, 'gl_trizap_stickers')
-            if chosen_sticker == 'eternal' then
-                copied_joker:set_eternal(true)
-            end
-            if chosen_sticker == 'perishable' then
-                copied_joker:set_perishable(true)
-            end
-            if chosen_sticker == 'rental' then
-                copied_joker:set_rental(true)
+            if chosen_sticker then
+                copied_joker['set_'..chosen_sticker.key](copied_joker, true)
             end
             
             copied_joker:add_to_deck()
@@ -243,9 +239,6 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-        info_queue[#info_queue + 1] = { key = "eternal", set = "Other" }
-        info_queue[#info_queue + 1] = { key = "perishable", set = "Other" }
-        info_queue[#info_queue + 1] = { key = "rental", set = "Other" }
 
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_trizap") -- Gives the chances for Trizap. Modified by Oops All Sixes
         return { vars = {numerator,denominator}, key = self.key }

@@ -821,6 +821,11 @@ SMODS.Blind {
     boss_colour = HEX("a96c8e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind then
+                for k, v in pairs(G.jokers.cards) do
+                    v.states.drag.can = false
+                end
+            end
             if context.hand_drawn then
                 for k, v in pairs(G.hand.cards) do
                     v.states.drag.can = false
@@ -828,6 +833,23 @@ SMODS.Blind {
             end
         end
     end,
+
+    disable = function(self)
+        for _, v in ipairs(G.jokers.cards) do
+            v.states.drag.can = true
+        end
+        for k, v in pairs(G.hand.cards) do
+            v.states.drag.can = true
+        end
+    end,
+    defeat = function(self)
+        for _, v in ipairs(G.jokers.cards) do
+            v.states.drag.can = true
+        end
+        for k, v in pairs(G.hand.cards) do
+            v.states.drag.can = true
+        end
+    end
 }
 
 SMODS.Blind {
