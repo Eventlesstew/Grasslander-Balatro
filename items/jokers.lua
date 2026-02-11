@@ -908,11 +908,11 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "wisplasm",
-    config = { extra = {size_mod = 2}},
+    config = { extra = {odds = 4}},
     pos = { x = 4, y = 3 },
     rarity = 2,
     cost = 7,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -921,21 +921,32 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'grasslanderJoker',
 
-    add_to_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
+    calculate = function(self,card,context)
+        if not context.blueprint then
+            if context.reroll_shop and SMODS.pseudorandom_probability(card, 'gl_wisplasm', 1, card.ability.extra.odds) then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                    for i = #G.shop_booster.cards,1, -1 do
+                        local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
+                        c:remove()
+                        c = nil
+                    end
+                    
+                    for i = 1, 2 - #G.shop_booster.cards do
+                        local new_shop_card = SMODS.add_booster_to_shop()
+                        new_shop_card:juice_up()
+                    end
+                    return true
+                    end
+                }))
+            end
         end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod + card.ability.extra.size_mod
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
-        end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod - card.ability.extra.size_mod
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.size_mod}, key = self.key }
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "grasslanders_deespirr") -- Gives the chances for Trizap. Modified by Oops All Sixes
+        return { vars = {numerator,denominator}, key = self.key }
     end
     --[[
     calculate = function(self,card,context)

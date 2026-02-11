@@ -491,8 +491,9 @@ return {
             j_grasslanders_wisplasm = {
                 name = "Wisplasm",
                 text = {
-                    "{C:attention}Booster Packs{} contain",
-                    "{C:attention}#1#{} extra items"
+                    "{C:green}Rerolls{} in shop have",
+                    "a {C:green}#1# in #2#{} chance",
+                    "to reroll {C:attention}Booster Packs"
                 },
             },
             j_grasslanders_ziffy = {
