@@ -1177,8 +1177,12 @@ SMODS.Blind {
                 for _,v in ipairs(G.jokers.cards) do
                     v.ability.gl_chonked = true
                     SMODS.recalc_debuff(v)
+                    v:juice_up()
                 end
-            elseif context.hand_drawn then
+                shakeBlind()
+            end
+
+            if context.hand_drawn and not context.first_hand_drawn then
                 blind.triggered = true
                 local debuffed_jokers = {}
                 for _,v in ipairs(G.jokers.cards) do
@@ -1221,16 +1225,11 @@ SMODS.Blind {
     boss_colour = HEX("97467b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.final_scoring_step and (G.GAME.chips + SMODS.calculate_round_score() >= G.GAME.blind.chips) then
+            if context.after and (G.GAME.chips + SMODS.calculate_round_score() >= G.GAME.blind.chips) then
                 blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
-                mult = 0
-                update_hand_text({ sound = 'chips2', modded = true }, {mult = mult })
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         G.GAME.chips = 0
-                        hand_chips = 0
-                        mult = 0
-                        update_hand_text({ sound = 'chips2', modded = true }, {mult = mult })
                         return true
                     end
                 }))

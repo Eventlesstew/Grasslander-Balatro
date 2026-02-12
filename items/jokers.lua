@@ -771,16 +771,20 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.modify_hand then
-            card.ability.extra.chips = card.ability.extra.chips + hand_chips
-            card.ability.extra.mult = card.ability.extra.mult + mult
-
-            mult = card.ability.extra.penalty
-            hand_chips = card.ability.extra.penalty
-            update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
-            return {
-                message = localize('k_upgrade_ex')
-            }
+        if not context.blueprint then
+            if context.modify_hand then
+                card.ability.extra.chips = card.ability.extra.chips + hand_chips
+                card.ability.extra.mult = card.ability.extra.mult + mult
+                return {
+                    message = localize('k_upgrade_ex')
+                }
+            end
+            if context.before then
+                mult = card.ability.extra.penalty
+                hand_chips = card.ability.extra.penalty
+                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
+                card:juice_up()
+            end
         end
         if context.joker_main and G.GAME.current_round.hands_left == 0 then
             local effects = {

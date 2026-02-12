@@ -505,10 +505,11 @@ return {
             j_grasslanders_tickini = {
                 name = "Tickini",
                 text = {
-                    "Gains {C:chips}Chips{} and {C:mult}Mult{} from base", 
-                    "{C:attention}hand{} and sets both values to {C:attention}#1#{}",
-                    "Grants {C:chips}+#2#{} Chips and {C:mult}+#3#{} Mult and",
-                    "resets on {C:attention}last hand{} of round",
+                    "Sets base {C:chips}Chips{} and {C:mult}Mult{} to {C:attention}#1#{}",
+                    "and stores the initial value",
+                    "On {C:attention}last hand{} of round, gives",
+                    "{C:chips}+#2#{} Chips and {C:mult}#3#{} Mult",
+                    "and resets",
                 },
             },
             j_grasslanders_cocotom = {
@@ -656,8 +657,12 @@ return {
             c_grasslanders_gloom = "Gloomy Days",
             c_grasslanders_gloom_kaizo = "Nah, I'd Win",
             c_grasslanders_trizap = "YOU WANT FUN?",
+            c_grasslanders_plingit = "Ping It",
+            c_grasslanders_plingitkaizo = "Pling Rave",
             c_grasslanders_junklake = "Bounty Hunt",
             c_grasslanders_santile = "Sandcastle",
+            c_grasslanders_squid = "Squid Game",
+            c_grasslanders_harparachnids = "Harparachnids",
             c_grasslanders_vegebonion = "Everything Decays...",
             c_grasslanders_deespirr = "Chilling Fate",
             c_grasslanders_hyphilliacs = "Cursed Love",
@@ -666,6 +671,7 @@ return {
         },
         v_text = {
             ch_c_gl_hyphilliacs = {'{C:red}X2{} base Blind size'},
+            ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
         },
 
         dictionary = {
@@ -745,10 +751,10 @@ return {
                 'him less RNG dependent',
                 'Proposed by Eventlesstew',
             },
-            gl_options_kaizochallenges = 'Extreme Challenges',
+            gl_options_kaizochallenges = 'Crazy Challenges',
             gl_options_kaizochallenges_info = {
-                'This option is only for',
-                'the insane.'
+                'Some of these challenges',
+                'are only for the insane.'
             },
         }
     }
