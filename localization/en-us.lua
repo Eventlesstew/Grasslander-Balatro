@@ -476,9 +476,8 @@ return {
             j_grasslanders_kracosteal = {
                 name = "Kracosteal",
                 text = {
-                    "Allows you to choose {C:attention}#1#",
-                    "extra item from any",
-                    "{C:attention}Booster Pack"
+                    "{C:green}Rerolls{} in shop give",
+                    "up to {C:money}$#1#{} of refund",
                 },
             },
             j_grasslanders_axonitta = {
@@ -506,8 +505,10 @@ return {
             j_grasslanders_tickini = {
                 name = "Tickini",
                 text = {
-                    "{C:attention}Blind{} no longer ends until",
-                    "last {C:attention}hand{} is played",
+                    "Gains {C:chips}Chips{} and {C:mult}Mult{} from base", 
+                    "{C:attention}hand{} and sets both values to {C:attention}#1#{}",
+                    "Grants {C:chips}+#2#{} Chips and {C:mult}+#3#{} Mult and",
+                    "resets on {C:attention}last hand{} of round",
                 },
             },
             j_grasslanders_cocotom = {
@@ -518,21 +519,6 @@ return {
                     "Activates after {C:attention}#3#{} rounds",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
-            },
-
-            j_grasslanders_triple9 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED",
-                    "{C:inactive}It's revelation",
-                    "{C:inactive}is approaching..."
-                }
-            },
-            j_grasslanders_triple10 = {
-                name = "???",
-                text = {
-                    "{X:black,C:white}UNDISCLOSED"
-                }
             },
 
             j_grasslanders_litabelle = {
@@ -669,8 +655,9 @@ return {
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
             c_grasslanders_gloom_kaizo = "Nah, I'd Win",
-            c_grasslanders_santile = "Sandcastle",
             c_grasslanders_trizap = "YOU WANT FUN?",
+            c_grasslanders_junklake = "Bounty Hunt",
+            c_grasslanders_santile = "Sandcastle",
             c_grasslanders_vegebonion = "Everything Decays...",
             c_grasslanders_deespirr = "Chilling Fate",
             c_grasslanders_hyphilliacs = "Cursed Love",
@@ -758,12 +745,6 @@ return {
                 'Full rework of Junklake, making',
                 'him less RNG dependent',
                 'Proposed by Eventlesstew',
-            },
-            gl_options_alttrizap = 'Alternate Trizap',
-            gl_options_alttrizap_info = {
-                'Trizap changes for positive synergy',
-                'with the Oops! All Sixes Joker',
-                'Proposed by Terrozei'
             },
             gl_options_kaizochallenges = 'Extreme Challenges',
             gl_options_kaizochallenges_info = {

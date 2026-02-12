@@ -46,20 +46,3 @@ elseif skip and (wrap or not SMODS.Ranks[v].straight_edge) then
 end
 '''
 match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = "G.STATE = G.STATES.NEW_ROUND"
-position = "at"
-payload = '''
-if 
-    ((#SMODS.find_card('j_grasslanders_tickini') > 0) and 
-    G.GAME.current_round.hands_left >= 1 and #G.deck.cards > 0)
-then
-    G.STATE = G.STATES.DRAW_TO_HAND
-else
-    G.STATE = G.STATES.NEW_ROUND
-end
-'''
-match_indent = true

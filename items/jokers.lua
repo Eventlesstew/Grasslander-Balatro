@@ -207,7 +207,9 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if 
-            (context.card and (context.joker_type_destroyed or (context.selling_card and context.card.ability.set == 'Joker'))) and -- Triggers if Jokers are sold or destroyed
+            context.card and 
+            (context.joker_type_destroyed or context.selling_card) 
+            and context.card.ability.set == 'Joker' and -- Triggers if Jokers are sold or destroyed
             (context.card ~= card) and -- So Trizap doesn't copy itself even though it can do that.
             not (context.card.edition and context.card.edition.negative) and -- Prevents Negatives from being copied
             SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) -- Probability
@@ -757,20 +759,52 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "tickini",
-    config = { extra = {}},
+    config = { extra = {chips = 0, mult = 0, penalty = 1}},
     pos = { x = 1, y = 4},
     rarity = 3,
     cost = 7,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
 
-    -- Tickini's function is done through a hook
+    calculate = function(self,card,context)
+        if context.modify_hand then
+            card.ability.extra.chips = card.ability.extra.chips + hand_chips
+            card.ability.extra.mult = card.ability.extra.mult + mult
+
+            mult = card.ability.extra.penalty
+            hand_chips = card.ability.extra.penalty
+            update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
+            return {
+                message = localize('k_upgrade_ex')
+            }
+        end
+        if context.joker_main and G.GAME.current_round.hands_left == 0 then
+            local effects = {
+                {
+                    chips = card.ability.extra.chips
+                },
+                {
+                    mult = card.ability.extra.mult
+                },
+            }
+            if not context.blueprint then
+                card.ability.extra.chips = 0
+                card.ability.extra.mult = 0
+                effects[#effects+1] = {
+                    message = localize('k_reset'),
+                }
+            end
+
+            return SMODS.merge_effects(effects)
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.penalty, card.ability.extra.chips, card.ability.extra.mult}, key = self.key }
+    end
 }
 
 SMODS.Sound ({
@@ -823,22 +857,9 @@ SMODS.Joker{
     end
 }
 
---[[
-local shatter_ref = SMODS.shatters
-SMODS.shatters = function(card)
-    local result = shatter_ref(card)
-
-    if card.gl_santile_destroy then
-        play_sound('grasslanders_breakstone', 1.0, 0.55)
-        result = true
-    end
-
-    return result
-end]]
-
 SMODS.Joker{
     key = "kracosteal",
-    config = { extra = {choice_mod = 1}},
+    config = { extra = {dollars = 3, active = false}},
     pos = { x = 3, y = 3 },
     rarity = 2,
     cost = 7,
@@ -847,40 +868,34 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     discovered = true,
-    effect=nil,
-    soul_pos=nil,
     atlas = 'grasslanderJoker',
 
-    add_to_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_choice_mod then
-            G.GAME.modifiers.booster_choice_mod = 0
-        end
-        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod + card.ability.extra.choice_mod
-
-        --[[
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
-        end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod + card.ability.extra.choice_mod
-        ]]
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_choice_mod then
-            G.GAME.modifiers.booster_choice_mod = 0
-        end
-        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod - card.ability.extra.choice_mod
-
-        --[[
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
-        end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod - card.ability.extra.choice_mod
-        ]]
-    end,
-
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.choice_mod}, key = self.key }
-    end
+        return { vars = {card.ability.extra.dollars}, key = self.key }
+    end,
+
+    calculate = function(self,card,context)
+        if context.reroll_shop and card.ability.extra.active then
+            local refund
+            if context.cost < card.ability.extra.dollars then
+                refund = context.cost
+            else
+                refund = card.ability.extra.dollars
+            end
+
+            return {
+                dollars = refund
+            }
+        end
+        if not context.blueprint then
+            if context.buying_card then
+                card.ability.extra.active = false
+            end
+            if context.reroll_shop or context.starting_shop then
+                card.ability.extra.active = true
+            end
+        end
+    end,
     --[[
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.hand and context.end_of_round then
@@ -927,17 +942,18 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(Event({
                     trigger = 'immediate',
                     func = function()
-                    for i = #G.shop_booster.cards,1, -1 do
-                        local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
-                        c:remove()
-                        c = nil
-                    end
-                    
-                    for i = 1, 2 - #G.shop_booster.cards do
-                        local new_shop_card = SMODS.add_booster_to_shop()
-                        new_shop_card:juice_up()
-                    end
-                    return true
+                        for i = #G.shop_booster.cards,1, -1 do
+                            local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
+                            c:remove()
+                            c = nil
+                        end
+                        
+                        for i = 1, G.GAME.starting_params.boosters_in_shop + (G.GAME.modifiers.extra_boosters or 0) - #G.shop_booster.cards do
+                            local new_shop_card = SMODS.add_booster_to_shop()
+                            new_shop_card:juice_up()
+                        end
+
+                        return true
                     end
                 }))
             end
@@ -1057,18 +1073,22 @@ SMODS.Joker{
                     colour = G.C.MULT,
                 }
             end
-            if context.after then
+        end
+        if context.joker_main then
+            local effects = {
+                {
+                    x_mult = card.ability.extra.x_mult
+                },
+            }
+            if not context.blueprint then
                 card.ability.extra.x_mult = 1
-                return {
+                effects[#effects+1] = {
                     message = localize('k_reset'),
                     colour = G.C.MULT,
                 }
             end
-        end
-        if context.joker_main then
-            return {
-                x_mult = card.ability.extra.x_mult
-            }
+
+            return SMODS.merge_effects(effects)
         end
     end,
 
