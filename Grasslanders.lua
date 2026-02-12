@@ -66,13 +66,14 @@ grasslanders.extra_tabs = function()
         nodes = {
             {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
                 create_toggle({label = localize('gl_options_posttrigger'), info = localize('gl_options_posttrigger_info'), ref_table = grasslanders.config, ref_value = "post_trigger", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_kaizochallenges'), info = localize('gl_options_kaizochallenges_info'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
         }
     }end},
 
     -- Experimental Tab
-    {label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
+    --[[{label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
     return {
         n=G.UIT.ROOT, 
         config = {
@@ -84,12 +85,11 @@ grasslanders.extra_tabs = function()
         }, 
         nodes = {
             {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                create_toggle({label = localize('gl_options_altjunklake'), info = localize('gl_options_altjunklake_info'), ref_table = grasslanders.config, ref_value = "altjunklake", callback = function() grasslanders:save_config() end}),
                 create_toggle({label = localize('gl_options_kaizochallenges'), info = localize('gl_options_kaizochallenges_info'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
         }
-    }end},
+    }end},]]
 }
 end
 
@@ -103,10 +103,12 @@ if grasslanders.config.grasslanderJokers == true then
 end
 
 -- Loads Clacker Blinds
+if type(grasslanders.config.clackerblinds) == 'boolean' then
+    grasslanders.config.clackerblinds = 2
+end
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
 end
-
 
 -- Disables Base Blinds
 if grasslanders.config.clackerblinds >= 3 then

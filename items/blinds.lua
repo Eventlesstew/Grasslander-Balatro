@@ -1241,7 +1241,6 @@ SMODS.Blind {
                         return true
                     end
                 }))
-                shakeBlind()
             end
         end
     end,

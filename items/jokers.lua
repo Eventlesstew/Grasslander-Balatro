@@ -453,7 +453,7 @@ SMODS.Joker{
     end
 }
 
-if grasslanders.config.altjunklake then -- Check for which Junklake to use.
+--[[
     SMODS.Joker{
         key = "altjunklake",
         atlas = 'grasslanderJoker',
@@ -487,74 +487,74 @@ if grasslanders.config.altjunklake then -- Check for which Junklake to use.
             return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), localize(idol_card.suit, 'suits_plural'), colours = { G.C.SUITS[idol_card.suit] } } }
         end,
     }
-else
-    SMODS.Joker{
-        key = "junklake",
-        atlas = 'grasslanderJoker',
-        config = { extra = {dollars = 20, count = 0, threshold = 3, active = true}},
-        pos = { x = 1, y = 1 },
-        rarity = 1,
-        cost = 5,
-        blueprint_compat=false,
-        eternal_compat=true,
-        perishable_compat=true,
-        unlocked = true,
-        discovered = true,
-        effect=nil,
-        soul_pos=nil,
-        calculate = function(self, card, context)
-            if not context.blueprint then
-                if context.end_of_round and context.main_eval then
-                    card.ability.extra.active = false
-                    card.ability.extra.count = 0
-                end
-                if context.setting_blind then
-                    card.ability.extra.active = true
-                    card.ability.extra.count = 0
-                end
+    ]]
+SMODS.Joker{
+    key = "junklake",
+    atlas = 'grasslanderJoker',
+    config = { extra = {dollars = 20, count = 0, threshold = 3, active = true}},
+    pos = { x = 1, y = 1 },
+    rarity = 1,
+    cost = 5,
+    blueprint_compat=false,
+    eternal_compat=true,
+    perishable_compat=true,
+    unlocked = true,
+    discovered = true,
+    effect=nil,
+    soul_pos=nil,
+    calculate = function(self, card, context)
+        if not context.blueprint then
+            if context.end_of_round and context.main_eval then
+                card.ability.extra.active = false
+                card.ability.extra.count = 0
+            end
+            if context.setting_blind then
+                card.ability.extra.active = true
+                card.ability.extra.count = 0
+            end
 
-                if context.discard then
-                    if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                        card.ability.extra.count = card.ability.extra.count + 1
-                    end
+            if context.discard then
+                if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                    card.ability.extra.count = card.ability.extra.count + 1
                 end
-                if context.discard and context.other_card == context.full_hand[#context.full_hand] then
-                    if card.ability.extra.count >= card.ability.extra.threshold then
-                        local target_cards = {}
-                        for _, v in ipairs(G.playing_cards) do
-                            if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                                target_cards[#target_cards + 1] = v
-                            end
+            end
+            if context.discard and context.other_card == context.full_hand[#context.full_hand] then
+                if card.ability.extra.count >= card.ability.extra.threshold and card.ability.extra.active then
+                    local target_cards = {}
+                    for _, v in ipairs(G.playing_cards) do
+                        if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                            target_cards[#target_cards + 1] = v
                         end
-                        for _, v in ipairs(target_cards) do
+                    end
+                    for _, v in ipairs(target_cards) do
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                draw_card(v, G.hand)
+                                return true
+                            end
+                        }))
+                    end
+                    card.ability.extra.active = false
+                    return {
+                        dollars = card.ability.extra.dollars,
+                        func = function() -- This is for timing purposes, everything here runs after the message
                             G.E_MANAGER:add_event(Event({
                                 func = function()
-                                    draw_card(v, G.hand)
+                                    SMODS.destroy_cards(target_cards)
                                     return true
                                 end
                             }))
                         end
-                        return {
-                            dollars = card.ability.extra.dollars,
-                            func = function() -- This is for timing purposes, everything here runs after the message
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        SMODS.destroy_cards(target_cards)
-                                        return true
-                                    end
-                                }))
-                            end
-                        }
-                    end
+                    }
                 end
             end
-        end,
-        loc_vars = function(self, info_queue, card)
-            local idol_card = G.GAME.current_round.grasslanders_junklake_card or { id = 1, rank = 'Ace', suit = 'Spades' }
-            return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), card.ability.extra.count, card.ability.extra.threshold} }
-        end,
-    }
-end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+        local idol_card = G.GAME.current_round.grasslanders_junklake_card or { id = 1, rank = 'Ace', suit = 'Spades' }
+        return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), card.ability.extra.count, card.ability.extra.threshold} }
+    end,
+}
 
 SMODS.Joker{
     key = "hornetrix",
@@ -956,12 +956,16 @@ SMODS.Joker{
                         return true
                     end
                 }))
+                return {
+                    message = localize{'gl_wisplasm'},
+                    colour = G.C.GREEN
+                }
             end
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "grasslanders_deespirr") -- Gives the chances for Trizap. Modified by Oops All Sixes
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_wisplasm") -- Gives the chances for Trizap. Modified by Oops All Sixes
         return { vars = {numerator,denominator}, key = self.key }
     end
     --[[

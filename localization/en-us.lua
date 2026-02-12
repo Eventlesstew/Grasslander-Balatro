@@ -705,11 +705,10 @@ return {
 
             grasslanders_drollfunny = "Drool Joker",
 
-            gl_trizap_fail = 'Unlucky!',
-            gl_deespirr = 'Glass',
             gl_chonkreep = 'Reduced!',
             gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
+            gl_wisplasm = 'Rerolled!',
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
 
