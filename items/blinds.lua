@@ -31,7 +31,6 @@ SMODS.Enhancement {
     atlas = 'gloom',
     replace_base_card = true,
     overrides_base_rank = true,
-    always_scores = true,
     no_rank = true,
     no_suit = true,
 

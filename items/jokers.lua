@@ -435,7 +435,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.edition and context.other_card.edition.polychrome then -- Check if card is Polychrome
+            if context.other_card.edition and SMODS.has_enhancement(context.other_card) then -- Check if card is Polychrome
                 SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
                 SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
             end
@@ -759,7 +759,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "tickini",
-    config = { extra = {chips = 0, mult = 0, penalty = 1}},
+    config = { extra = {requirement = 0}},
     pos = { x = 1, y = 4},
     rarity = 3,
     cost = 7,
@@ -771,43 +771,31 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if context.modify_hand then
-                card.ability.extra.chips = card.ability.extra.chips + hand_chips
-                card.ability.extra.mult = card.ability.extra.mult + mult
+        if context.after then
+            if SMODS.calculate_round_score() >= card.ability.extra.requirement then
+                card.ability.extra.requirement = SMODS.calculate_round_score()
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'before',
+                    delay = 0.0,
+                    func = (function()
+                        SMODS.add_card {
+                            set = 'Tarot',
+                            key_append = 'gl_tickini' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+                        }
+                        G.GAME.consumeable_buffer = 0
+                        return true
+                    end)
+                }))
                 return {
-                    message = localize('k_upgrade_ex')
+                    message = localize('k_plus_tarot'),
+                    colour = G.C.PURPLE,
                 }
             end
-            if context.before then
-                mult = card.ability.extra.penalty
-                hand_chips = card.ability.extra.penalty
-                update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
-                card:juice_up()
-            end
-        end
-        if context.joker_main and G.GAME.current_round.hands_left == 0 then
-            local effects = {
-                {
-                    chips = card.ability.extra.chips
-                },
-                {
-                    mult = card.ability.extra.mult
-                },
-            }
-            if not context.blueprint then
-                card.ability.extra.chips = 0
-                card.ability.extra.mult = 0
-                effects[#effects+1] = {
-                    message = localize('k_reset'),
-                }
-            end
-
-            return SMODS.merge_effects(effects)
         end
     end,
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.penalty, card.ability.extra.chips, card.ability.extra.mult}, key = self.key }
+        return { vars = {card.ability.extra.requirement}, key = self.key }
     end
 }
 
@@ -879,23 +867,27 @@ SMODS.Joker{
     end,
 
     calculate = function(self,card,context)
-        if context.reroll_shop and card.ability.extra.active then
-            local refund
-            if context.cost < card.ability.extra.dollars then
-                refund = context.cost
-            else
-                refund = card.ability.extra.dollars
-            end
+        if context.reroll_shop then
+            if card.ability.extra.active then
+                local refund
+                if context.cost < card.ability.extra.dollars then
+                    refund = context.card
+                else
+                    refund = card.ability.extra.dollars
+                end
 
-            return {
-                dollars = refund
-            }
+                return {
+                    dollars = refund
+                }
+            elseif not context.blueprint then
+                card.ability.extra.active = true
+            end
         end
         if not context.blueprint then
             if context.buying_card then
                 card.ability.extra.active = false
             end
-            if context.reroll_shop or context.starting_shop then
+            if context.starting_shop then
                 card.ability.extra.active = true
             end
         end
@@ -999,7 +991,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "cocotom",
-    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 12,}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 20,}},
     pos = { x = 0, y = 3 },
     rarity = 3,
     cost = 9,
@@ -1027,7 +1019,7 @@ SMODS.Joker{
                     }
                 end
             end
-            if context.end_of_round and context.game_over == false and context.main_eval then
+            if context.after then
                 card.ability.extra.rounds = card.ability.extra.rounds - 1
                 if card.ability.extra.rounds <= 0 then
                     return {
@@ -1478,20 +1470,40 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            local count = 0
+            local effects = {}
             for _, area in ipairs({ G.jokers, G.consumeables }) do for _, other_card in ipairs(area.cards) do
                     if other_card.sell_cost > 0 and other_card ~= card then
                         other_card.ability.extra_value = (other_card.ability.extra_value or 0) -
                             card.ability.extra.sell_value
                         other_card:set_cost()
-                        count = count + card.ability.extra.sell_value
                     end
+
+                    card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                    if G.GAME.modifiers.gl_vegebonion and other_card.sell_cost <= 0 then
+                        effects[#effects + 1] = {
+                            func = function()
+                                SMODS.destroy_cards(other_card)
+                            end
+                        }
+                    else
+                        effects[#effects + 1] = {
+                            func = function()
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        other_card:juice_up()
+                                        return true
+                                    end
+                                }))
+                            end
+                        }
+                    end
+                    effects[#effects + 1] = {
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.RED,
+                    }
             end end
-            card.ability.extra.mult = card.ability.extra.mult + (card.ability.extra.mult_mod * count)
-            return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.RED
-            }
+
+            return SMODS.merge_effects(effects)
         end
         if context.joker_main then
             return {

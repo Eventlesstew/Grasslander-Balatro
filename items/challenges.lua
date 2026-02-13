@@ -86,7 +86,12 @@ SMODS.Challenge {
         modifiers = {
             { id = 'hands', value = 1 },
         }
-    }
+    },
+    restrictions = {
+        banned_other = {
+            {id = 'bl_grasslanders_matriarch', type = 'blind'},
+        },
+    },
 }
 
 SMODS.Challenge {
@@ -208,6 +213,41 @@ SMODS.Challenge {
             { s = 'D', r = '3' },
             { s = 'D', r = '2' },
             { s = 'D', r = 'A' },
+        }
+    }
+}
+
+SMODS.Challenge {
+    key = 'hornetrix',
+    rules = {
+        custom = {
+            { id = 'no_reward' },
+            { id = 'no_extra_hand_money' },
+            { id = 'no_interest' },
+        }
+    },
+    jokers = {
+        { id = 'j_grasslanders_hornetrix'},
+        { id = 'j_grasslanders_hornetrix'},
+        { id = 'j_grasslanders_hornetrix'},
+        { id = 'j_grasslanders_hornetrix'},
+        { id = 'j_grasslanders_hornetrix'},
+    },
+    vouchers = {
+        { id = 'v_tarot_merchant' },
+        { id = 'v_tarot_tycoon' },
+        { id = 'v_planet_merchant' },
+        { id = 'v_planet_tycoon' },
+        { id = 'v_crystal_ball' },
+    },
+    restrictions = {
+        banned_cards = {
+            { id = 'v_seed_money' },
+            { id = 'v_money_tree' },
+            { id = 'j_to_the_moon' },
+            { id = 'j_rocket' },
+            { id = 'j_golden' },
+            { id = 'j_satellite' },
         }
     }
 }
@@ -436,6 +476,11 @@ if SMODS.current_mod.config.kaizochallenges then
             custom = {
                 {id = 'gl_plingitkaizo', value = true},
             }
-        }
+        },
+        restrictions = {
+            banned_other = {
+                {id = 'bl_grasslanders_matriarch', type = 'blind'},
+            },
+        },
     }
 end
