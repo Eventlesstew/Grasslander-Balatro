@@ -43,12 +43,14 @@ grasslanders.config_tab = function()
                         localize('gl_options_clackerblind2'),
                     },
                 }),
+                create_toggle({label = localize('gl_options_kaizochallenges'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
 		}
 	}
 end
 
+--[[
 grasslanders.extra_tabs = function()
 	return {
 
@@ -65,7 +67,6 @@ grasslanders.extra_tabs = function()
         }, 
         nodes = {
             {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                create_toggle({label = localize('gl_options_posttrigger'), info = localize('gl_options_posttrigger_info'), ref_table = grasslanders.config, ref_value = "post_trigger", callback = function() grasslanders:save_config() end}),
                 create_toggle({label = localize('gl_options_kaizochallenges'), info = localize('gl_options_kaizochallenges_info'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
@@ -89,9 +90,9 @@ grasslanders.extra_tabs = function()
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
         }
-    }end},]]
+    }end},
 }
-end
+end]]
 
 assert(SMODS.load_file("items/game_globals.lua"))()
 assert(SMODS.load_file("items/multirank.lua"))()

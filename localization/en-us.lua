@@ -34,8 +34,8 @@ return {
             bl_grasslanders_biter = {
                 name = "The Biter",
                 text = {
-                    "Debuffs 2 random cards held",
-                    "in hand after each hand",
+                    "Debuffs 2 random",
+                    "cards per hand played",
                 },
             },
             bl_grasslanders_spiker = {
@@ -132,7 +132,8 @@ return {
             bl_grasslanders_strider = {
                 name = "The Strider",
                 text = {
-                    "-1 hand, -1 discard",
+                    "-1 hand",
+                    "-1 discard",
                 },
             },
             bl_grasslanders_deepwalker = {
@@ -159,15 +160,8 @@ return {
             bl_grasslanders_rockagnaw = {
                 name = "The Rockagnaw",
                 text = {
-                    "Lose $1 per Joker triggered",
-                    "during scoring or discarding"
-                },
-            },
-            bl_grasslanders_altrockagnaw = {
-                name = "The Rockagnaw",
-                text = {
-                    "Lose $1 per Joker when",
-                    "hand is played"
+                    "Lose $1 per card",
+                    "held in hand"
                 },
             },
             bl_grasslanders_wallkerip = {
@@ -564,14 +558,6 @@ return {
                 },
             },
 
-            j_grasslanders_ddquad = {
-                name = "???",
-                text = {
-                    "This {C:attention}Joker",
-                    "drools",
-                }
-            },
-
             j_grasslanders_vegebonion = {
                 name = "Vegebonion",
                 text = {
@@ -611,7 +597,10 @@ return {
             j_grasslanders_sugamimi = {
                 name = "Sugamimi",
                 text = {
-                    "{X:mult,C:white}INCOMPLETE",
+                    "Adds a random {C:attention}Seal{}",
+                    "to all scored cards",
+                    "in {C:attention}first hand{} of round"
+                    
                 },
             },
             j_grasslanders_vacomar = {
@@ -715,6 +704,8 @@ return {
             gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
+            gl_sugamimi = 'Candy!',
+
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
 

@@ -132,17 +132,15 @@ SMODS.Blind {
     boss_colour = HEX("82444b"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.setting_blind then
-                blind.prepped = nil
+            if context.debuff_card and context.debuff_card.gl_biter_debuff then
+                return {
+                    debuff = true
+                }
             end
 
-            -- Ensures the Blind will debuff cards next hand
-            if context.after then
-                blind.prepped = true
-            end
-
-            if context.hand_drawn and blind.prepped then
+            if context.debuff_hand and not context.check then
                 -- Debuffs cards
+                local count = 0
                 for i = 1, 2 do
                     local valid_cards = {}
                     for _, v in ipairs(G.hand.cards) do
@@ -151,22 +149,32 @@ SMODS.Blind {
                         end
                     end
                     local target_card = pseudorandom_element(valid_cards, 'gl_biter')
-                    target_card:juice_up()
-                    target_card.gl_biter_debuff = true
-                    SMODS.recalc_debuff(target_card)
+                    if target_card then
+                        count = count + 1
+                        target_card.gl_biter_debuff = true
+                        SMODS.recalc_debuff(target_card)
+                        target_card:juice_up()
+                    end
                 end
-                blind.prepped = nil
-                shakeBlind()
-                delay(0.4)
-            end
 
-            if context.debuff_card and context.debuff_card.gl_biter_debuff then
-                return {
-                    debuff = true
-                }
+                if count > 0 then
+                    blind.prepped = nil
+                    shakeBlind()
+                    delay(0.4)
+                end
             end
         end
     end,
+    disable = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_biter_debuff = nil
+        end
+    end,
+    defeat = function(self)
+        for _, card in ipairs(G.playing_cards) do
+            card.ability.gl_biter_debuff = nil
+        end
+    end
 }
 
 SMODS.Blind {
@@ -670,12 +678,12 @@ SMODS.Blind {
     boss_colour = HEX("697359"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.before and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
+            if context.debuff_hand and not context.check and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
                 local count = 0
                 for _,v in ipairs(context.full_hand) do
+                    v:set_ability('m_grasslanders_gloom', nil, false)
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            v:set_ability('m_grasslanders_gloom', nil, false)
                             v:juice_up()
                             return true
                         end
@@ -789,7 +797,7 @@ SMODS.Blind {
     boss_colour = HEX("ab4f58"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.before and #context.scoring_hand <= 1 then
+            if context.debuff_hand and not context.check and #context.scoring_hand <= 1 then
                 local count = 0
                 for _,v in ipairs(context.full_hand) do
                     G.E_MANAGER:add_event(Event({
@@ -1261,14 +1269,14 @@ SMODS.Blind {
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.before and not context.blueprint then
+            if context.debuff_hand and not context.check then
                 local faces = 0
                 for _, scored_card in ipairs(context.scoring_hand) do
                     if scored_card:is_face() then
                         faces = faces + 1
+                        scored_card:set_ability('m_grasslanders_gloom', nil, false)
                         G.E_MANAGER:add_event(Event({
                             func = function()
-                                scored_card:set_ability('m_grasslanders_gloom', nil, false)
                                 scored_card:juice_up()
                                 return true
                             end
@@ -1542,89 +1550,46 @@ SMODS.Blind {
     boss_colour = HEX("916d53"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if grasslanders.config.post_trigger then
-                -- Resets all Jokers on play or discard
-                if context.press_play or context.pre_discard then
-                    for _,v in ipairs(G.jokers.cards) do
-                        if v.gl_rockagnaw_trigger then
-                            v.gl_rockagnaw_trigger = nil
+            if context.press_play then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.2,
+                    func = function()
+                        for i = 1, #G.hand.cards do
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    G.hand.cards[i]:juice_up()
+                                    return true
+                                end,
+                            }))
+                            ease_dollars(-1)
+                            delay(0.23)
                         end
+                        return true
                     end
-                end
-
-                -- Adds triggered Jokers
-                if context.post_trigger and context.other_ret then
-                    if context.other_card.ability.set == 'Joker' and not context.other_card.gl_rockagnaw_trigger then
-                        context.other_card.gl_rockagnaw_trigger = true
+                }))
+                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = (function()
+                        SMODS.juice_up_blind()
                         G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.06 * G.SETTINGS.GAMESPEED,
+                            blockable = false,
+                            blocking = false,
                             func = function()
-                                context.other_card:juice_up()
-                                delay(0.23)
+                                play_sound('tarot2', 0.76, 0.4)
                                 return true
                             end
                         }))
-                        ease_dollars(-1)
-                    end
-                end
-            else
-                if context.press_play then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.2,
-                        func = function()
-                            for _,v in ipairs(G.jokers.cards) do
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        v:juice_up()
-                                        return true
-                                    end,
-                                }))
-                                ease_dollars(-1)
-                                delay(0.23)
-                            end
-                            return true
-                        end
-                    }))
-                    blind.triggered = true
-                    shakeBlind()
-                    delay(0.4)
-                end
+                        play_sound('tarot2', 1, 0.4)
+                        return true
+                    end)
+                }))
+                delay(0.4)
             end
         end
-    end,
-
-    -- Resets all Jokers when disabled
-    disable = function(self)
-        for _,v in ipairs(G.jokers.cards) do
-            if v.gl_rockagnaw_trigger then
-                v.gl_rockagnaw_trigger = nil
-            end
-        end
-    end,
-
-    -- Resets all Jokers when defeated
-    defeat = function(self)
-        for _,v in ipairs(G.jokers.cards) do
-            if v.gl_rockagnaw_trigger then
-                v.gl_rockagnaw_trigger = nil
-            end
-        end
-    end,
-
-    loc_vars = function(self, info_queue, card)
-        local blindkey = self.key
-        if not grasslanders.config.post_trigger then
-            blindkey = 'bl_grasslanders_altrockagnaw'
-        end
-        return { key = blindkey }
-    end,
-
-    collection_loc_vars = function(self)
-        local blindkey = self.key
-        if not grasslanders.config.post_trigger then
-            blindkey = 'bl_grasslanders_altrockagnaw'
-        end
-        return { key = blindkey }
     end,
 }
 

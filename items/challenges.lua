@@ -68,8 +68,10 @@ SMODS.Challenge {
         { id = 'j_grasslanders_trizap', eternal = true, edition = 'negative' },
         { id = 'j_oops', eternal = true, edition = 'negative' },
     },
-    modifiers = {
-        { id = 'joker_slots', value = 1},
+    rules = {
+        modifiers = {
+            { id = 'joker_slots', value = 1 },
+        }
     }
 }
 
@@ -80,8 +82,10 @@ SMODS.Challenge {
         { id = 'j_grasslanders_concrab', eternal = true },
         { id = 'j_grasslanders_concrab', eternal = true },
     },
-    modifiers = {
-        { id = 'hands', value = 1 },
+    rules = {
+        modifiers = {
+            { id = 'hands', value = 1 },
+        }
     }
 }
 
@@ -423,11 +427,15 @@ if SMODS.current_mod.config.kaizochallenges then
             { id = 'j_grasslanders_concrab', eternal = true },
             { id = 'j_grasslanders_concrab', eternal = true },
         },
-        modifiers = {
-            { id = 'hands',       value = 1 },
-            { id = 'discards',    value = 0 },
-            { id = 'joker_slots', value = 15},
-            {id = 'gl_plingitkaizo', value = true},
+        rules = {
+            modifiers = {
+                { id = 'hands',       value = 1 },
+                { id = 'discards',    value = 0 },
+                { id = 'joker_slots', value = 15},
+            },
+            custom = {
+                {id = 'gl_plingitkaizo', value = true},
+            }
         }
     }
 end

@@ -1079,6 +1079,7 @@ SMODS.Joker{
                 return {
                     message = localize('k_upgrade_ex'),
                     colour = G.C.MULT,
+                    delay = 0.2
                 }
             end
         end
@@ -1617,7 +1618,7 @@ SMODS.Joker{
     pos = { x = 0, y = 8 },
     rarity = 4,
     cost = 20,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -1626,15 +1627,17 @@ SMODS.Joker{
     soul_pos={ x = 0, y = 9 },
     atlas = 'grasslanderJoker',
 
-    in_pool = function()
-        return false
-    end,
     calculate = function(self,card,context)
+        if context.before and not context.blueprint then
+            for _, v in ipairs(context.scoring_hand) do
+                v:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'gl_sugamimi' }), nil, true)
+            end
+            return {
+                message = localize('gl_sugamimi'),
+                colour = G.C.MONEY
+            }
+        end
     end,
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = {}, key = self.key }
-    end
 }
 
 SMODS.Joker{
