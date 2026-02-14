@@ -91,7 +91,7 @@ SMODS.Blind {
     key = 'clacker',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 0},
     dollars = 5,
     mult = 2,
@@ -123,7 +123,7 @@ SMODS.Blind {
     key = 'biter',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 1},
     dollars = 5,
     mult = 2,
@@ -180,7 +180,7 @@ SMODS.Blind {
     key = 'spiker',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 2},
     dollars = 5,
     mult = 2,
@@ -219,7 +219,7 @@ SMODS.Blind {
     key = 'clacklume',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 3},
     dollars = 5,
     mult = 2,
@@ -258,7 +258,7 @@ SMODS.Blind {
     key = 'wondertraps',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 4},
     dollars = 5,
     mult = 2,
@@ -297,7 +297,7 @@ SMODS.Blind {
     key = 'cruncher',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 5},
     dollars = 5,
     mult = 2,
@@ -336,7 +336,7 @@ SMODS.Blind {
     key = 'observer',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 6},
     dollars = 5,
     mult = 2,
@@ -374,7 +374,7 @@ SMODS.Blind {
     key = 'tesloid',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 7},
     dollars = 5,
     mult = 2,
@@ -395,7 +395,7 @@ SMODS.Blind {
     key = 'fangatusk',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 8},
     dollars = 5,
     mult = 2,
@@ -416,7 +416,7 @@ SMODS.Blind {
     key = 'crawler',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 9},
     dollars = 5,
     mult = 2,
@@ -455,7 +455,7 @@ SMODS.Blind {
     key = 'woeslop',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 10},
     dollars = 5,
     mult = 2,
@@ -488,7 +488,7 @@ SMODS.Blind {
     key = 'crusher',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 12},
     dollars = 5,
     mult = 2,
@@ -523,7 +523,7 @@ SMODS.Blind {
     key = 'ripted',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 13},
     dollars = 5,
     mult = 2,
@@ -564,7 +564,7 @@ SMODS.Blind {
     key = 'shifter',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 14},
     dollars = 5,
     mult = 2,
@@ -603,7 +603,7 @@ SMODS.Blind {
     key = 'strider',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 15},
     dollars = 5,
     mult = 2,
@@ -627,7 +627,7 @@ SMODS.Blind {
     key = 'deepwalker',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 16},
     dollars = 5,
     mult = 2,
@@ -669,7 +669,7 @@ SMODS.Blind {
     key = 'stigz',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 17},
     dollars = 5,
     mult = 2,
@@ -707,7 +707,7 @@ SMODS.Blind {
     key = 'kyner',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 18},
     dollars = 5,
     mult = 2,
@@ -753,7 +753,7 @@ SMODS.Blind {
     key = 'wallkerip',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 20},
     dollars = 5,
     mult = 2,
@@ -788,7 +788,7 @@ SMODS.Blind {
     key = 'clacteriophage',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 21},
     dollars = 5,
     mult = 2,
@@ -820,7 +820,7 @@ SMODS.Blind {
     key = 'glumplesk',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 24},
     dollars = 5,
     mult = 2,
@@ -863,7 +863,7 @@ SMODS.Blind {
     key = 'leaper',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 23},
     dollars = 5,
     mult = 2,
@@ -917,7 +917,7 @@ SMODS.Blind {
     key = 'silentflash',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 27},
     dollars = 5,
     mult = 2,
@@ -947,7 +947,7 @@ SMODS.Blind {
     key = 'snaggler',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 28},
     dollars = 5,
     mult = 2,
@@ -971,7 +971,7 @@ SMODS.Blind {
     key = 'bumpohorn',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 29},
     dollars = 5,
     mult = 2,
@@ -1026,7 +1026,7 @@ SMODS.Blind {
     key = 'twinckler',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 31},
     dollars = 8,
     mult = 2,
@@ -1078,7 +1078,7 @@ SMODS.Blind {
     key = 'maw',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 32},
     dollars = 8,
     mult = 2,
@@ -1111,7 +1111,7 @@ SMODS.Blind {
     key = 'persecutor',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 33},
     dollars = 8,
     mult = 2,
@@ -1164,7 +1164,7 @@ SMODS.Blind {
     key = 'radiochomper',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 34},
     dollars = 8,
     mult = 2,
@@ -1224,7 +1224,7 @@ SMODS.Blind {
     key = 'matriarch',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 35},
     dollars = 8,
     mult = 2,
@@ -1256,7 +1256,7 @@ SMODS.Blind {
     key = 'veguar',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 11},
     dollars = 5,
     mult = 2,
@@ -1295,7 +1295,7 @@ SMODS.Blind {
     key = 'wartumorr',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 30},
     dollars = 5,
     mult = 2,
@@ -1410,7 +1410,7 @@ SMODS.Blind {
     key = 'jawtrap',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 26},
     dollars = 5,
     mult = 2,
@@ -1459,7 +1459,7 @@ SMODS.Blind {
     key = 'chomper',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 25},
     dollars = 5,
     mult = 2,
@@ -1541,7 +1541,7 @@ SMODS.Blind {
     key = 'rockagnaw',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 19},
     dollars = 5,
     mult = 2,
@@ -1596,7 +1596,7 @@ SMODS.Blind {
     key = 'screecher',
     atlas = 'clackerblind',
     unlocked = true,
-    discovered = true,     
+          
     pos = {x = 0, y = 22},
     dollars = 5,
     mult = 2,

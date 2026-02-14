@@ -27,15 +27,15 @@ return {
             bl_grasslanders_clacker = {
                 name = "The Clacker",
                 text = {
-                    "Adds a Gloom Card to deck",
-                    "after each hand played",
+                    "Adds a Gloom Card to your",
+                    "hand after each hand played",
                 },
             },
             bl_grasslanders_biter = {
                 name = "The Biter",
                 text = {
-                    "Debuffs 2 random",
-                    "cards per hand played",
+                    "Debuffs 2 random cards",
+                    "held in hand per hand played",
                 },
             },
             bl_grasslanders_spiker = {
@@ -76,14 +76,14 @@ return {
             bl_grasslanders_tesloid = {
                 name = "The Tesloid",
                 text = {
-                    "Sets base Mult",
+                    "Set base Mult",
                     "to 1",
                 },
             },
             bl_grasslanders_fangatusk = {
                 name = "The Fangatusk",
                 text = {
-                    "Sets base Chips",
+                    "Set base Chips",
                     "to 0"
                 },
             },
@@ -146,8 +146,9 @@ return {
             bl_grasslanders_stigz = {
                 name = "The Stigz",
                 text = {
-                    "Played cards become Gloom cards",
-                    "if poker hand isn't #1#"
+                    "Played cards become",
+                    "Gloom cards if poker",
+                    "hand isn't a #1#"
                 },
             },
             bl_grasslanders_kyner = {
@@ -188,9 +189,10 @@ return {
             bl_grasslanders_leaper = {
                 name = "The Leaper",
                 text = {
-                    "Cannot play or discard",
+                    "Cannot Play or Discard",
                     "2 times in a row",
-                    "(Unless you run out)",
+                    "(Unless you run out",
+                    "of Discards)"
                 },
             },
             bl_grasslanders_glumplesk = {
@@ -204,22 +206,23 @@ return {
                 name = "The Chomper",
                 text = {
                     "Disables a random Joker",
-                    "after each hand",
+                    "after each Hand",
                     "Enables a random Joker",
-                    "after each discard",
+                    "after each Discard",
                 },
             },
             bl_grasslanders_jawtrap = {
                 name = "The Jawtrap",
                 text = {
-                    "If more than one hand type is",
-                    "played, destroy a random Joker",
+                    "Destroy a random Joker",
+                    "if more than one hand",
+                    "type is played",
                 },
             },
             bl_grasslanders_silentflash = {
                 name = "The Silent Flash",
                 text = {
-                    "After play, always",
+                    "After Play, always",
                     "draw 1 card",
                 },
             },
@@ -248,7 +251,7 @@ return {
                 name = "Twinckler",
                 text = {
                     "Disables your leftmost or",
-                    "rightmost Joker before hand",
+                    "rightmost Joker during hand",
                 },
             },
             bl_grasslanders_maw = {
@@ -262,22 +265,22 @@ return {
                 name = "Persecutor",
                 text = {
                     "Forces 2 cards to be",
-                    "selected after each hand"
+                    "selected after played hand"
                 },
             },
             bl_grasslanders_radiochomper = {
                 name = "Radiochomper",
                 text = {
-                    "Disables all Jokers",
-                    "After play or discard",
-                    "enable one random Joker"
+                    "All Jokers disabled",
+                    "Enables one random Joker",
+                    "after play or discard",
                 },
             },
             bl_grasslanders_matriarch = {
                 name = "Matriarch",
                 text = {
-                    "Resets score when you",
-                    "beat it the first time",
+                    "Score resets when",
+                    "beaten the first time",
                 },
             },
         },
@@ -294,16 +297,16 @@ return {
             j_grasslanders_scorpibeat = {
                 name = "Scorpibeat",
                 text = {
-                    "{C:mult}+#1# {}Mult during",
+                    "{C:mult}+#1#{} Mult during",
                     "a {C:attention}Boss Blind{}"
                 },
             },
             j_grasslanders_blowy = {
                 name = "Blowy",
                 text = {
-                    "{C:attention}+#1#{} Hand size per hand played",
+                    "{C:attention}+#1#{} Hand size per hand,",
                     "{C:attention}-#1#{} Hand size per discard",
-                    "this round",
+                    "used this round",
                     "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
                 },
             },
@@ -311,25 +314,25 @@ return {
                 name = "Molty",
                 text = {
                     "This Joker gains",
-                    "{C:mult}+#2#{} Mult if played",
+                    "{X:mult,C:white}X#2#{} Mult if played",
                     "hand is on {C:attention}fire",
-                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
-                    "When any other {C:attention}Joker{} is sold or",
-                    "destroyed, {C:green}#1# in #2#{} chance to",
-                    "create a {C:dark_edition}Negative{} copy with",
-                    "a random {C:attention}sticker",
+                    "When any other {C:attention}Joker{} is sold",
+                    "or destroyed, {C:green}#1# in #2#{} chance",
+                    "to create a {C:dark_edition}Negative{} copy",
+                    "with a random {C:attention}sticker",
                 },
             },
             j_grasslanders_frogobonk = {
                 name = "Frogobonk",
                 text = {
                     "{C:mult}+#1#{} Mult for each",
-                    "{C:attention}Enhanced {}card scored",
+                    "{C:attention}Enhanced{} card scored",
                     --[[
                     "Becomes {C:attention}Crazy {}if a",
                     "{C:dark_edition}Polychrome {}card is",
@@ -341,23 +344,23 @@ return {
                 name = "Lumobonk", -- Frbbngook
                 text = {
                     "{X:mult,C:white}X#1#{} Mult for each",
-                    "{C:attention}card {}scored",
+                    "{C:attention}card{} scored",
                     "with an {C:attention}Edition",
                 },
             },
             j_grasslanders_reeflute = {
                 name = "Reeflet",
                 text = {
-                    "All {C:attention}cards {}held in",
-                    "hand give {C:attention}double{} their",
-                    "base chip value"
+                    "Adds {C:attention}double{} the base",
+                    "{C:chips}Chips{} of all {C:attention}cards{}",
+                    "held in hand",
                 },
             },
             j_grasslanders_concrab = {
                 name = "Plingit",
                 text = {
-                    "Grants Chips and Mult",
-                    "of previous {C:attention}poker hand",
+                    "Grants Chips and Mult of",
+                    "previous {C:attention}poker hand{} played",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive})",
                     "{C:inactive}({C:chips}+#2# {C:inactive}Chips and {C:mult}+#3# {C:inactive}Mult)"
                 },
@@ -374,35 +377,25 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "If played hand is",
-                    "not on {C:attention}fire{},",
                     "{C:green}#1# in #2#{} chance to",
                     "create a {C:attention}Coupon Tag",
-                    "at end of round",
+                    "If final hand of round",
+                    "is not on {C:attention}fire{},",
                 },
             },
             j_grasslanders_volcarox = {
                 name = "Volcarox",
                 text = {
                     "Draw {C:attention}#1#{} extra {C:attention}cards",
-                    "when {C:attention}#2# {}discards",
-                    "are remaining"
-                },
-            },
-            j_grasslanders_altjunklake = {
-                name = "Junklake",
-                text = {
-                    "Each discarded {C:attention}#2#",
-                    "of {V:1}#3#{} gives",
-                    "{C:money}$#1#{} and is destroyed",
-                    "{s:0.8}Card changes every round",
+                    "if no {C:attention}discards{} are left",
                 },
             },
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "If 3 {C:attention}#2#s{} are discarded,",
-                    "destroy them and give {C:money}$#1#{}",
+                    "If 3 or more {C:attention}#2#{} cards",
+                    "are discarded, destroy",
+                    "them and give {C:money}$#1#{}",
                     "{C:inactive}(Currently {C:attention}#3#/#4#{C:inactive})"
                 },
             },
@@ -439,7 +432,7 @@ return {
                 text = {
                     "Gains {C:chips}+#3#{} Chips when",
                     "{C:attention}Boss Blind{} is defeated",
-                    "Loses {C:chips}-#2#{} Chips after",
+                    "Lose {C:chips}-#2#{} Chips after",
                     "played non-winning hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
@@ -449,8 +442,8 @@ return {
                 text = {
                     "Played {C:attention}Stone{} cards give",
                     "{C:chips}+#3#{} chips when scored",
-                    "{C:green}#1# in #2#{} chance to destroy",
-                    "played {C:attention}Stone{} cards",
+                    "but have a {C:green}#1# in #2#{} chance",
+                    "to be destroyed",
                 },
             },
             j_grasslanders_penny = {
@@ -461,9 +454,9 @@ return {
             },j_grasslanders_fortromtoise = {
                 name = "Fortromtoise",
                 text = {
-                    "Gains {X:mult,C:white}X#2#{} Mult for",
-                    "each card {C:attention}discarded{}, resets",
-                    "after this Joker scores",
+                    "Gains {X:mult,C:white}X#2#{} Mult for each",
+                    "card {C:attention}discarded{}, resets",
+                    "when scored",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
@@ -477,23 +470,23 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "After scoring, returns leftmost",
-                    "played {C:attention}card{} to hand",
+                    "First played card returns",
+                    "to {C:attention}hand{} after scoring",
                 },
             },
             j_grasslanders_wisplasm = {
                 name = "Wisplasm",
                 text = {
                     "{C:green}Rerolls{} in shop have",
-                    "a {C:green}#1# in #2#{} chance",
-                    "to reroll {C:attention}Booster Packs"
+                    "a {C:green}#1# in #2#{} chance to",
+                    "reroll {C:attention}Booster Packs"
                 },
             },
             j_grasslanders_ziffy = {
                 name = "Ziffy",
                 text = {
-                    "Gives a {C:attention}refund{} if",
-                    "{C:attention}Booster Pack{} is skipped",
+                    "Skipping {C:attention}Booster Packs{} gives",
+                    "a full {C:attention}refund{} of their cost",
                 },
             },
             j_grasslanders_tickini = {
@@ -531,7 +524,7 @@ return {
                 text = {
                     "Gains {X:mult,C:white}X#2#{} Mult if played",
                     "hand contains a {C:attention}#5#",
-                    "Resets if hand does not",
+                    "Resets if played hand does not",
                     "contain a {C:attention}#3#{} or a {C:attention}#4#{}",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
@@ -548,11 +541,10 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "At start of round",
-                    "Disables {C:attention}Joker{} to the right",
-                    "and gains {C:chips}+#2#{} Chips for each",
-                    "{C:attention}Joker{}, played card or held",
-                    "card for each hand",
+                    "Disables Joker{} to the right",
+                    "during a round and gains {C:chips}+#2#{}",
+                    "Chips for each debuffed {C:attention}Joker",
+                    "or {C:attention}card each hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
@@ -570,17 +562,10 @@ return {
             j_grasslanders_deespirr = {
                 name = "Deespirr",
                 text = {
-                    "Each played {C:attention}card has a",
-                    "{C:green}#1# in #2#{} chance to be",
-                    "destroyed after scoring",
-                },
-            },
-            j_grasslanders_althyphilliacs = {
-                name = "Hyphilliacs",
-                text = {
-                    "Played {C:attention}Kings{} and {C:attention}Queens{} are retriggered",
-                    "{C:attention}Kings{} are debuffed if played",
-                    "without any {C:attention}Queens{} and vice versa",
+                    "All {C:attention}cards{} have a",
+                    "{C:green}#1# in #2#{} chance",
+                    "to be destroyed",
+                    "after scoring",
                 },
             },
             j_grasslanders_hyphilliacs = {

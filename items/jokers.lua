@@ -24,7 +24,7 @@ SMODS.Joker{
     eternal_compat=true, -- Specifies if the Joker can have Eternal
     perishable_compat=true, -- Specifies if the Joker can have Perishable
     unlocked = true,
-    discovered = true, -- Need to disable this on release
+      -- Need to disable this on release
 
     calculate = function(self,card,context) --define calculate functions here
         -- Context contains various different booleans that you can see in this link:
@@ -91,7 +91,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true, 
+      
 
     calculate = function(self,card,context)
         if context.joker_main then -- Triggers when scored
@@ -119,7 +119,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then -- Triggers when the card is played
@@ -155,7 +155,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "molty",
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 0, mult_mod = 5} },
+    config = { extra = {mult = 0, mult_mod = 0.25} },
     pos = { x = 3, y = 0 },
     rarity = 2,
     cost = 7,
@@ -163,7 +163,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if not context.blueprint then -- Prevents Blueprint from scaling
@@ -179,7 +179,7 @@ SMODS.Joker{
         -- Giving Mult
         if context.joker_main then
             return {
-                mult = card.ability.extra.mult, 
+                x_mult = card.ability.extra.mult, 
                 colour = G.C.MULT
             }
         end
@@ -203,7 +203,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if 
@@ -258,7 +258,7 @@ SMODS.Joker{
     eternal_compat=false,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
 
@@ -304,7 +304,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
 
@@ -355,7 +355,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.hand and not context.end_of_round then -- Triggers for cards held in hand
@@ -391,7 +391,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if not context.blueprint and context.discard then -- Activates Volcarox, ensures that Blueprint is not affected
@@ -431,19 +431,24 @@ SMODS.Joker{
     eternal_compat=false,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.edition and SMODS.has_enhancement(context.other_card) then -- Check if card is Polychrome
-                SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
-                SMODS.add_card{key = "j_grasslanders_lumobonk"} -- Add an event to create Lumobonk
-            end
-            if next(SMODS.get_enhancements(context.other_card)) then -- Check if card has an enhancement
-                return {
-                    mult = card.ability.extra.mult,
-                    colour = G.C.MULT
-                }
+            if next(SMODS.get_enhancements(context.other_card))then
+                if not context.blueprint and context.other_card:get_edition() then -- Check if card is Polychrome
+                    SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            SMODS.add_card{key = "j_grasslanders_lumobonk"}
+                            return true
+                        end
+                    }))
+                else
+                    return {
+                        mult = card.ability.extra.mult,
+                    }
+                end
             end
         end
     end,
@@ -465,7 +470,7 @@ SMODS.Joker{
         eternal_compat=true,
         perishable_compat=true,
         unlocked = true,
-        discovered = true,
+         
         effect=nil,
         soul_pos=nil,
 
@@ -499,7 +504,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     calculate = function(self, card, context)
@@ -567,7 +572,7 @@ SMODS.Joker{
     eternal_compat=false,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     set_sprites = function(self, card, front)
         local alt = 1
@@ -609,7 +614,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         -- Levels up the poker hand if it is correct
@@ -640,7 +645,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         -- Gives Chips and Mult
@@ -678,7 +683,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if context.before then
@@ -716,7 +721,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
 
     calculate = function(self,card,context)
         if not context.blueprint then
@@ -767,7 +772,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
@@ -814,7 +819,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -859,7 +864,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
 
     loc_vars = function(self, info_queue, card)
@@ -927,7 +932,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -999,7 +1004,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1014,8 +1019,7 @@ SMODS.Joker{
                 if #context.removed > 0 then
                     card.ability.extra.x_mult = card.ability.extra.x_mult + (#context.removed * card.ability.extra.x_mult_mod)
                     return {
-                        message = localize {type='variable', key='a_xmult', vars={card.ability.extra.x_mult}},
-                        colour = G.C.MULT
+                        message = localize('k_upgrade_ex'),
                     }
                 end
             end
@@ -1024,17 +1028,17 @@ SMODS.Joker{
                 if card.ability.extra.rounds <= 0 then
                     return {
                         message = localize('k_free_ex'),
-                        colour = G.C.FILTER
+                        colour = G.C.MULT
                     }
                 else
                     return {
                         message = localize{key='a_left', vars={card.ability.extra.rounds}},
-                        colour = G.C.FILTER
+                        colour = G.C.MULT
                     }
                 end
             end
         end
-        if context.joker_main and context.cardarea == G.jokers then
+        if context.joker_main then
             if card.ability.extra.rounds <= 0 then
                 return {
                     x_mult = card.ability.extra.x_mult, 
@@ -1059,7 +1063,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1108,7 +1112,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
@@ -1153,7 +1157,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1184,7 +1188,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1221,7 +1225,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
         if not context.blueprint then
@@ -1258,7 +1262,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1308,7 +1312,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1354,7 +1358,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false, -- TODO: Test if Edward works when Perishable and with Perishable
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
@@ -1464,7 +1468,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=false,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1527,7 +1531,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     atlas = 'grasslanderJoker',
 
     calculate = function(self, card, context)
@@ -1555,7 +1559,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos=nil,
     atlas = 'grasslanderJoker',
@@ -1634,7 +1638,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,
+     
     effect=nil,
     soul_pos={ x = 0, y = 9 },
     atlas = 'grasslanderJoker',
@@ -1662,7 +1666,7 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-    discovered = true,                                   --is joker discovered by default.    
+                                        --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos={ x = 1, y = 9},
     atlas = 'grasslanderJoker',                                --atlas name, single sprites are deprecated.
@@ -1709,7 +1713,7 @@ SMODS.Joker{
                         if card.ability.extra.card.state == 'stone' then
                             valid = SMODS.has_enhancement(discarded_card, 'm_stone')
                         else
-                            valid = (discarded_card:get_id() == card.ability.extra.card.id) and discarded_card:is_suit(card.ability.extra.card.suit)
+                            valid = (discarded_card:get_id() == card.ability.extra.card.id) or discarded_card:is_suit(card.ability.extra.card.suit)
                         end
                     end
 
