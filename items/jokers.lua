@@ -689,15 +689,17 @@ SMODS.Joker{
         if context.before then
             local effects = {}
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
+            local chip_display = G.GAME.blind.chips
             for _, v in ipairs(context.scoring_hand) do
+                G.GAME.blind.chips = G.GAME.blind.chips - reduction
                 effects[#effects + 1] = {
                     func = function()
                         G.E_MANAGER:add_event(Event({
                             trigger = 'after',
                             delay = 0.4,
                             func = function()
-                                G.GAME.blind.chips = G.GAME.blind.chips - reduction
-                                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                                chip_display = chip_display - reduction
+                                G.GAME.blind.chip_text = number_format(chip_display)
                                 v:juice_up()
                                 return true
                             end
@@ -709,6 +711,13 @@ SMODS.Joker{
                     delay = 0.4
                 }
             end
+            
+            effects[#effects + 1] = {
+                func = function()
+                    G.GAME.blind.chip_text = number_format(chip_display)
+                    return true
+                end
+            }
             return SMODS.merge_effects(effects)
         end
     end,
