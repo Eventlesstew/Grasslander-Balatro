@@ -155,7 +155,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "molty",
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 0, mult_mod = 0.25} },
+    config = { extra = {mult = 1, mult_mod = 0.25} },
     pos = { x = 3, y = 0 },
     rarity = 2,
     cost = 7,
@@ -1027,12 +1027,12 @@ SMODS.Joker{
                 card.ability.extra.rounds = card.ability.extra.rounds - 1
                 if card.ability.extra.rounds <= 0 then
                     return {
-                        message = localize('k_free_ex'),
+                        message = localize('gl_cocotom_free'),
                         colour = G.C.MULT
                     }
                 else
                     return {
-                        message = localize{key='a_left', vars={card.ability.extra.rounds}},
+                        message = localize{type = 'variable', key='gl_cocotom_countdown', vars={card.ability.extra.rounds}},
                         colour = G.C.MULT
                     }
                 end
@@ -1073,7 +1073,7 @@ SMODS.Joker{
             if context.discard then
                 card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
-                    message = localize('k_upgrade_ex'),
+                    message = localize{type='variable', key='a_xmult', vars={card.ability.extra.x_mult_mod}},
                     colour = G.C.MULT,
                     delay = 0.2
                 }

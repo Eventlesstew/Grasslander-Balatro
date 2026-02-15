@@ -651,6 +651,9 @@ return {
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
         },
 
+        v_dictionary = {
+            gl_cocotom_countdown = '#1# left',
+        },
         dictionary = {
             a_chips="+#1#",
             a_chips_minus="-#1#",
@@ -670,10 +673,7 @@ return {
             a_active='Active!',
 
             k_trap='Trap',
-            k_free='Free',
-            k_free_ex='Free!',
             a_fled='Fled',
-            a_left='#1# left',
 
             a_hand_chips = "+#1# Chips",
             a_hand_chips_minus = "-#1# Chips",
@@ -692,6 +692,7 @@ return {
             gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
+            gl_cocotom_free = 'Free!',
             gl_sugamimi = 'Candy!',
 
             gl_deepwalker_collection = '[X1 Base]',
