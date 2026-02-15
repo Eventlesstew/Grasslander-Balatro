@@ -21,9 +21,9 @@ end
 
 SMODS.Atlas({
     key = "gloom",
-    path = "gloomOld.png",
+    path = "gloom.png",
     px = 71,
-    py = 95
+    py = 115,
 })
 
 SMODS.Enhancement {
@@ -33,14 +33,11 @@ SMODS.Enhancement {
     overrides_base_rank = true,
     no_rank = true,
     no_suit = true,
-
-    --display_size = {w = 71, h = 102},
-    --pixel_size = {w = 71, h = 102},
+    --display_size = {w = 71, h = 225},
     in_pool = function(self, args)
         return false
     end,
 }
-
 --[[SMODS.Atlas({
     key = "gloom_deck",
     path = "gloom.png",

@@ -687,22 +687,29 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.before then
+            local effects = {}
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
             for _, v in ipairs(context.scoring_hand) do
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.4,
+                effects[#effects + 1] = {
                     func = function()
-                        G.GAME.blind.chips = G.GAME.blind.chips - reduction
-                        G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                        v:juice_up()
-                        return true
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.4,
+                            func = function()
+                                G.GAME.blind.chips = G.GAME.blind.chips - reduction
+                                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                                v:juice_up()
+                                return true
+                            end
+                        }))
                     end
-                }))
+                }
+                effects[#effects + 1] = {
+                    message = localize('gl_chonkreep'),
+                    delay = 0.4
+                }
             end
-            --[[return {
-                message = localize('gl_chonkreep'),
-            }]]
+            return SMODS.merge_effects(effects)
         end
     end,
     loc_vars = function(self, info_queue, card)
@@ -1011,7 +1018,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.buying_self then
-            local eval = function(card) return card.ability.extra.rounds <= 0 end
+            local eval = function(card) return card.ability.extra.rounds > 0 end
             juice_card_until(card,eval,true)
         end
         if not context.blueprint and card.ability.extra.rounds > 0 then
@@ -1321,7 +1328,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.first_hand_drawn then
             card.ability.extra.active = true
-            local eval = function() return not card.ability.extra.active end
+            local eval = function() return card.ability.extra.active end
             juice_card_until(card, eval, true)
         end
         if (context.before and next(context.poker_hands['Straight'])) or (context.end_of_round and context.main_eval) then
@@ -1610,7 +1617,7 @@ SMODS.Joker{
                     }
                 end
             end
-            if context.hand_drawn then
+            if context.hand_drawn or (context.end_of_round and context.game_over == false and context.main_eval) then
                 for _, other_card in ipairs(G.playing_cards) do
                     other_card.gl_hyphilliacs_debuff = nil
                     SMODS.recalc_debuff(other_card)

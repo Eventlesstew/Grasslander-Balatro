@@ -94,19 +94,31 @@ grasslanders.extra_tabs = function()
 }
 end]]
 
+if type(grasslanders.config.althornetrix) == 'nil' then
+    grasslanders.config.althornetrix = false
+end
+if type(grasslanders.config.kaizochallenges) == 'nil' then
+    grasslanders.config.kaizochallenges = false
+end
+
 assert(SMODS.load_file("items/game_globals.lua"))()
 assert(SMODS.load_file("items/multirank.lua"))()
 
 -- Loads Jokers
+if type(grasslanders.config.grasslanderJokers) == 'nil' then
+    grasslanders.config.grasslanderJokers = true
+end
+
 if grasslanders.config.grasslanderJokers == true then
     assert(SMODS.load_file("items/jokers.lua"))()
     assert(SMODS.load_file("items/challenges.lua"))()
 end
 
 -- Loads Clacker Blinds
-if type(grasslanders.config.clackerblinds) == 'boolean' then
-    grasslanders.config.clackerblinds = 2
+if not grasslanders.config.clackerblinds or type(grasslanders.config.clackerblinds) == 'boolean' then
+    grasslanders.config.clackerblinds = 1
 end
+
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
 end
