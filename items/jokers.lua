@@ -722,7 +722,7 @@ SMODS.Joker{
         end
     end,
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.reduction * 100}, key = self.key }
+        return { vars = {card.ability.extra.reduction}, key = self.key }
     end
 }
 

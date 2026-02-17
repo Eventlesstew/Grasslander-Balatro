@@ -21,9 +21,9 @@ end
 
 SMODS.Atlas({
     key = "gloom",
-    path = "gloom.png",
+    path = "gloomOld.png",
     px = 71,
-    py = 115,
+    py = 95,
 })
 
 SMODS.Enhancement {
@@ -83,38 +83,6 @@ SMODS.Atlas({
     px = 34,
     py = 34
 })
-
-SMODS.Blind {
-    key = 'clacker',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 0},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 1},
-    boss_colour = HEX("39405b"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.after then
-                local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
-                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                _card.playing_card = G.playing_card
-                table.insert(G.playing_cards, _card)
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        G.hand:emplace(_card)
-                        _card:start_materialize()
-                        G.hand:sort()
-                        SMODS.juice_up_blind()
-                        return true
-                    end
-                }))
-            end
-        end
-    end,
-}
 
 SMODS.Blind {
     key = 'biter',
@@ -449,39 +417,6 @@ SMODS.Blind {
 }
 
 SMODS.Blind {
-    key = 'woeslop',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 10},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 1},
-    boss_colour = HEX("333545"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                local cards = 0
-                for _, v in ipairs(G.hand.cards) do
-                    cards = cards + 1
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:set_ability('m_grasslanders_gloom', nil, false)
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                end
-                if cards > 0 then
-                    shakeBlind()
-                    delay(0.8)
-                end
-            end
-        end
-    end,
-}
-
-SMODS.Blind {
     key = 'crusher',
     atlas = 'clackerblind',
     unlocked = true,
@@ -663,44 +598,6 @@ SMODS.Blind {
 }
 
 SMODS.Blind {
-    key = 'stigz',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 17},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 3},
-    boss_colour = HEX("697359"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.debuff_hand and not context.check and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
-                local count = 0
-                for _,v in ipairs(context.full_hand) do
-                    v:set_ability('m_grasslanders_gloom', nil, false)
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                    count = count + 1
-                end
-                if count > 0 then
-                    shakeBlind()
-                end
-            end
-        end
-    end,
-    loc_vars = function(self)
-        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
-    end,
-    collection_loc_vars = function(self)
-        return { vars = { localize('ph_most_played') } }
-    end,
-}
-
-SMODS.Blind {
     key = 'kyner',
     atlas = 'clackerblind',
     unlocked = true,
@@ -776,38 +673,6 @@ SMODS.Blind {
                     suit_count = suit_count + 1
                 end
                 return {debuff = (suit_count >= 3)}
-            end
-        end
-    end,
-}
-
-SMODS.Blind {
-    key = 'clacteriophage',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 21},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 3},
-    boss_colour = HEX("ab4f58"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.debuff_hand and not context.check and #context.scoring_hand <= 1 then
-                local count = 0
-                for _,v in ipairs(context.full_hand) do
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:set_ability('m_grasslanders_gloom', nil, false)
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                    count = count + 1
-                end
-                if count > 0 then
-                    shakeBlind()
-                end
             end
         end
     end,
@@ -993,6 +858,229 @@ SMODS.Blind {
                 end
             end
         end
+    end,
+}
+
+SMODS.Blind {
+    key = 'jawtrap',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 26},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 4},
+    boss_colour = HEX("70242e"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.setting_blind then
+                blind.only_hand = false
+            end
+            if context.debuff_hand then
+                if not context.check then
+                    if blind.only_hand then
+                        if blind.only_hand ~= context.scoring_name then
+                            blind.triggered = true
+                            local destructable_jokers = {}
+                            for i = 1, #G.jokers.cards do
+                                if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                                    destructable_jokers[#destructable_jokers + 1] =
+                                    G.jokers.cards[i]
+                                end
+                            end
+                            local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
+
+                            if joker_to_destroy then
+                                joker_to_destroy.getting_sliced = true
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+                                        return true
+                                    end
+                                }))
+                                shakeBlind()
+                            end
+                        end
+                    else
+                        blind.only_hand = context.scoring_name
+                    end
+                end
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'chomper',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 25},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 4},
+    boss_colour = HEX("a3444c"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.debuff_card and context.debuff_card.area == G.jokers then
+                if context.debuff_card.ability.gl_chomped then
+                    return {
+                        debuff = true
+                    }
+                end
+            end
+
+            if context.setting_blind then
+                blind.state = nil
+            end
+            if context.before then
+                blind.state = 'hand'
+            end
+            if context.pre_discard then
+                blind.state = 'discard'
+            end
+
+            if context.hand_drawn then
+                blind.triggered = true
+
+                if blind.state == 'hand' then
+                    local valid_jokers = {}
+                    for _,v in ipairs(G.jokers.cards) do
+                        if not v.ability.gl_chomped then
+                            valid_jokers[#valid_jokers + 1] = v
+                        end
+                    end
+
+                    local target_joker = pseudorandom_element(valid_jokers, 'gl_chomper_debuff')
+                    if target_joker then
+                        target_joker.ability.gl_chomped = true
+                        SMODS.recalc_debuff(target_joker)
+                        target_joker:juice_up()
+                        blind:wiggle()
+                    end
+                    blind.state = nil
+                
+                elseif blind.state == 'discard' then
+                    local debuffed_jokers = {}
+                    for _,v in ipairs(G.jokers.cards) do
+                        if v.ability.gl_chomped then
+                            debuffed_jokers[#debuffed_jokers + 1] = v
+                        end
+                    end
+
+                    local target_joker = pseudorandom_element(debuffed_jokers, 'gl_chomper_rebuff')
+                    if target_joker then
+                        target_joker.ability.gl_chomped = nil
+                        SMODS.recalc_debuff(target_joker)
+                        target_joker:juice_up()
+                        blind:wiggle()
+                    end
+                    blind.state = nil
+                end
+            end
+        end
+    end,
+    disable = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chomped = nil
+        end
+    end,
+    defeat = function(self)
+        for _, joker in ipairs(G.jokers.cards) do
+            joker.ability.gl_chomped = nil
+        end
+    end
+}
+
+SMODS.Blind {  
+    key = 'rockagnaw',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 19},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("916d53"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.press_play then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.2,
+                    func = function()
+                        for i = 1, #G.hand.cards do
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    G.hand.cards[i]:juice_up()
+                                    return true
+                                end,
+                            }))
+                            ease_dollars(-1)
+                            delay(0.23)
+                        end
+                        return true
+                    end
+                }))
+                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = (function()
+                        SMODS.juice_up_blind()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.06 * G.SETTINGS.GAMESPEED,
+                            blockable = false,
+                            blocking = false,
+                            func = function()
+                                play_sound('tarot2', 0.76, 0.4)
+                                return true
+                            end
+                        }))
+                        play_sound('tarot2', 1, 0.4)
+                        return true
+                    end)
+                }))
+                delay(0.4)
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'screecher',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 22},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("35414c"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.debuff_hand and not context.check then
+                blind.triggered = false
+                if G.GAME.hands[context.scoring_name].level > to_big(1) and context.scoring_name == G.GAME.current_round.most_played_poker_hand then
+                    blind.triggered = true
+                    local penalty
+                    if G.GAME.hands[context.scoring_name].level > to_big(3) then
+                        penalty = 3
+                    else
+                        penalty = to_number(G.GAME.hands[context.scoring_name].level) - 1
+                    end
+                    return {
+                        level_up = -penalty
+                    }
+                end
+            end
+        end
+    end,
+    loc_vars = function(self)
+        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { localize('ph_most_played') } }
     end,
 }
 
@@ -1250,6 +1338,38 @@ SMODS.Blind {
 }
 
 SMODS.Blind {
+    key = 'clacker',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 0},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 1},
+    boss_colour = HEX("39405b"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.after then
+                local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
+                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                _card.playing_card = G.playing_card
+                table.insert(G.playing_cards, _card)
+
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.hand:emplace(_card)
+                        _card:start_materialize()
+                        G.hand:sort()
+                        SMODS.juice_up_blind()
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
     key = 'veguar',
     atlas = 'clackerblind',
     unlocked = true,
@@ -1282,6 +1402,128 @@ SMODS.Blind {
                 if faces > 0 then
                     shakeBlind()
                     delay(0.4)
+                end
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'woeslop',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 10},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 1},
+    boss_colour = HEX("333545"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                local cards = 0
+                for _, v in ipairs(G.hand.cards) do
+                    cards = cards + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:set_ability('m_grasslanders_gloom', nil, false)
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                end
+                if cards > 0 then
+                    shakeBlind()
+                    delay(0.8)
+                end
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'stigz',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 17},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("697359"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.debuff_hand and not context.check and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
+                local count = 0
+                for _,v in ipairs(context.full_hand) do
+                    v:set_ability('m_grasslanders_gloom', nil, false)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    count = count + 1
+                end
+                if count > 0 then
+                    shakeBlind()
+                end
+            end
+        end
+    end,
+    loc_vars = function(self)
+        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { localize('ph_most_played') } }
+    end,
+}
+
+SMODS.Blind {
+    key = 'fungalic',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 35},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("66999a"),
+    in_pool = function()
+        return false
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+        end
+    end,
+}
+
+SMODS.Blind {
+    key = 'clacteriophage',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 21},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 3},
+    boss_colour = HEX("ab4f58"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.debuff_hand and not context.check and #context.scoring_hand <= 1 then
+                local count = 0
+                for _,v in ipairs(context.full_hand) do
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:set_ability('m_grasslanders_gloom', nil, false)
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    count = count + 1
+                end
+                if count > 0 then
+                    shakeBlind()
                 end
             end
         end
@@ -1401,227 +1643,4 @@ SMODS.Blind {
             playing_card.ability.forced_selection = nil
         end
     end
-}
-
-SMODS.Blind {
-    key = 'jawtrap',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 26},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 4},
-    boss_colour = HEX("70242e"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.setting_blind then
-                blind.only_hand = false
-            end
-            if context.debuff_hand then
-                if not context.check then
-                    if blind.only_hand then
-                        if blind.only_hand ~= context.scoring_name then
-                            blind.triggered = true
-                            local destructable_jokers = {}
-                            for i = 1, #G.jokers.cards do
-                                if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
-                                    destructable_jokers[#destructable_jokers + 1] =
-                                    G.jokers.cards[i]
-                                end
-                            end
-                            local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
-
-                            if joker_to_destroy then
-                                joker_to_destroy.getting_sliced = true
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                                        return true
-                                    end
-                                }))
-                                shakeBlind()
-                            end
-                        end
-                    else
-                        blind.only_hand = context.scoring_name
-                    end
-                end
-            end
-        end
-    end,
-}
-
-SMODS.Blind {
-    key = 'chomper',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 25},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 4},
-    boss_colour = HEX("a3444c"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.debuff_card and context.debuff_card.area == G.jokers then
-                if context.debuff_card.ability.gl_chomped then
-                    return {
-                        debuff = true
-                    }
-                end
-            end
-
-            if context.setting_blind then
-                blind.state = nil
-            end
-            if context.before then
-                blind.state = 'hand'
-            end
-            if context.pre_discard then
-                blind.state = 'discard'
-            end
-
-            if context.hand_drawn then
-                blind.triggered = true
-
-                if blind.state == 'hand' then
-                    local valid_jokers = {}
-                    for _,v in ipairs(G.jokers.cards) do
-                        if not v.ability.gl_chomped then
-                            valid_jokers[#valid_jokers + 1] = v
-                        end
-                    end
-
-                    local target_joker = pseudorandom_element(valid_jokers, 'gl_chomper_debuff')
-                    if target_joker then
-                        target_joker.ability.gl_chomped = true
-                        SMODS.recalc_debuff(target_joker)
-                        target_joker:juice_up()
-                        blind:wiggle()
-                    end
-                    blind.state = nil
-                
-                elseif blind.state == 'discard' then
-                    local debuffed_jokers = {}
-                    for _,v in ipairs(G.jokers.cards) do
-                        if v.ability.gl_chomped then
-                            debuffed_jokers[#debuffed_jokers + 1] = v
-                        end
-                    end
-
-                    local target_joker = pseudorandom_element(debuffed_jokers, 'gl_chomper_rebuff')
-                    if target_joker then
-                        target_joker.ability.gl_chomped = nil
-                        SMODS.recalc_debuff(target_joker)
-                        target_joker:juice_up()
-                        blind:wiggle()
-                    end
-                    blind.state = nil
-                end
-            end
-        end
-    end,
-    disable = function(self)
-        for _, joker in ipairs(G.jokers.cards) do
-            joker.ability.gl_chomped = nil
-        end
-    end,
-    defeat = function(self)
-        for _, joker in ipairs(G.jokers.cards) do
-            joker.ability.gl_chomped = nil
-        end
-    end
-}
-
-SMODS.Blind {  
-    key = 'rockagnaw',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 19},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 3},
-    boss_colour = HEX("916d53"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.press_play then
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.2,
-                    func = function()
-                        for i = 1, #G.hand.cards do
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    G.hand.cards[i]:juice_up()
-                                    return true
-                                end,
-                            }))
-                            ease_dollars(-1)
-                            delay(0.23)
-                        end
-                        return true
-                    end
-                }))
-                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'immediate',
-                    func = (function()
-                        SMODS.juice_up_blind()
-                        G.E_MANAGER:add_event(Event({
-                            trigger = 'after',
-                            delay = 0.06 * G.SETTINGS.GAMESPEED,
-                            blockable = false,
-                            blocking = false,
-                            func = function()
-                                play_sound('tarot2', 0.76, 0.4)
-                                return true
-                            end
-                        }))
-                        play_sound('tarot2', 1, 0.4)
-                        return true
-                    end)
-                }))
-                delay(0.4)
-            end
-        end
-    end,
-}
-
-SMODS.Blind {
-    key = 'screecher',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 22},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 3},
-    boss_colour = HEX("35414c"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.debuff_hand and not context.check then
-                blind.triggered = false
-                if G.GAME.hands[context.scoring_name].level > to_big(1) and context.scoring_name == G.GAME.current_round.most_played_poker_hand then
-                    blind.triggered = true
-                    local penalty
-                    if G.GAME.hands[context.scoring_name].level > to_big(3) then
-                        penalty = 3
-                    else
-                        penalty = to_number(G.GAME.hands[context.scoring_name].level) - 1
-                    end
-                    return {
-                        level_up = -penalty
-                    }
-                end
-            end
-        end
-    end,
-    loc_vars = function(self)
-        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
-    end,
-    collection_loc_vars = function(self)
-        return { vars = { localize('ph_most_played') } }
-    end,
 }

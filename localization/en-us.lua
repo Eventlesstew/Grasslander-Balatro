@@ -247,6 +247,14 @@ return {
                     "to be selected",
                 },
             },
+            bl_grasslanders_fungalic = {
+                name = "The Fungalic",
+                text = {
+                    "Incomplete",
+                    "Cards played previously this",
+                    "ante become Gloom cards if played"
+                },
+            },
             bl_grasslanders_twinckler = {
                 name = "Twinckler",
                 text = {
@@ -422,7 +430,7 @@ return {
                 name = "Chonkreep",
                 text = {
                     "Reduces {C:attention}Blind{} requirement",
-                    "by {C:attention}#1#%{} for each scoring",
+                    "by {C:red}X#1#{} for each scoring",
                     "card after played hand"
                 },
             },
