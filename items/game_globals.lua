@@ -41,9 +41,6 @@ end
 
 function grasslanders.reset_game_globals(run_start)
     if run_start then
-        if G.GAME.modifiers.gl_hyphilliacs then
-            G.GAME.starting_params.ante_scaling = 2
-        end
         if G.GAME.modifiers.gl_plingitkaizo then
             G.GAME.starting_params.ante_scaling = 5
         end

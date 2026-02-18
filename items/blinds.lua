@@ -1494,6 +1494,25 @@ SMODS.Blind {
     end,
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.debuff_hand and not context.check then
+                local faces = 0
+                for _, scored_card in ipairs(context.scoring_hand) do
+                    if scored_card.ability.played_this_ante then
+                        faces = faces + 1
+                        scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                scored_card:juice_up()
+                                return true
+                            end
+                        }))
+                    end
+                end
+                if faces > 0 then
+                    shakeBlind()
+                    delay(0.4)
+                end
+            end
         end
     end,
 }

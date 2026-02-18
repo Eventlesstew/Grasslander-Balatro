@@ -76,6 +76,31 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'logobreak',
+    jokers = {
+        { id = 'j_grasslanders_logobreak', eternal = true},
+        { id = 'j_grasslanders_blowy'},
+    },
+    rules = {
+        custom = {
+            { id = 'no_reward' },
+            { id = 'no_extra_hand_money' },
+            { id = 'no_interest' },
+        }
+    },
+    restrictions = {
+        banned_cards = {
+            { id = 'v_seed_money' },
+            { id = 'v_money_tree' },
+            { id = 'j_to_the_moon' },
+            { id = 'j_rocket' },
+            { id = 'j_golden' },
+            { id = 'j_satellite' },
+        }
+    },
+}
+
+SMODS.Challenge {
     key = 'plingit',
     jokers = {
         { id = 'j_grasslanders_concrab', eternal = true },
@@ -226,6 +251,16 @@ SMODS.Challenge {
             { id = 'no_interest' },
         }
     },
+    restrictions = {
+        banned_cards = {
+            { id = 'v_seed_money' },
+            { id = 'v_money_tree' },
+            { id = 'j_to_the_moon' },
+            { id = 'j_rocket' },
+            { id = 'j_golden' },
+            { id = 'j_satellite' },
+        }
+    },
     jokers = {
         { id = 'j_grasslanders_hornetrix'},
         { id = 'j_grasslanders_hornetrix'},
@@ -240,16 +275,6 @@ SMODS.Challenge {
         { id = 'v_planet_tycoon' },
         { id = 'v_crystal_ball' },
     },
-    restrictions = {
-        banned_cards = {
-            { id = 'v_seed_money' },
-            { id = 'v_money_tree' },
-            { id = 'j_to_the_moon' },
-            { id = 'j_rocket' },
-            { id = 'j_golden' },
-            { id = 'j_satellite' },
-        }
-    }
 }
 
 SMODS.Challenge {
@@ -342,87 +367,6 @@ SMODS.Challenge {
             {id = 'gl_hyphilliacs', value = true},
         }
     },
-    restrictions = {
-        banned_cards = {
-            {id = 'j_ride_the_bus'},
-            {id = 'j_grasslanders_sprinkle'},
-            {id = 'j_pareidolia'},
-        },
-        banned_other = {
-            {id = 'bl_plant', type = 'blind'},
-            {id = 'bl_mark', type = 'blind'},
-            {id = 'bl_grasslanders_veguar', type = 'blind'},
-        },
-    },
-    deck = {
-        type = 'Challenge Deck',
-        cards = {
-            { s = 'C', r = 'J' },
-            { s = 'D', r = 'J' },
-            { s = 'H', r = 'J' },
-            { s = 'S', r = 'J' },
-
-            { s = 'C', r = 'J' },
-            { s = 'D', r = 'J' },
-            { s = 'H', r = 'J' },
-            { s = 'S', r = 'J' },
-
-            { s = 'C', r = 'J' },
-            { s = 'D', r = 'J' },
-            { s = 'H', r = 'J' },
-            { s = 'S', r = 'J' },
-
-            { s = 'C', r = 'J' },
-            { s = 'D', r = 'J' },
-            { s = 'H', r = 'J' },
-            { s = 'S', r = 'J' },
-
-            { s = 'C', r = 'J' },
-            { s = 'D', r = 'J' },
-            { s = 'H', r = 'J' },
-            { s = 'S', r = 'J' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'K' },
-            { s = 'D', r = 'K' },
-            { s = 'H', r = 'K' },
-            { s = 'S', r = 'K' },
-
-            { s = 'C', r = 'Q' },
-            { s = 'D', r = 'Q' },
-            { s = 'H', r = 'Q' },
-            { s = 'S', r = 'Q' },
-
-            { s = 'C', r = 'Q' },
-            { s = 'D', r = 'Q' },
-            { s = 'H', r = 'Q' },
-            { s = 'S', r = 'Q' },
-        }
-    }
 }
 
 SMODS.Challenge {

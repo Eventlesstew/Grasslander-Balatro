@@ -23,33 +23,20 @@ SMODS.Joker{
     blueprint_compat=false, -- This only affects the "compatible" message in Blueprint or Brainstorm. You need to use context.blueprint to specify which stuff Blueprint can or can't do.
     eternal_compat=true, -- Specifies if the Joker can have Eternal
     perishable_compat=true, -- Specifies if the Joker can have Perishable
-    unlocked = true,
-      -- Need to disable this on release
 
     calculate = function(self,card,context) --define calculate functions here
         -- Context contains various different booleans that you can see in this link:
         -- https://github.com/Steamodded/smods/wiki/Calculate-Functions#:~:text=Contexts,-A%20context
 
         if not context.blueprint then -- This prevents Blueprint from doing anything
-            if context.discard and context.other_card == context.full_hand[#context.full_hand] then -- Affects the hand size after played hand
-                card.ability.extra.h_size = card.ability.extra.h_size - card.ability.extra.h_mod
-                G.hand:change_size(-card.ability.extra.h_mod)
+            if context.after then -- Affects the hand size after hand
+                card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
+                G.hand:change_size(card.ability.extra.h_mod)
 
                 return {
-                    message = localize{type = 'variable',key = 'a_handsize_minus',vars = {card.ability.extra.h_mod}},
+                    message = localize{type = 'variable',key = 'a_handsize',vars = {card.ability.extra.h_mod}},
                     colour = G.C.FILTER
                 }
-            end
-            if context.after then -- Affects the hand size after discard
-                if G.hand.config.card_limit > 0 then
-                    card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
-                    G.hand:change_size(card.ability.extra.h_mod)
-
-                    return {
-                        message = localize{type = 'variable',key = 'a_handsize',vars = {card.ability.extra.h_mod}},
-                        colour = G.C.FILTER
-                    }
-                end
             end
 
             if context.end_of_round and context.game_over == false and context.main_eval then -- Resets Hand size at end of round
@@ -72,16 +59,12 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card) --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        local operator = '+'
-        if card.ability.extra.h_size < 0 then
-            operator = ''
-        end
-        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size, operator}, key = self.key }
+        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size}, key = self.key }
     end
 }
 
 SMODS.Joker{
-    key = "scorpibeat",   
+    key = "scorpibeat",
     atlas = 'grasslanderJoker',
     config = { extra = {mult = 18} },
     pos = { x = 1, y = 0 },
@@ -122,7 +105,7 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play then -- Triggers when the card is played
+        if context.individual and context.cardarea == G.play and context.blueprint then -- Triggers when the card is played
             local valid = true
             for _,v in ipairs(G.hand.cards) do -- This checks if held hand has any face cards
                 if v:is_face() then
@@ -1179,7 +1162,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.open_booster then
+        if context.open_booster and not context.blueprint then
             card.ability.extra.booster_cost = context.card.cost
         end
         if context.skipping_booster then
@@ -1214,14 +1197,12 @@ SMODS.Joker{
     end,
 
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if context.individual and context.cardarea == G.play then
-                if context.other_card:get_edition() then
-                    return {
-                        x_mult = card.ability.extra.x_mult, 
-                        colour = G.C.MULT
-                    }
-                end
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:get_edition() then
+                return {
+                    x_mult = card.ability.extra.x_mult, 
+                    colour = G.C.MULT
+                }
             end
         end
     end,
@@ -1284,7 +1265,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.before then
+        if context.before and not context.blueprint then
             if next(context.poker_hands[card.ability.extra.uphand]) then
                 card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
                 return {
@@ -1324,7 +1305,7 @@ SMODS.Joker{
     pos = { x = 2, y = 5 },
     rarity = 2,
     cost = 6,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -1418,6 +1399,8 @@ SMODS.Joker{
                     end
                 end
             end
+
+            
             if context.before then
                 local cards = {}
                 for _,v in ipairs(G.jokers.cards) do
@@ -1496,9 +1479,10 @@ SMODS.Joker{
                         other_card.ability.extra_value = (other_card.ability.extra_value or 0) -
                             card.ability.extra.sell_value
                         other_card:set_cost()
+
+                        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
                     end
 
-                    card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
                     if G.GAME.modifiers.gl_vegebonion and other_card.sell_cost <= 0 then
                         effects[#effects + 1] = {
                             func = function()
@@ -1606,8 +1590,13 @@ SMODS.Joker{
 
                         if debuff then
                             count = count + 1
-                            other_card.gl_hyphilliacs_debuff = true
-                            SMODS.recalc_debuff(other_card)
+
+                            if G.GAME.modifiers.gl_hyphilliacs then
+                                SMODS.destroy_cards(other_card)
+                            else
+                                other_card.gl_hyphilliacs_debuff = true
+                                SMODS.recalc_debuff(other_card)
+                            end
                             --[[
                             G.E_MANAGER:add_event(Event({
                                 func = function()

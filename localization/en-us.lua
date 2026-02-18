@@ -250,7 +250,6 @@ return {
             bl_grasslanders_fungalic = {
                 name = "The Fungalic",
                 text = {
-                    "Incomplete",
                     "Cards played previously this",
                     "ante become Gloom cards if played"
                 },
@@ -313,9 +312,8 @@ return {
                 name = "Blowy",
                 text = {
                     "{C:attention}+#1#{} Hand size per hand,",
-                    "{C:attention}-#1#{} Hand size per discard",
-                    "used this round",
-                    "{C:inactive}(Currently {C:attention}#3##2# {C:inactive}Hand Size)"
+                    "played this round",
+                    "{C:inactive}(Currently {C:attention}+#2#{C:inactive} Hand Size)"
                 },
             },
             j_grasslanders_molty = {
@@ -636,10 +634,9 @@ return {
 
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
-            c_grasslanders_gloom_kaizo = "Nah, I'd Win",
             c_grasslanders_trizap = "Shock Therapy",
+            c_grasslanders_logobreak = "No Flame Zone",
             c_grasslanders_plingit = "Ping It",
-            c_grasslanders_plingitkaizo = "Pling Rave",
             c_grasslanders_junklake = "Bounty Hunt",
             c_grasslanders_hornetrix = "Wasp Nest",
             c_grasslanders_santile = "Sandcastle",
@@ -650,12 +647,15 @@ return {
             c_grasslanders_hyphilliacs = "Cursed Love",
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
+
+            c_grasslanders_gloom_kaizo = "Nah, I'd Win",
+            c_grasslanders_plingitkaizo = "Pling Rave",
         },
         v_text = {
             ch_c_gl_vegebonion = {
                 '{C:attention}Jokers{} and {C:attention}Consumables{} with {C:money}$0{} of sell value are destroyed',
             },
-            ch_c_gl_hyphilliacs = {'{C:red}X2{} base Blind size'},
+            ch_c_gl_hyphilliacs = {'Cards {C:attention}debuffed{} by {C:attention}Hyphilliacs{} are {C:attention}destroyed{} instead'},
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
         },
 
