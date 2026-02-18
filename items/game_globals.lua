@@ -56,3 +56,40 @@ function grasslanders.calculate(self, context)
         gl_reroll_hands(context.scoring_name)
     end
 end
+
+function grasslanders.alert_debuff(blind, add, text)
+    if add and not blind.boss_warning_text then
+        blind.get_loc_debuff_text = function ()
+            return text
+        end
+        blind.boss_warning_text = UIBox{
+        definition = 
+            {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR, padding = 0.2}, nodes={
+            {n=G.UIT.R, config = {align = 'cm', maxw = 1}, nodes={
+                {n=G.UIT.O, config={object = DynaText({scale = 0.7, string = text, maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
+            }},
+            --[[{n=G.UIT.R, config = {align = 'cm', maxw = 1}, nodes={
+                {n=G.UIT.O, config={func = "update_blind_debuff_text", object = DynaText({scale = 0.6, string = text, maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
+            }}]]
+        }},
+        config = {
+            align = 'cm',
+            offset ={x=0,y=-3.1}, 
+            major = G.play,
+            }
+        }
+        blind.boss_warning_text.attention_text = true
+        blind.boss_warning_text.states.collide.can = false
+        if SMODS.hand_debuff_source then
+            SMODS.hand_debuff_source:juice_up(0.05, 0.1)
+        else
+            G.GAME.blind.children.animatedSprite:juice_up(0.05, 0.02)
+        end
+        play_sound('chips1', math.random()*0.1 + 0.55, 0.12)
+    elseif not add then
+        if blind.boss_warning_text then 
+            blind.boss_warning_text:remove()
+            blind.boss_warning_text = nil
+        end
+    end
+end

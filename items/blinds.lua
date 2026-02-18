@@ -1492,25 +1492,56 @@ SMODS.Blind {
     boss_colour = HEX("66999a"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.debuff_hand and not context.check then
-                local faces = 0
-                for _, scored_card in ipairs(context.scoring_hand) do
-                    if scored_card.ability.played_this_ante then
-                        faces = faces + 1
-                        scored_card:set_ability('m_grasslanders_gloom', nil, false)
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                scored_card:juice_up()
-                                return true
-                            end
-                        }))
+            if context.setting_blind then
+                for _, v in ipairs(G.playing_cards) do
+                    if v.ability.played_this_ante then
+                        v.gl_fungalic_effect = true
                     end
                 end
-                if faces > 0 then
-                    shakeBlind()
-                    delay(0.4)
+            end
+            if (context.debuff_hand and not context.check) or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND) then
+                local check = context.scoring_name and G.STATE == G.STATES.SELECTING_HAND
+
+                local faces = 0
+                for _, scored_card in ipairs(context.scoring_hand) do
+                    if scored_card.gl_fungalic_effect then
+                        faces = faces + 1
+                        if not check then
+                            scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    scored_card:juice_up()
+                                    return true
+                                end
+                            }))
+                        end
+                    end
+                end
+                if check then
+                    if faces > 0 then
+                        shakeBlind()
+                        delay(0.4)
+                    end
+                else
+                    if faces > 0 then
+                        grasslanders.alert_debuff(self, true, localize('gl_fungalic'))
+                    else
+                        grasslanders.alert_debuff(self, false)
+                    end
                 end
             end
+        end
+    end,
+
+    disable = function(self)
+        for _, playing_card in ipairs(G.playing_cards) do
+            playing_card.gl_fungalic_effect = nil
+        end
+    end,
+
+    defeat = function(self)
+        for _, playing_card in ipairs(G.playing_cards) do
+            playing_card.gl_fungalic_effect = nil
         end
     end,
 }

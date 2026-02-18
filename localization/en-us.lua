@@ -251,7 +251,8 @@ return {
                 name = "The Fungalic",
                 text = {
                     "Cards played previously this",
-                    "ante become Gloom cards if played"
+                    "ante become Gloom cards",
+                    "if played"
                 },
             },
             bl_grasslanders_twinckler = {
@@ -500,8 +501,8 @@ return {
                 text = {
                     "Grants a {C:tarot}Tarot{} card if",
                     "played {C:attention}hand{} scores higher",
-                    "than the {C:attention}high score{}",
-                    "(Currently {C:attention}#1#{})"
+                    "than the {C:attention}best hand{}",
+                    "{C:inactive}(Currently {C:attention}#1#{C:inactive})"
                 },
             },
             j_grasslanders_cocotom = {
@@ -705,6 +706,7 @@ return {
 
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
+            gl_fungalic = 'Hand contains cards previously played this Ante',
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',

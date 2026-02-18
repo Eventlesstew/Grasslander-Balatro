@@ -1481,6 +1481,11 @@ SMODS.Joker{
                         other_card:set_cost()
 
                         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+
+                        effects[#effects + 1] = {
+                            message = localize('k_upgrade_ex'),
+                            colour = G.C.RED,
+                        }
                     end
 
                     if G.GAME.modifiers.gl_vegebonion and other_card.sell_cost <= 0 then
@@ -1501,10 +1506,6 @@ SMODS.Joker{
                             end
                         }
                     end
-                    effects[#effects + 1] = {
-                        message = localize('k_upgrade_ex'),
-                        colour = G.C.RED,
-                    }
             end end
 
             return SMODS.merge_effects(effects)
