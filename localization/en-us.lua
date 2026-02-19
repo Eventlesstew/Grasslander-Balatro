@@ -707,6 +707,7 @@ return {
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
             gl_fungalic = 'Hand contains cards previously played this Ante',
+            gl_jawtrap = 'Playing this hand will destroy a random Joker!',
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',

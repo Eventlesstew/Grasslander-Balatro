@@ -907,36 +907,58 @@ SMODS.Blind {
     boss_colour = HEX("70242e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.setting_blind then
-                blind.only_hand = false
-            end
-            if context.debuff_hand then
-                if not context.check then
-                    if blind.only_hand then
-                        if blind.only_hand ~= context.scoring_name then
-                            blind.triggered = true
-                            local destructable_jokers = {}
-                            for i = 1, #G.jokers.cards do
-                                if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
-                                    destructable_jokers[#destructable_jokers + 1] =
-                                    G.jokers.cards[i]
-                                end
-                            end
-                            local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
+            if (context.debuff_hand and not context.check) or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND) then
+                local check = context.scoring_name and G.STATE == G.STATES.SELECTING_HAND
 
-                            if joker_to_destroy then
-                                joker_to_destroy.getting_sliced = true
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                                        return true
-                                    end
-                                }))
-                                shakeBlind()
-                            end
+                local will_destroy = false
+
+                if blind.hand_list then
+                    local doesNotHaveHand = true
+                    for _,v in ipairs(blind.hand_list) do
+                        if context.scoring_name == v then
+                            doesNotHaveHand = false
+                            break
                         end
+                    end
+                    if doesNotHaveHand then
+                        will_destroy = true
+                        if not check then
+                            blind.hand_list[#blind.hand_list + 1] = context.scoring_name
+                        end
+                    end
+                elseif not check then
+                    blind.hand_list = {context.scoring_name}
+                end
+                
+                local destructable_jokers = {}
+                if will_destroy then
+                    for i = 1, #G.jokers.cards do
+                        if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                            destructable_jokers[#destructable_jokers + 1] =
+                            G.jokers.cards[i]
+                        end
+                    end
+                end
+
+                if check then
+                    if will_destroy and #destructable_jokers > 0 then
+                        grasslanders.alert_debuff(self, true, localize('gl_jawtrap'))
                     else
-                        blind.only_hand = context.scoring_name
+                        grasslanders.alert_debuff(self, false)
+                    end
+                else
+                    local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
+
+                    if joker_to_destroy then
+                        blind.triggered = true
+                        joker_to_destroy.getting_sliced = true
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+                                return true
+                            end
+                        }))
+                        shakeBlind()
                     end
                 end
             end
@@ -1519,14 +1541,14 @@ SMODS.Blind {
                 end
                 if check then
                     if faces > 0 then
-                        shakeBlind()
-                        delay(0.4)
-                    end
-                else
-                    if faces > 0 then
                         grasslanders.alert_debuff(self, true, localize('gl_fungalic'))
                     else
                         grasslanders.alert_debuff(self, false)
+                    end
+                else
+                    if faces > 0 then
+                        shakeBlind()
+                        delay(0.4)
                     end
                 end
             end
