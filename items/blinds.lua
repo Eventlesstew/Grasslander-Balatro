@@ -947,6 +947,7 @@ SMODS.Blind {
                         grasslanders.alert_debuff(self, false)
                     end
                 else
+                    grasslanders.alert_debuff(self, false)
                     local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
 
                     if joker_to_destroy then
@@ -1546,6 +1547,7 @@ SMODS.Blind {
                         grasslanders.alert_debuff(self, false)
                     end
                 else
+                    grasslanders.alert_debuff(self, false)
                     if faces > 0 then
                         shakeBlind()
                         delay(0.4)
