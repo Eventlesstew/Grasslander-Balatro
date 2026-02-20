@@ -649,7 +649,7 @@ return {
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
 
-            c_grasslanders_gloom_kaizo = "Nah, I'd Win",
+            c_grasslanders_gloom_kaizo = "Doom and Gloom",
             c_grasslanders_plingitkaizo = "Pling Rave",
         },
         v_text = {
