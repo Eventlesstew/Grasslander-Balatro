@@ -94,33 +94,16 @@ grasslanders.extra_tabs = function()
 }
 end]]
 
-if type(grasslanders.config.althornetrix) == 'nil' then
-    grasslanders.config.althornetrix = false
-end
-if type(grasslanders.config.kaizochallenges) == 'nil' then
-    grasslanders.config.kaizochallenges = false
-end
+grasslanders.config.grasslanderJokers = (type(grasslanders.config.grasslanderJokers) == 'nil') or grasslanders.config.grasslanderJokers
+grasslanders.config.clackerblinds = (type(grasslanders.config.clackerblinds) == 'number' and grasslanders.config.clackerblinds) or 2
 
 assert(SMODS.load_file("items/game_globals.lua"))()
 assert(SMODS.load_file("items/multirank.lua"))()
 
--- Loads Jokers
-if type(grasslanders.config.grasslanderJokers) == 'nil' then
-    grasslanders.config.grasslanderJokers = true
-end
-
-if grasslanders.config.grasslanderJokers == true then
-    assert(SMODS.load_file("items/jokers.lua"))()
-    assert(SMODS.load_file("items/challenges.lua"))()
-end
-
 -- Loads Clacker Blinds
-if not grasslanders.config.clackerblinds or type(grasslanders.config.clackerblinds) == 'boolean' then
-    grasslanders.config.clackerblinds = 1
-end
-
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
+    assert(SMODS.load_file("items/challenges_gloom.lua"))()
 end
 
 -- Disables Base Blinds
@@ -132,6 +115,17 @@ if grasslanders.config.clackerblinds >= 3 then
         end
         return add_to_pool_ref(prototype_obj, args)
     end
+end
+
+-- Loads Jokers
+if grasslanders.config.grasslanderJokers == true then
+    assert(SMODS.load_file("items/jokers.lua"))()
+    assert(SMODS.load_file("items/challenges.lua"))()
+end
+
+-- Loads Kaizo Challenges
+if grasslanders.config.kaizochallenges then
+    assert(SMODS.load_file("items/challenges_kaizo.lua"))()
 end
 
 --[[
