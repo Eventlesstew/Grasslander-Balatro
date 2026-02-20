@@ -1651,6 +1651,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.before and not context.blueprint then
+            print(G.P_SEALS.Blue.calculate)
             for _, v in ipairs(context.scoring_hand) do
                 v:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'gl_sugamimi' }), nil, true)
             end
