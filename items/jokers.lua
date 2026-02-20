@@ -1636,7 +1636,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "sugamimi",
-    config = { extra = {}},
+    config = { extra = {retriggers = 1}},
     pos = { x = 0, y = 8 },
     rarity = 4,
     cost = 20,
@@ -1650,15 +1650,76 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.before and not context.blueprint then
-            print(G.P_SEALS.Blue.calculate)
-            for _, v in ipairs(context.scoring_hand) do
-                v:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'gl_sugamimi' }), nil, true)
+        if context.other_card and context.other_card.seal then
+            local effects = {}
+            if context.other_card.seal ~= 'Blue' then
+                if context.end_of_round and context.cardarea == G.hand and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.0,
+                        func = function()
+                            if G.GAME.last_hand_played then
+                                local _planet = nil
+                                for k, v in pairs(G.P_CENTER_POOLS.Planet) do
+                                    if v.config.hand_type == G.GAME.last_hand_played then
+                                        _planet = v.key
+                                    end
+                                end
+                                if _planet then
+                                    SMODS.add_card({ key = _planet })
+                                end
+                                G.GAME.consumeable_buffer = 0
+                            end
+                            return true
+                        end
+                    }))
+                    effects[#effects + 1] = {
+                        message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet,
+                        message_card = context.other_card
+                    }
+                end
             end
-            return {
-                message = localize('gl_sugamimi'),
-                colour = G.C.MONEY
-            }
+
+            if context.other_card.seal ~= 'Purple' then
+                if context.discard and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.0,
+                        func = function()
+                            SMODS.add_card({ set = 'Tarot' })
+                            G.GAME.consumeable_buffer = 0
+                            return true
+                        end
+                    }))
+                    effects[#effects + 1] = {
+                        message = localize('k_plus_tarot'), 
+                        colour = G.C.PURPLE,
+                        message_card = context.other_card
+                    }
+                end
+            end
+
+            if context.other_card.seal ~= 'Gold' then
+                if context.individual and context.cardarea == G.play then
+                    effects[#effects + 1] = {
+                        dollars = card.ability.extra.dollars,
+                        message_card = context.other_card
+                    }
+                end
+            end
+
+            if context.other_card.seal ~= 'Red' then
+                if context.repetition then
+                    effects[#effects + 1] = {
+                        repetitions = card.ability.extra.retriggers,
+                        message_card = context.other_card
+                    }
+                end
+            end
+
+            return SMODS.merge_effects(effects)
         end
     end,
 }

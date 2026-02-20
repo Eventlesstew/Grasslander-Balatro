@@ -588,9 +588,9 @@ return {
             j_grasslanders_sugamimi = {
                 name = "Sugamimi",
                 text = {
-                    "Adds a random {C:attention}Seal{}",
-                    "to all scored cards",
-                    "in {C:attention}first hand{} of round"
+                    "{C:red}Red{}, {C:money}Gold{}, {C:tarot}Purple{}",
+                    "and {C:chips}Blue{} seals have",
+                    "their effects combined",
                     
                 },
             },
