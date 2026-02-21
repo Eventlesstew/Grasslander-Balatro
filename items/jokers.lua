@@ -511,47 +511,44 @@ SMODS.Joker{
                 if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
                     card.ability.extra.count = card.ability.extra.count + 1
 
-                    if card.ability.extra.active and card.ability.extra.count <= card.ability.extra.threshold then
-                        effects[#effects+1] = {
+                    if card.ability.extra.active and card.ability.extra.count < card.ability.extra.threshold then
+                        return {
                             message = (card.ability.extra.count .. '/' .. card.ability.extra.threshold),
                             colour = G.C.MONEY,
                         }
                     end
                 end
-                if context.other_card == context.full_hand[#context.full_hand] then
-                    if card.ability.extra.count >= card.ability.extra.threshold and card.ability.extra.active then
-                        local target_cards = {}
-                        for _, v in ipairs(G.playing_cards) do
-                            if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                                target_cards[#target_cards + 1] = v
-                            end
+                if 
+                    context.other_card == context.full_hand[#context.full_hand] and
+                    card.ability.extra.count >= card.ability.extra.threshold and 
+                    card.ability.extra.active 
+                then
+                    local target_cards = {}
+                    for _, v in ipairs(G.playing_cards) do
+                        if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                            target_cards[#target_cards + 1] = v
                         end
-                        for _, v in ipairs(target_cards) do
+                    end
+                    for _, v in ipairs(target_cards) do
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                draw_card(v, G.hand)
+                                return true
+                            end
+                        }))
+                    end
+                    card.ability.extra.active = false
+                    return {
+                        dollars = card.ability.extra.dollars,
+                        func = function() -- This is for timing purposes, everything here runs after the message
                             G.E_MANAGER:add_event(Event({
                                 func = function()
-                                    draw_card(v, G.hand)
+                                    SMODS.destroy_cards(target_cards)
                                     return true
                                 end
                             }))
                         end
-                        card.ability.extra.active = false
-                        effects[#effects+1] = {
-                            message_card = card,
-                            dollars = card.ability.extra.dollars,
-                            func = function() -- This is for timing purposes, everything here runs after the message
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        SMODS.destroy_cards(target_cards)
-                                        return true
-                                    end
-                                }))
-                            end
-                        }
-                        effects[#effects+1] = {
-                            message_card = card,
-                            message = localize{type = 'variable', key='gl_junklake', vars={#target_cards}},
-                        }
-                    end
+                    }
                 end
 
                 return SMODS.merge_effects(effects)
