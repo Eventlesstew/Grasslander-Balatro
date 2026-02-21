@@ -581,9 +581,16 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.setting_blind and not context.blueprint then
-            local eaten_card = pseudorandom_element(G.consumeables.cards, 'grasslanders_hornetrix')
+            local valid_consumeables = {}
+            for _,v in ipairs(G.consumeables.cards) do
+                if not v.getting_sliced then
+                    valid_consumeables[#valid_consumeables+1] = v
+                end
+            end
+            local eaten_card = pseudorandom_element(valid_consumeables, 'grasslanders_hornetrix')
             if eaten_card then -- Checks if you do have a consumable card
                 card.ability.extra_value = card.ability.extra_value + card.ability.extra.dollars -- Increases Sell Value
+                eaten_card.getting_sliced = true
                 card:set_cost()
                 SMODS.destroy_cards(eaten_card)
                 return {
@@ -890,6 +897,7 @@ SMODS.Joker{
         end
         if not context.blueprint then
             if context.buying_card then
+                print(context.card.area)
                 card.ability.extra.active = false
             end
             if context.starting_shop then
@@ -1692,7 +1700,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.other_card and context.other_card.sea and not context.blueprint then
+        if context.other_card and context.other_card.seal and not context.blueprint then
 
             -- Gold Seal
             if context.other_card.seal ~= 'Gold' then

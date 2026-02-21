@@ -182,7 +182,6 @@ SMODS.Challenge {
     key = 'hornetrix',
     rules = {
         custom = {
-            { id = 'no_reward' },
             { id = 'no_extra_hand_money' },
             { id = 'no_interest' },
         }
@@ -198,8 +197,6 @@ SMODS.Challenge {
         }
     },
     jokers = {
-        { id = 'j_grasslanders_hornetrix'},
-        { id = 'j_grasslanders_hornetrix'},
         { id = 'j_grasslanders_hornetrix'},
         { id = 'j_grasslanders_hornetrix'},
         { id = 'j_grasslanders_hornetrix'},
