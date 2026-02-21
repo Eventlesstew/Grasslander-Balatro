@@ -896,8 +896,7 @@ SMODS.Joker{
             end
         end
         if not context.blueprint then
-            if context.buying_card then
-                print(context.card.area)
+            if context.buying_card and context.card.area then
                 card.ability.extra.active = false
             end
             if context.starting_shop then
