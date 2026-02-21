@@ -391,6 +391,12 @@ SMODS.Joker{
                     sound = 'grasslanders_erupt',
                     func = function() -- This is for timing purposes, everything here runs after the message
                         SMODS.draw_cards(card.ability.extra.draw)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                save_run()
+                                return true
+                            end
+                        }))
                     end,
                 }
             end
