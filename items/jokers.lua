@@ -536,7 +536,7 @@ SMODS.Joker{
                         end
                         card.ability.extra.active = false
                         effects[#effects+1] = {
-                            card = card,
+                            message_card = card,
                             dollars = card.ability.extra.dollars,
                             func = function() -- This is for timing purposes, everything here runs after the message
                                 G.E_MANAGER:add_event(Event({
