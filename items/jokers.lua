@@ -530,12 +530,12 @@ SMODS.Joker{
                                 G.E_MANAGER:add_event(Event({
                                     func = function()
                                         draw_card(v, G.hand)
-                                        return true
-                                    end
-                                }))
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        SMODS.destroy_cards(v, nil, nil, true)
+                                        G.E_MANAGER:add_event(Event({
+                                            func = function()
+                                                SMODS.destroy_cards(v, nil, true)
+                                                return true
+                                            end
+                                        }))
                                         return true
                                     end
                                 }))
