@@ -501,39 +501,52 @@ SMODS.Joker{
             end
 
             if context.discard then
+                local effects = {}
                 if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
                     card.ability.extra.count = card.ability.extra.count + 1
+
+                    if card.ability.extra.active and card.ability.extra.count <= card.ability.extra.threshold then
+                        effects[#effects+1] = {
+                            message = (card.ability.extra.count .. '/' .. card.ability.extra.threshold),
+                            colour = G.C.MONEY,
+                        }
+                    end
                 end
-            end
-            if context.discard and context.other_card == context.full_hand[#context.full_hand] then
-                if card.ability.extra.count >= card.ability.extra.threshold and card.ability.extra.active then
-                    local target_cards = {}
-                    for _, v in ipairs(G.playing_cards) do
-                        if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
-                            target_cards[#target_cards + 1] = v
-                        end
-                    end
-                    for _, v in ipairs(target_cards) do
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                draw_card(v, G.hand)
-                                return true
+                if context.other_card == context.full_hand[#context.full_hand] then
+                    if card.ability.extra.count >= card.ability.extra.threshold and card.ability.extra.active then
+                        local target_cards = {}
+                        for _, v in ipairs(G.playing_cards) do
+                            if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+                                target_cards[#target_cards + 1] = v
                             end
-                        }))
-                    end
-                    card.ability.extra.active = false
-                    return {
-                        dollars = card.ability.extra.dollars,
-                        func = function() -- This is for timing purposes, everything here runs after the message
+                        end
+                        for _, v in ipairs(target_cards) do
                             G.E_MANAGER:add_event(Event({
                                 func = function()
-                                    SMODS.destroy_cards(target_cards)
+                                    draw_card(v, G.hand)
                                     return true
                                 end
                             }))
                         end
-                    }
+                        card.ability.extra.active = false
+                        effects[#effects+1] = {
+                            dollars = card.ability.extra.dollars,
+                            func = function() -- This is for timing purposes, everything here runs after the message
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        SMODS.destroy_cards(target_cards)
+                                        return true
+                                    end
+                                }))
+                            end
+                        }
+                        effects[#effects+1] = {
+                            message = localize{type = 'variable', key='gl_junklake', vars={#target_cards}},
+                        }
+                    end
                 end
+
+                return SMODS.merge_effects(effects)
             end
         end
     end,
@@ -1506,17 +1519,18 @@ SMODS.Joker{
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
             local effects = {}
             for _, area in ipairs({ G.jokers, G.consumeables }) do for _, other_card in ipairs(area.cards) do
+                    local affected = false
                     if other_card.sell_cost > 0 and other_card ~= card then
                         other_card.ability.extra_value = (other_card.ability.extra_value or 0) -
                             card.ability.extra.sell_value
                         other_card:set_cost()
 
                         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-
                         effects[#effects + 1] = {
                             message = localize('k_upgrade_ex'),
                             colour = G.C.RED,
                         }
+                        affected = true
                     end
 
                     if G.GAME.modifiers.gl_vegebonion and other_card.sell_cost <= 0 then
@@ -1525,7 +1539,7 @@ SMODS.Joker{
                                 SMODS.destroy_cards(other_card)
                             end
                         }
-                    else
+                    elseif affected then
                         effects[#effects + 1] = {
                             func = function()
                                 G.E_MANAGER:add_event(Event({

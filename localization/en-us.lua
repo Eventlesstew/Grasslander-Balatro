@@ -663,6 +663,7 @@ return {
         v_dictionary = {
             gl_cocotom_countdown = '#1# left',
             gl_chonkreep = '-#1# Requirement',
+            gl_junklake = '#1# Caught!',
         },
         dictionary = {
             a_chips="+#1#",
@@ -717,6 +718,7 @@ return {
             gl_options_clackerblind1 = 'Enabled',
             gl_options_clackerblind2 = 'Replace Base',
             gl_options_funny = 'The funny option',
+            
 
             gl_options_performanceTitle = 'Advanced',
             gl_options_posttrigger = 'Enable Post Trigger',
