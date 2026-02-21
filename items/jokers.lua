@@ -416,7 +416,7 @@ SMODS.Joker{
     rarity = 1,
     cost = 5,
     blueprint_compat=true,
-    eternal_compat=false,
+    eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
      
@@ -425,7 +425,7 @@ SMODS.Joker{
         if context.individual and context.cardarea == G.play then
             if next(SMODS.get_enhancements(context.other_card))then
                 if not context.blueprint and context.other_card:get_edition() then -- Check if card is Polychrome
-                    SMODS.destroy_cards(card, nil, nil, true) -- Add an event to destroy Frogobonk
+                    SMODS.destroy_cards(card, true, nil, true) -- Add an event to destroy Frogobonk
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             SMODS.add_card{key = "j_grasslanders_lumobonk"}
@@ -535,7 +535,7 @@ SMODS.Joker{
                                 }))
                                 G.E_MANAGER:add_event(Event({
                                     func = function()
-                                        SMODS.destroy_cards(v, nil, nil, true)
+                                        SMODS.destroy_cards(v, nil, true, true)
                                         return true
                                     end
                                 }))
@@ -928,7 +928,7 @@ SMODS.Joker{
     pos = { x = 4, y = 3 },
     rarity = 2,
     cost = 7,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -938,30 +938,28 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if context.reroll_shop and SMODS.pseudorandom_probability(card, 'gl_wisplasm', 1, card.ability.extra.odds) then
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'immediate',
-                    func = function()
-                        for i = #G.shop_booster.cards,1, -1 do
-                            local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
-                            c:remove()
-                            c = nil
-                        end
-                        
-                        for i = 1, G.GAME.starting_params.boosters_in_shop + (G.GAME.modifiers.extra_boosters or 0) - #G.shop_booster.cards do
-                            local new_shop_card = SMODS.add_booster_to_shop()
-                            new_shop_card:juice_up()
-                        end
-
-                        return true
+        if context.reroll_shop and SMODS.pseudorandom_probability(card, 'gl_wisplasm', 1, card.ability.extra.odds) then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'immediate',
+                func = function()
+                    for i = #G.shop_booster.cards,1, -1 do
+                        local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
+                        c:remove()
+                        c = nil
                     end
-                }))
-                return {
-                    message = localize{'gl_wisplasm'},
-                    colour = G.C.GREEN
-                }
-            end
+                    
+                    for i = 1, G.GAME.starting_params.boosters_in_shop + (G.GAME.modifiers.extra_boosters or 0) - #G.shop_booster.cards do
+                        local new_shop_card = SMODS.add_booster_to_shop()
+                        new_shop_card:juice_up()
+                    end
+
+                    return true
+                end
+            }))
+            return {
+                message = localize{'gl_wisplasm'},
+                colour = G.C.GREEN
+            }
         end
     end,
 
