@@ -535,7 +535,7 @@ SMODS.Joker{
                                 }))
                                 G.E_MANAGER:add_event(Event({
                                     func = function()
-                                        SMODS.destroy_cards(v, nil, true, true)
+                                        SMODS.destroy_cards(v, nil, nil, true)
                                         return true
                                     end
                                 }))
