@@ -536,6 +536,7 @@ SMODS.Joker{
                         end
                         card.ability.extra.active = false
                         effects[#effects+1] = {
+                            card = card,
                             dollars = card.ability.extra.dollars,
                             func = function() -- This is for timing purposes, everything here runs after the message
                                 G.E_MANAGER:add_event(Event({
@@ -1532,29 +1533,35 @@ SMODS.Joker{
                         other_card:set_cost()
 
                         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-                        effects[#effects + 1] = {
-                            message = localize('k_upgrade_ex'),
-                            colour = G.C.RED,
-                        }
                         affected = true
                     end
 
+                    local getting_destroyed = false
                     if G.GAME.modifiers.gl_vegebonion and other_card.sell_cost <= 0 then
+                        getting_destroyed = true
                         effects[#effects + 1] = {
                             func = function()
                                 SMODS.destroy_cards(other_card)
                             end
                         }
-                    elseif affected then
+                    end
+
+                    if affected then
+                        if not getting_destroyed then
+                            effects[#effects + 1] = {
+                                func = function()
+                                    G.E_MANAGER:add_event(Event({
+                                        func = function()
+                                            other_card:juice_up()
+                                            return true
+                                        end
+                                    }))
+                                end
+                            }
+                        end
                         effects[#effects + 1] = {
-                            func = function()
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        other_card:juice_up()
-                                        return true
-                                    end
-                                }))
-                            end
+                            message = localize('k_upgrade_ex'),
+                            colour = G.C.RED,
                         }
                     end
             end end

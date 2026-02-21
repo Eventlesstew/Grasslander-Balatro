@@ -97,6 +97,7 @@ end
 
 -- Handles same cards
 -- TODO: Make it so you can only get one or the other with the ranks.
+--[[
 local oldgetxsame = get_X_same
 function get_X_same(num, hand, or_more)
     local passed = false
@@ -214,4 +215,4 @@ function get_straight(hand, min_length, skip, wrap)
     end
     table.sort(ret, function(a, b) return #a > #b end)
     return ret
-end
+end]]
