@@ -506,52 +506,48 @@ SMODS.Joker{
                 card.ability.extra.count = 0
             end
 
-            if context.discard then
-                local effects = {}
-                if context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
+            if 
+                context.discard and
+                card.ability.extra.active and 
+                context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id 
+            then
+                if card.ability.extra.count < card.ability.extra.threshold then
                     card.ability.extra.count = card.ability.extra.count + 1
-
-                    if card.ability.extra.active and card.ability.extra.count < card.ability.extra.threshold then
-                        return {
-                            message = (card.ability.extra.count .. '/' .. card.ability.extra.threshold),
-                            colour = G.C.MONEY,
-                        }
-                    end
                 end
-                if 
-                    context.other_card == context.full_hand[#context.full_hand] and
-                    card.ability.extra.count >= card.ability.extra.threshold and 
-                    card.ability.extra.active 
-                then
+
+                if card.ability.extra.count >= card.ability.extra.threshold then
+                    card.ability.extra.active = false
                     local target_cards = {}
                     for _, v in ipairs(G.playing_cards) do
                         if v:get_id() == G.GAME.current_round.grasslanders_junklake_card.id then
                             target_cards[#target_cards + 1] = v
                         end
                     end
-                    for _, v in ipairs(target_cards) do
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                draw_card(v, G.hand)
-                                return true
-                            end
-                        }))
-                    end
-                    card.ability.extra.active = false
                     return {
                         dollars = card.ability.extra.dollars,
                         func = function() -- This is for timing purposes, everything here runs after the message
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    SMODS.destroy_cards(target_cards)
-                                    return true
-                                end
-                            }))
+                            for _, v in ipairs(target_cards) do
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        draw_card(v, G.hand)
+                                        return true
+                                    end
+                                }))
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        SMODS.destroy_cards(v)
+                                        return true
+                                    end
+                                }))
+                            end
                         end
                     }
+                else
+                    return {
+                        message = (card.ability.extra.count .. '/' .. card.ability.extra.threshold),
+                        colour = G.C.MONEY,
+                    }
                 end
-
-                return SMODS.merge_effects(effects)
             end
         end
     end,
@@ -1698,7 +1694,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.other_card and context.other_card.seal then
+        if context.other_card and context.other_card.sea and not context.blueprint then
 
             -- Gold Seal
             if context.other_card.seal ~= 'Gold' then
