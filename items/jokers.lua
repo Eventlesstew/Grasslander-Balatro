@@ -101,11 +101,9 @@ SMODS.Joker{
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
-    unlocked = true,
-     
 
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play and context.blueprint then -- Triggers when the card is played
+        if context.individual and context.cardarea == G.play and not context.blueprint then -- Triggers when the card is played
             local valid = true
             for _,v in ipairs(G.hand.cards) do -- This checks if held hand has any face cards
                 if v:is_face() then
@@ -123,6 +121,7 @@ SMODS.Joker{
                 }
             end
         end
+
         if context.joker_main then
             return { -- Gives Chips
                 chips = card.ability.extra.chips,
@@ -658,7 +657,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "chonkreep",
     atlas = 'grasslanderJoker',
-    config = { extra = {reduction = 0.05}},
+    config = { extra = {reduction = 0.05, score_mod = 0, score_display = 0}},
     pos = { x = 3, y = 2 },
     rarity = 3,
     cost = 8,
@@ -669,39 +668,27 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
-        if context.before then
-            local effects = {}
-            local reduction = G.GAME.blind.chips * card.ability.extra.reduction
-            local chip_display = G.GAME.blind.chips
-            for _, v in ipairs(context.scoring_hand) do
-                G.GAME.blind.chips = G.GAME.blind.chips - reduction
-                effects[#effects + 1] = {
-                    func = function()
-                        G.E_MANAGER:add_event(Event({
-                            trigger = 'after',
-                            delay = 0.4,
-                            func = function()
-                                chip_display = chip_display - reduction
-                                G.GAME.blind.chip_text = number_format(chip_display)
-                                v:juice_up()
-                                return true
-                            end
-                        }))
+        if context.pre_discard then
+            card.ability.extra.score_mod = G.GAME.blind.chips * card.ability.extra.reduction
+            card.ability.extra.score_display = G.GAME.blind.chips
+        end
+        if context.discard then
+            G.GAME.blind.chips = G.GAME.blind.chips - card.ability.extra.score_mod
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    if context.other_card == context.full_hand[#context.full_hand] then
+                        card.ability.extra.score_display = G.GAME.blind.chips
+                    else
+                        card.ability.extra.score_display = card.ability.extra.score_display - card.ability.extra.score_mod
                     end
-                }
-                effects[#effects + 1] = {
-                    message = localize('gl_chonkreep'),
-                    delay = 0.4
-                }
-            end
-            
-            effects[#effects + 1] = {
-                func = function()
-                    G.GAME.blind.chip_text = number_format(chip_display)
+                    G.GAME.blind.chip_text = number_format(card.ability.extra.score_display)
                     return true
-                end
+                end)
+            }))
+            return {
+                message = localize{type = 'variable', key='gl_chonkreep', vars={card.ability.extra.score}},
+                delay = 0.2,
             }
-            return SMODS.merge_effects(effects)
         end
     end,
     loc_vars = function(self, info_queue, card)
@@ -1018,7 +1005,7 @@ SMODS.Joker{
                 if #context.removed > 0 then
                     card.ability.extra.x_mult = card.ability.extra.x_mult + (#context.removed * card.ability.extra.x_mult_mod)
                     return {
-                        message = localize('k_upgrade_ex'),
+                        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } },
                     }
                 end
             end
@@ -1359,7 +1346,12 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
-        if context.debuff_card and context.debuff_card.area == G.jokers and context.debuff_card == G.jokers.cards[card.ability.extra.chosen_joker] then
+        if 
+            context.debuff_card and 
+            context.debuff_card.area == G.jokers and 
+            context.debuff_card == G.jokers.cards[card.ability.extra.chosen_joker] and
+            (type(context.debuff_card.config.center.grasslanders_edward_compat) == 'nil' or context.debuff_card.config.center.grasslanders_edward_compat)
+        then
             return {debuff = true}
         end
 
@@ -1453,9 +1445,48 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, key = self.key }
+        local compat_message = nil
+        if card.area and card.area == G.jokers then
+            local other_joker
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+            end
+            local compatible = other_joker and other_joker ~= card and (type(other_joker.config.center.grasslanders_edward_compat) == 'nil' or other_joker.config.center.grasslanders_edward_compat)
+            compat_message = {
+                {
+                    n = G.UIT.C,
+                    config = { align = "bm", minh = 0.4 },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { ref_table = card, align = "m", colour = compatible and mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8) or mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8), r = 0.05, padding = 0.06 },
+                            nodes = {
+                                { n = G.UIT.T, config = { text = ' ' .. localize('k_' .. (compatible and 'compatible' or 'incompatible')) .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.8 } },
+                            }
+                        }
+                    }
+                }
+            }
+        end
+        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, main_end = compat_message }
     end
 }
+
+SMODS.Joker:take_ownership(
+    'drunkard',
+    {
+	    grasslanders_edward_compat = false
+    },
+    true
+)
+
+SMODS.Joker:take_ownership(
+    'merry_andy',
+    {
+	    grasslanders_edward_compat = false
+    },
+    true
+)
 
 SMODS.Joker{
     key = "vegebonion",
@@ -1623,20 +1654,12 @@ SMODS.Joker{
                 end
             end
         end
-        --[[
-        if context.repetition and context.cardarea == G.play then
-            if context.other_card:get_id() == 13 or context.other_card:get_id() == 12 then
-                return {
-                    repetitions = card.ability.extra.repetitions
-                }
-            end
-        end]]
     end,
 }
 
 SMODS.Joker{
     key = "sugamimi",
-    config = { extra = {retriggers = 1}},
+    config = { extra = {retriggers = 1, dollars = 3}},
     pos = { x = 0, y = 8 },
     rarity = 4,
     cost = 20,
@@ -1651,9 +1674,25 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.other_card and context.other_card.seal then
-            local effects = {}
+
+            -- Gold Seal
+            if context.other_card.seal ~= 'Gold' then
+                if context.individual and context.cardarea == G.play then
+                    return {
+                        dollars = card.ability.extra.dollars,
+                        message_card = context.other_card
+                    }
+                end
+            end
+
+            -- Blue Seal
             if context.other_card.seal ~= 'Blue' then
-                if context.end_of_round and context.cardarea == G.hand and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                if 
+                    context.end_of_round and
+                    context.individual and
+                    context.cardarea == G.hand and
+                    #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit 
+                then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                     G.E_MANAGER:add_event(Event({
                         trigger = 'before',
@@ -1674,7 +1713,7 @@ SMODS.Joker{
                             return true
                         end
                     }))
-                    effects[#effects + 1] = {
+                    return {
                         message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet,
                         message_card = context.other_card
                     }
@@ -1693,7 +1732,7 @@ SMODS.Joker{
                             return true
                         end
                     }))
-                    effects[#effects + 1] = {
+                    return {
                         message = localize('k_plus_tarot'), 
                         colour = G.C.PURPLE,
                         message_card = context.other_card
@@ -1701,27 +1740,23 @@ SMODS.Joker{
                 end
             end
 
-            if context.other_card.seal ~= 'Gold' then
-                if context.individual and context.cardarea == G.play then
-                    effects[#effects + 1] = {
-                        dollars = card.ability.extra.dollars,
-                        message_card = context.other_card
-                    }
-                end
-            end
-
+            -- Red Seal
             if context.other_card.seal ~= 'Red' then
                 if context.repetition then
-                    effects[#effects + 1] = {
+                    return {
                         repetitions = card.ability.extra.retriggers,
                         message_card = context.other_card
                     }
                 end
             end
-
-            return SMODS.merge_effects(effects)
         end
     end,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_SEALS.Red
+        info_queue[#info_queue + 1] = G.P_SEALS.Gold
+        info_queue[#info_queue + 1] = G.P_SEALS.Blue
+        info_queue[#info_queue + 1] = G.P_SEALS.Purple
+    end
 }
 
 SMODS.Joker{

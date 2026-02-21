@@ -429,8 +429,8 @@ return {
                 name = "Chonkreep",
                 text = {
                     "Reduces {C:attention}Blind{} requirement",
-                    "by {C:red}X#1#{} for each scoring",
-                    "card after played hand"
+                    "by {C:red}X#1#{} for each card",
+                    "discarded",
                 },
             },
 
@@ -550,8 +550,8 @@ return {
                 text = {
                     "Disables Joker{} to the right",
                     "during a round and gains {C:chips}+#2#{}",
-                    "Chips for each debuffed {C:attention}Joker",
-                    "or {C:attention}card each hand",
+                    "Chips for each debuffed",
+                    "{C:attention}Joker{} or {C:attention}card{} each hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
@@ -588,9 +588,9 @@ return {
             j_grasslanders_sugamimi = {
                 name = "Sugamimi",
                 text = {
-                    "{C:red}Red{}, {C:money}Gold{}, {C:tarot}Purple{}",
-                    "and {C:chips}Blue{} seals have",
-                    "their effects combined",
+                    "{C:red}Red{}, {C:chips}Blue{}, {C:money}Gold{}, and",
+                    "{C:tarot}Purple{} seals have all of",
+                    "their effects {C:attention}combined{}",
                     
                 },
             },
@@ -649,7 +649,7 @@ return {
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
 
-            c_grasslanders_gloom_kaizo = "Doom and Gloom",
+            c_grasslanders_gloom_kaizo = "Doom & Gloom",
             c_grasslanders_plingitkaizo = "Pling Rave",
         },
         v_text = {
@@ -662,6 +662,7 @@ return {
 
         v_dictionary = {
             gl_cocotom_countdown = '#1# left',
+            gl_chonkreep = '-#1# Requirement',
         },
         dictionary = {
             a_chips="+#1#",
@@ -697,12 +698,10 @@ return {
 
             grasslanders_drollfunny = "Drool Joker",
 
-            gl_chonkreep = 'Reduced!',
             gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',
-            gl_sugamimi = 'Candy!',
 
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
