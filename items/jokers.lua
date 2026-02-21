@@ -548,6 +548,7 @@ SMODS.Joker{
                             end
                         }
                         effects[#effects+1] = {
+                            message_card = card,
                             message = localize{type = 'variable', key='gl_junklake', vars={#target_cards}},
                         }
                     end
