@@ -10,7 +10,7 @@ SMODS.Atlas({
 
 -- I'll use Blowy as an example for the values shared by all other Jokers
 SMODS.Joker{
-    -- They key acts as the card's internal ID. 
+    -- The key acts as the card's internal ID. 
     -- Do note that SMODS appends j_(modprefix)_ to the key so Blowy's actual key for example is j_grasslanders_blowy
     key = "blowy",
     atlas = 'grasslanderJoker', -- The card refers to the Atlas listed.
@@ -831,6 +831,20 @@ SMODS.Joker{
     soul_pos=nil,
     atlas = 'grasslanderJoker',
 
+    in_pool = function()
+        local valid = false
+        if (G.GAME.round_resets.ante >= 6) then
+            local count = 0
+            for _,v in ipairs(G.playing_cards or {}) do
+                if SMODS.has_enhancement(v, 'm_grasslanders_gloom') then
+                    count = count + 1
+                end
+            end
+
+            valid = (count >= 1)
+        end
+        return valid
+    end,
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
             if SMODS.has_enhancement(context.other_card, 'm_stone') then
