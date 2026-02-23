@@ -836,7 +836,7 @@ SMODS.Joker{
         if (G.GAME.round_resets.ante >= 6) then
             local count = 0
             for _,v in ipairs(G.playing_cards or {}) do
-                if SMODS.has_enhancement(v, 'm_grasslanders_gloom') then
+                if SMODS.has_enhancement(v, 'm_stone') then
                     count = count + 1
                 end
             end
