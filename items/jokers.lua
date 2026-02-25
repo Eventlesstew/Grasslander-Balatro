@@ -832,18 +832,13 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     in_pool = function()
-        local valid = false
-        if (G.GAME.round_resets.ante >= 6) then
-            local count = 0
-            for _,v in ipairs(G.playing_cards or {}) do
-                if SMODS.has_enhancement(v, 'm_stone') then
-                    count = count + 1
-                end
+        for _,v in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(v, 'm_stone') then
+                return true
             end
-
-            valid = (count >= 1)
         end
-        return valid
+
+        return false
     end,
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
@@ -1605,12 +1600,26 @@ SMODS.Joker{
     unlocked = true,
      
     atlas = 'grasslanderJoker',
+    in_pool = function()
+        for _,v in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(v, 'm_glass') then
+                return true
+            end
+        end
 
+        return false
+    end,
     calculate = function(self, card, context)
-        if context.after and not context.blueprint then
-            for _, scored_card in ipairs(context.scoring_hand) do
-                if SMODS.pseudorandom_probability(card, 'grasslanders_deespirr', 1, card.ability.extra.odds) then
-                    SMODS.destroy_cards(scored_card)
+        if not context.blueprint then
+            if context.remove_playing_cards and context.full_hand then
+                local glass_cards = 0
+                for _, removed_card in ipairs(context.removed) do
+                    if removed_card.shattered then glass_cards = glass_cards + 1 end
+                end
+                if glass_cards > 0 then
+                    for _, scored_card in ipairs(context.full_hand) do
+                        SMODS.destroy_cards(scored_card)
+                    end
                 end
             end
         end

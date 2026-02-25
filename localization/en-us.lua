@@ -569,10 +569,9 @@ return {
             j_grasslanders_deespirr = {
                 name = "Deespirr",
                 text = {
-                    "All {C:attention}cards{} have a",
-                    "{C:green}#1# in #2#{} chance",
-                    "to be destroyed",
-                    "after scoring",
+                    "All cards in played hand",
+                    "are destroyed if a {C:attention}Glass{}",
+                    "card breaks",
                 },
             },
             j_grasslanders_hyphilliacs = {
