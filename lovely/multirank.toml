@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 214748364
+priority = -1
 
 # From All-in-Jest!
 # They removed the link because apparently it was "unstable"
