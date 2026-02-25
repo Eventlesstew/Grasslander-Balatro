@@ -1611,14 +1611,20 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if not context.blueprint then
-            if context.remove_playing_cards and context.full_hand then
+            if context.remove_playing_cards and context.scoring_hand then
                 local glass_cards = 0
                 for _, removed_card in ipairs(context.removed) do
-                    if removed_card.shattered then glass_cards = glass_cards + 1 end
+                    if removed_card.shattered then 
+                        glass_cards = glass_cards + 1 
+                    end
+                    removed_card.getting_sliced = true
                 end
                 if glass_cards > 0 then
-                    for _, scored_card in ipairs(context.full_hand) do
-                        SMODS.destroy_cards(scored_card)
+                    for _, scored_card in ipairs(G.play.cards) do
+                        if not scored_card.getting_sliced then
+                            SMODS.destroy_cards(scored_card)
+                            scored_card.getting_sliced = true
+                        end
                     end
                 end
             end
