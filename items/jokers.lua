@@ -428,7 +428,21 @@ SMODS.Joker{
                     SMODS.destroy_cards(card, true, nil, true) -- Add an event to destroy Frogobonk
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            SMODS.add_card{key = "j_grasslanders_lumobonk"}
+                            check_for_unlock{type = 'grasslanders_lumobonk'}
+                            local _card = SMODS.add_card{key = "j_grasslanders_lumobonk"}
+
+                            -- Applies the edition to Lumobonk
+                            if card.edition then
+                                _card.set_edition(card.edition.key)
+                            end
+
+                            -- Applies the stickers to Lumobonk
+                            for _, v in pairs(SMODS.Stickers) do
+                                if card.ability[v.key] then
+                                    _card['set_'..v.key](_card, true)
+                                end
+                            end
+
                             return true
                         end
                     }))
@@ -571,11 +585,13 @@ SMODS.Joker{
      
 
     set_sprites = function(self, card, front)
-        local alt = 1
-        if grasslanders.config.althornetrix then
-            card.children.center:set_sprite_pos({x=5,y=2})
-        else
-            card.children.center:set_sprite_pos({x=1,y=2})
+        if card.config.center.discovered or card.bypass_discovery_center then
+            local alt = 1
+            if grasslanders.config.althornetrix then
+                card.children.center:set_sprite_pos({x=5,y=2})
+            else
+                card.children.center:set_sprite_pos({x=1,y=2})
+            end
         end
     end,
 
@@ -1201,10 +1217,7 @@ SMODS.Joker{
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,
-     
-    effect=nil,
-    soul_pos=nil,
+    unlocked = false,
     atlas = 'grasslanderJoker',
 
     in_pool = function(self, args)
@@ -1224,7 +1237,10 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         return { vars = {card.ability.extra.x_mult}, key = self.key }
-    end
+    end,
+    check_for_unlock = function(self, args)
+        return args.type == 'grasslanders_lumobonk'
+    end,
 }
 
 SMODS.Joker{
@@ -1721,7 +1737,7 @@ SMODS.Joker{
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,
+    unlocked = false,
      
     effect=nil,
     soul_pos={ x = 0, y = 9 },
@@ -1823,7 +1839,7 @@ SMODS.Joker{
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
-    unlocked = true,
+    unlocked = false,
                                         --is joker discovered by default.    
     effect=nil,                                          --you can specify an effect here eg. 'Mult'
     soul_pos={ x = 1, y = 9},

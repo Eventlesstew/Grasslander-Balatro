@@ -23,7 +23,7 @@ SMODS.Atlas({
     key = "gloom",
     path = "gloomOld.png",
     px = 71,
-    py = 95
+    py = 95,
     --py = 115,
 })
 
@@ -39,6 +39,20 @@ SMODS.Enhancement {
         return false
     end,
 }
+
+--[[
+SMODS.DrawStep {
+    key = 'gloom_card',
+    order = 1,
+    func = function(card, layer)
+        if SMODS.has_enhancement(card, 'm_grasslanders_gloom') then
+            local scale_mod = 1
+            card.children.center:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod)
+        end
+    end,
+    conditions = { vortex = false, facing = 'front' },
+}]]
+
 --[[SMODS.Atlas({
     key = "gloom_deck",
     path = "gloom.png",

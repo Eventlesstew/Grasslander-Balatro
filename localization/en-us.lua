@@ -354,6 +354,10 @@ return {
                     "{C:attention}card{} scored",
                     "with an {C:attention}Edition",
                 },
+                unlock = {
+                    'Make {E:1,C:attention}Frogobonk{} score a',
+                    'card with an {E:1,C:attention}Edition{}',
+                }
             },
             j_grasslanders_reeflute = {
                 name = "Reeflet",
@@ -590,7 +594,9 @@ return {
                     "{C:red}Red{}, {C:chips}Blue{}, {C:money}Gold{}, and",
                     "{C:tarot}Purple{} seals have all of",
                     "their effects {C:attention}combined{}",
-                    
+                },
+                unlock = {
+                    "{E:1,s:1.3}?????",
                 },
             },
             j_grasslanders_vacomar = {
@@ -603,6 +609,9 @@ return {
                     "discarded cards match",
                     "the stored {C:attention}rank{} or {C:attention}suit{}",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive}#2#{V:1}#3#{C:inactive})"
+                },
+                unlock = {
+                    "{E:1,s:1.3}?????",
                 },
             },
 
