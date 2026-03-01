@@ -21,7 +21,7 @@ end
 
 SMODS.Atlas({
     key = "gloom",
-    path = "gloomOld.png",
+    path = "gloom.png",
     px = 71,
     py = 95,
     --py = 115,
