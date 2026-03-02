@@ -94,7 +94,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "sprinkle",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_mod = 3} },
+    config = { extra = {chips = 0, chip_mod = 2} },
     pos = { x = 2, y = 0 },
     rarity = 1,
     cost = 5,
