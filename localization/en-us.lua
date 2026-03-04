@@ -296,7 +296,7 @@ return {
             j_grasslanders_sprinkle = {
                 name = "Sprinkle",
                 text = {
-                    "Gains {C:chips}+#2#{} Chips for each",
+                    "Gain {C:chips}+#2#{} Chip for each",
                     "card scored if no {C:attention}face",
                     "cards are held in hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
@@ -565,8 +565,8 @@ return {
                 text = {
                     "Steal {C:money}$#1#{} of {C:attention}sell value{} from",
                     "every other {C:attention}Joker{} and {C:attention}Consumable{}",
-                    "at end of round and add {C:attention}double{}",
-                    "of taken sell value to {C:mult}Mult{}",
+                    "at end of round and add taken",
+                    "sell value to {C:mult}Mult{}",
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
                 },
             },

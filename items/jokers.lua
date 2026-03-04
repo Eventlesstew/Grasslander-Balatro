@@ -94,7 +94,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "sprinkle",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_mod = 2} },
+    config = { extra = {chips = 0, chip_mod = 1} },
     pos = { x = 2, y = 0 },
     rarity = 1,
     cost = 5,
@@ -1534,7 +1534,7 @@ SMODS.Joker:take_ownership(
 
 SMODS.Joker{
     key = "vegebonion",
-    config = { extra = {sell_value = 1, mult = 0, mult_mod = 2}},
+    config = { extra = {sell_value = 1, mult = 0, mult_mod = 1}},
     pos = { x = 0, y = 7 },
     rarity = 3,
     cost = 6,
