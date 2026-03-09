@@ -373,8 +373,6 @@ SMODS.Joker{
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
-     
-
     calculate = function(self,card,context)
         if 
             not context.blueprint and 
