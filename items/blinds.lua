@@ -24,7 +24,6 @@ SMODS.Atlas({
     path = "gloom.png",
     px = 71,
     py = 95,
-    --py = 115,
 })
 
 SMODS.Enhancement {
@@ -34,52 +33,19 @@ SMODS.Enhancement {
     overrides_base_rank = true,
     no_rank = true,
     no_suit = true,
-    --display_size = {w = 71, h = 115},
     in_pool = function(self, args)
         return false
     end,
 }
 
---[[
-SMODS.DrawStep {
-    key = 'gloom_card',
-    order = 1,
-    func = function(card, layer)
-        if SMODS.has_enhancement(card, 'm_grasslanders_gloom') then
-            local scale_mod = 1
-            card.children.center:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod)
-        end
-    end,
-    conditions = { vortex = false, facing = 'front' },
-}]]
-
---[[SMODS.Atlas({
-    key = "gloom_deck",
-    path = "gloom.png",
-    px = 71,
-    py = 95
-})
-
-SMODS.Back {
-    key = "gloom_deck",
-    atlas = "gloom_deck",
-    pos = { x = 0, y = 0 },
-    unlocked = true,
-    config = {extra = {ability = 'm_grasslanders_gloom'}},
-    apply = function(self, back)
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                for _,v in pairs(G.playing_cards) do
-                    v:set_ability(self.config.extra.ability, nil, true)
-                end
-                return true
-            end
-        }))
-    end,
-    loc_vars = function(self, info_queue, back)
-        return { vars = {self.config.extra.ability} }
-    end,
-}]]
+local is_face_ref = Card.is_face
+function Card:is_face()
+    local result = is_face_ref(self)
+    if SMODS.has_enhancement(self, 'm_grasslanders_gloom') then
+        result = false
+    end
+    return result
+end
 
 SMODS.Atlas({
     key = "clackerblind",

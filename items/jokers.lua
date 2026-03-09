@@ -374,24 +374,21 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     calculate = function(self,card,context)
-        if 
-            not context.blueprint and 
-            context.pre_discard
-        then -- Activates Volcarox, ensures that Blueprint is not affected
-            card.ability.extra.active = true
-        end
+        if not context.blueprint then 
+            if context.pre_discard then -- Activates Volcarox, ensures that Blueprint is not affected
+                card.ability.extra.active = true
+            end
 
-        if 
-            (
-                not context.blueprint and 
-                context.hand_drawn and 
-                G.GAME.current_round.discards_left <= card.ability.extra.d_remaining and 
-                card.ability.extra.active
-            ) or (
-                context.blueprint and 
-                context.gl_volcarox_bp
-            )
-        then -- This is the code for drawing extra cards
+            if context.hand_drawn and card.ability.extra.active then
+                if G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
+                    SMODS.calculate_context({
+                        gl_volcarox_erupt = true
+                    })
+                end
+                card.ability.extra.active = false
+            end
+        end
+        if context.gl_volcarox_erupt and #G.deck.cards > 0 then
             return {
                 message = localize('k_erupt_ex'),
                 colour = G.C.RED,
@@ -401,26 +398,13 @@ SMODS.Joker{
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             save_run()
-                            if not context.blueprint then -- Ensures that Blueprint doesn't mess things up
-                                SMODS.calculate_context({
-                                    gl_volcarox_bp = true
-                                })
-                            end
                             return true
                         end
                     }))
-                    if not context.blueprint then
-                        card.ability.extra.active = false
-                    end
                 end,
             }
-        elseif 
-            not context.blueprint and context.hand_drawn
-        then
-            card.ability.extra.active = false
         end
     end,
-
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
         return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
     end
@@ -989,8 +973,9 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.reroll_shop and SMODS.pseudorandom_probability(card, 'gl_wisplasm', 1, card.ability.extra.odds) then
-            G.E_MANAGER:add_event(Event({
-                trigger = 'immediate',
+            return {
+                message = localize{'gl_wisplasm'},
+                colour = G.C.GREEN,
                 func = function()
                     for i = #G.shop_booster.cards,1, -1 do
                         local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
@@ -1004,11 +989,7 @@ SMODS.Joker{
                     end
 
                     return true
-                end
-            }))
-            return {
-                message = localize{'gl_wisplasm'},
-                colour = G.C.GREEN
+                end,
             }
         end
     end,
