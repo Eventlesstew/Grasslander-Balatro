@@ -376,30 +376,50 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
-        if not context.blueprint and context.discard then -- Activates Volcarox, ensures that Blueprint is not affected
+        if 
+            not context.blueprint and 
+            context.pre_discard
+        then -- Activates Volcarox, ensures that Blueprint is not affected
             card.ability.extra.active = true
         end
 
-        if context.hand_drawn and card.ability.extra.active then -- This is the code for drawing extra cards
-            if not context.blueprint then -- Ensures that Blueprint doesn't mess things up
-                card.ability.extra.active = false
-            end
-            if G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
-                return {
-                    message = localize('k_erupt_ex'),
-                    colour = G.C.RED,
-                    sound = 'grasslanders_erupt',
-                    func = function() -- This is for timing purposes, everything here runs after the message
-                        SMODS.draw_cards(card.ability.extra.draw)
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                save_run()
-                                return true
+        if 
+            (
+                not context.blueprint and 
+                context.hand_drawn and 
+                G.GAME.current_round.discards_left <= card.ability.extra.d_remaining and 
+                card.ability.extra.active
+            ) or (
+                context.blueprint and 
+                context.gl_volcarox_bp
+            )
+        then -- This is the code for drawing extra cards
+            return {
+                message = localize('k_erupt_ex'),
+                colour = G.C.RED,
+                sound = 'grasslanders_erupt',
+                func = function() -- This is for timing purposes, everything here runs after the message
+                    SMODS.draw_cards(card.ability.extra.draw)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            save_run()
+                            if not context.blueprint then -- Ensures that Blueprint doesn't mess things up
+                                SMODS.calculate_context({
+                                    gl_volcarox_bp = true
+                                })
                             end
-                        }))
-                    end,
-                }
-            end
+                            return true
+                        end
+                    }))
+                    if not context.blueprint then
+                        card.ability.extra.active = false
+                    end
+                end,
+            }
+        elseif 
+            not context.blueprint and context.hand_drawn
+        then
+            card.ability.extra.active = false
         end
     end,
 

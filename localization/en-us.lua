@@ -474,8 +474,9 @@ return {
             j_grasslanders_kracosteal = {
                 name = "Kracosteal",
                 text = {
-                    "{C:green}Rerolls{} in shop give",
-                    "up to {C:money}$#1#{} of refund",
+                    "{C:green}Rerolls{} in shop give up",
+                    "to {C:money}$#1#{} of refund if no",
+                    "cards were bought"
                 },
             },
             j_grasslanders_axonitta = {
