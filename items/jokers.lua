@@ -69,7 +69,7 @@ SMODS.Joker{
     config = { extra = {mult = 18} },
     pos = { x = 1, y = 0 },
     rarity = 1,
-    cost = 5,
+    cost = 4,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -97,7 +97,7 @@ SMODS.Joker{
     config = { extra = {chips = 0, chip_mod = 1} },
     pos = { x = 2, y = 0 },
     rarity = 1,
-    cost = 5,
+    cost = 4,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -140,7 +140,7 @@ SMODS.Joker{
     config = { extra = {mult = 1, mult_mod = 0.25} },
     pos = { x = 3, y = 0 },
     rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -176,11 +176,11 @@ SMODS.Joker{
 SMODS.Joker{
     key = "trizap",
     atlas = 'grasslanderJoker',
-    config = { extra = {odds = 2}},
+    config = { extra = {odds = 3}},
     pos = { x = 4, y = 0 },
     soul_pos={ x = 5, y = 0 },
     rarity = 3,
-    cost = 8,
+    cost = 10,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -281,7 +281,7 @@ SMODS.Joker{
     config = { extra = {repetitions = 1}},
     pos = { x = 0, y = 2 },
     rarity = 2,
-    cost = 8,
+    cost = 5,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -332,7 +332,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 2, y = 1 },
     rarity = 1,
-    cost = 6,
+    cost = 4,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -368,7 +368,7 @@ SMODS.Joker{
     config = { extra = {draw = 10, active = false, d_remaining = 0} },
     pos = { x = 3, y = 1 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -416,7 +416,7 @@ SMODS.Joker{
     config = { extra = {mult = 5}},
     pos = {x = 4, y = 2},
     rarity = 1,
-    cost = 5,
+    cost = 4,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -579,7 +579,7 @@ SMODS.Joker{
     config = { extra = {dollars = 5}},
     pos = { x = 1, y = 2 },
     rarity = 1,
-    cost = 6,
+    cost = 5,
     blueprint_compat=false,
     eternal_compat=false,
     perishable_compat=true,
@@ -661,7 +661,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 4, y = 1 },
     rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -741,7 +741,7 @@ SMODS.Joker{
     config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 100}},
     pos = { x = 1, y = 3 },
     rarity = 1,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -839,7 +839,7 @@ SMODS.Joker{
     config = { extra = {odds = 4, chips = 150}},
     pos = { x = 2, y = 3 },
     rarity = 2,
-    cost = 5,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -893,7 +893,7 @@ SMODS.Joker{
     config = { extra = {dollars = 3, active = false}},
     pos = { x = 3, y = 3 },
     rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -961,7 +961,7 @@ SMODS.Joker{
     config = { extra = {odds = 4}},
     pos = { x = 4, y = 3 },
     rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -1028,7 +1028,7 @@ SMODS.Joker{
     config = { extra = {x_mult = 1, x_mult_mod = 0.5, rounds = 20,}},
     pos = { x = 0, y = 3 },
     rarity = 3,
-    cost = 9,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1087,7 +1087,7 @@ SMODS.Joker{
     config = { extra = {x_mult = 1, x_mult_mod = 0.2}},
     pos = { x = 3, y = 4 },
     rarity = 2,
-    cost = 5,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -1136,7 +1136,7 @@ SMODS.Joker{
     config = { extra = {}},
     pos = { x = 2, y = 4 },
     rarity = 2,
-    cost = 6,
+    cost = 5,
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
@@ -1212,7 +1212,7 @@ SMODS.Joker{
     config = { extra = {x_mult = 2}},
     pos = { x = 4, y = 5 },
     rarity = 1,
-    cost = 10,
+    cost = 4,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -1244,10 +1244,10 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "litabelle",
-    config = { extra = {dollars = 0}},
+    config = { extra = {stored_joker = nil}},
     pos = { x = 0, y = 5 },
     rarity = 3,
-    cost = 7,
+    cost = 8,
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=false,
@@ -1256,21 +1256,34 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.selling_card and not context.selling_self then
-                card.ability.extra.dollars = card.ability.extra.dollars + (context.card.sell_cost * 2)
-                ease_dollars(-context.card.sell_cost, true)
+            if context.setting_blind then
+                local other_joker = nil
+                for i = 1, #G.jokers.cards do
+                    if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+                end
+
+                if other_joker then
+                    card.ability.extra.stored_joker = other_joker
+                    SMODS.destroy_cards(other_joker)
+                    return {
+                        message = localize('k_eaten_ex')
+                    }
+                end
+            end
+            if context.end_of_round and context.main_eval and context.game_over == false and card.ability.extra.stored_joker then
+                local copied_joker = copy_card(card.ability.extra.stored_joker)
+                card.ability.extra.stored_joker = nil
+
+                local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
+                copied_joker:set_edition(edition, true)
+                G.jokers:emplace(copied_joker)
+                copied_joker:start_materialize()
+                copied_joker:add_to_deck()
+
                 return {
-                    message = localize("k_upgrade_ex"),
-                    color = G.C.MONEY
+                    message = localize('gl_litabelle')
                 }
             end
-        end
-    end,
-    calc_dollar_bonus = function(self, card)
-        if G.GAME.blind.boss then
-            local dollars = card.ability.extra.dollars
-            card.ability.extra.dollars = 0
-            return dollars
         end
     end,
 
@@ -1284,7 +1297,7 @@ SMODS.Joker{
     config = { extra = {x_mult = 1, x_mult_mod = 1, uphand = 'Straight Flush', hand1 = 'Straight', hand2 = 'Flush'}},
     pos = { x = 3, y = 5 },
     rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1334,7 +1347,7 @@ SMODS.Joker{
     config = { extra = {active = false}},
     pos = { x = 2, y = 5 },
     rarity = 2,
-    cost = 6,
+    cost = 7,
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
@@ -1380,7 +1393,7 @@ SMODS.Joker{
     config = { extra = {chips = 0, chip_mod = 5, chosen_joker = 0, active = false}},
     pos = { x = 1, y = 5 },
     rarity = 3,
-    cost = 9,
+    cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false, -- TODO: Test if Edward works when Perishable and with Perishable
@@ -1536,7 +1549,7 @@ SMODS.Joker{
     config = { extra = {sell_value = 1, mult = 0, mult_mod = 1}},
     pos = { x = 0, y = 7 },
     rarity = 3,
-    cost = 6,
+    cost = 7,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=false,
@@ -1608,7 +1621,7 @@ SMODS.Joker{
     config = { extra = {odds = 4}},
     pos = { x = 1, y = 7 },
     rarity = 2,
-    cost = 8,
+    cost = 6,
     blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,

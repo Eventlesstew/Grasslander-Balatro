@@ -262,6 +262,13 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'litabelle',
+    jokers = {
+        { id = 'j_grasslanders_litabelle', pinned = true, eternal = true },
+    }
+}
+
+SMODS.Challenge {
     key = 'harparachnids',
     jokers = {
         { id = 'j_grasslanders_erny', eternal = true },

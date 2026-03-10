@@ -523,11 +523,10 @@ return {
             j_grasslanders_litabelle = {
                 name = "Litabelle",
                 text = {
-                    "Takes the {C:attention}sell value{} from",
-                    "each card {C:attention}sold{} and stores",
-                    "{C:money}double{} the amount",
-                    "Earn {C:money}$#1#{} and reset when",
-                    "{C:attention}Boss Blind{} is defeated",
+                    "When {C:attention}Blind{} is selected, destroy",
+                    "and store {C:attention}Joker{} to the right",
+                    "At end of round, return stored",
+                    "{C:attention}Joker{} with a random {C:dark_edition}Edition{}",
                 },
             },
             
@@ -651,6 +650,7 @@ return {
             c_grasslanders_hornetrix = "Wasp Nest",
             c_grasslanders_santile = "Sandcastle",
             c_grasslanders_squid = "Squid Game",
+            c_grasslanders_litabelle = "Predator",
             c_grasslanders_harparachnids = "Harparachnids",
             c_grasslanders_vegebonion = "Everything Decays",
             c_grasslanders_deespirr = "Chilling Fate",
@@ -712,6 +712,7 @@ return {
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',
+            gl_litabelle = 'Granted!',
 
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
