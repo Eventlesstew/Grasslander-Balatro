@@ -329,10 +329,16 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
+                    "If a card with an {C:attention}edition",
+                    "is scored, {C:green}#1# in #2#{} chance",
+                    "to add a random {C:attention}edition",
+                    "to a random card in deck",
+                    "{C:inactive}(Including {C:dark_edition}Negative{C:inactive})"
+                    --[[
                     "When any other {C:attention}Joker{} is sold",
                     "or destroyed, {C:green}#1# in #2#{} chance",
                     "to create a {C:dark_edition}Negative{} copy",
-                    "with a random {C:attention}sticker",
+                    "with a random {C:attention}sticker",]]
                 },
             },
             j_grasslanders_frogobonk = {

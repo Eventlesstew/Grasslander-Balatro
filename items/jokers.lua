@@ -191,7 +191,14 @@ SMODS.Joker{
         if context.individual and context.cardarea == G.play and context.other_card.edition and pseudorandom_probability(card, 'gl_trizap', 1, card.ability.extra.odds) then
             local valid_cards = {}
             for _,v in ipairs(G.deck.cards) do
-                
+                if not valid_cards.edition then
+                    valid_cards[#valid_cards+1] = v
+                end
+            end
+            local chosen_card = pseudorandom_element(valid_cards, 'gl_trizap_cards')
+            if chosen_card then
+                local edition = poll_edition{key = "gl_trizap_edition", guaranteed = true}
+                chosen_card:set_edition(edition)--context.other_card.edition)
             end
         end
         --[[
@@ -1280,7 +1287,7 @@ SMODS.Joker{
             end
             if context.end_of_round and context.main_eval and context.game_over == false and card.ability.extra.stored_joker then
                 local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
-                if edition.negative or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
+                if edition == 'e_negative' or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
                     local copied_joker = copy_card(card.ability.extra.stored_joker)
                     card.ability.extra.stored_joker = nil
                     copied_joker:set_edition(edition, true)
