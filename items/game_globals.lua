@@ -41,6 +41,25 @@ end
 
 function grasslanders.reset_game_globals(run_start)
     if run_start then
+        if G.GAME.modifiers.gl_doubleblind then
+            G.GAME.starting_params.ante_scaling = 2
+        end
+        if G.GAME.modifiers.gl_trizap then
+            func = function()
+                for i=1, 6 do
+                    local valid_cards = {}
+                    for _,v in ipairs(G.playing_cards) do
+                        if not(v.edition and v.edition.negative) then
+                            valid_cards[#valid_cards+1] = v
+                        end
+                    end
+
+                    local card = pseudorandom_element(valid_cards, 'gl_challenge_trizap')
+                    card.set_edition('e_negative', true, true)
+                end
+                return true
+            end
+        end
         if G.GAME.modifiers.gl_plingitkaizo then
             G.GAME.starting_params.ante_scaling = 5
         end

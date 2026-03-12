@@ -673,6 +673,8 @@ return {
             },
             ch_c_gl_hyphilliacs = {'Cards {C:attention}debuffed{} by {C:attention}Hyphilliacs{} are {C:attention}destroyed{} instead'},
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
+            ch_c_gl_doubleblind = {'{C:red}X2{} base Blind size'},
+            ch_c_gl_trizap = {'6 random cards have {C:dark_edition}Negative{} edition'},
         },
 
         v_dictionary = {

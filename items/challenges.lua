@@ -1,14 +1,18 @@
 SMODS.Challenge {
     key = 'trizap',
     jokers = {
-        { id = 'j_grasslanders_trizap', eternal = true, edition = 'negative' },
-        { id = 'j_oops', eternal = true, edition = 'negative' },
+        { id = 'j_grasslanders_trizap', eternal = true},
     },
+    custom = {
+        {id = 'gl_doubleblind', value = true},
+        {id = 'gl_trizap', value = true},
+    },
+    --[[
     rules = {
         modifiers = {
             { id = 'joker_slots', value = 1 },
         }
-    }
+    }]]
 }
 
 SMODS.Challenge {
