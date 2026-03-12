@@ -176,7 +176,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "trizap",
     atlas = 'grasslanderJoker',
-    config = { extra = {odds = 3}},
+    config = { extra = {odds = 2}},
     pos = { x = 4, y = 0 },
     soul_pos={ x = 5, y = 0 },
     rarity = 3,
