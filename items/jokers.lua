@@ -188,6 +188,13 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card.edition and pseudorandom_probability(card, 'gl_trizap', 1, card.ability.extra.odds) then
+            local valid_cards = {}
+            for _,v in ipairs(G.deck.cards) do
+                
+            end
+        end
+        --[[
         if 
             context.card and 
             (context.joker_type_destroyed or context.selling_card) 
@@ -219,6 +226,7 @@ SMODS.Joker{
             copied_joker:add_to_deck()
             G.jokers:emplace(copied_joker)
         end
+        ]]
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1256,7 +1264,7 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.setting_blind then
+            if context.setting_blind and card.ability.extra.stored_joker == nil then
                 local other_joker = nil
                 for i = 1, #G.jokers.cards do
                     if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
@@ -1271,18 +1279,23 @@ SMODS.Joker{
                 end
             end
             if context.end_of_round and context.main_eval and context.game_over == false and card.ability.extra.stored_joker then
-                local copied_joker = copy_card(card.ability.extra.stored_joker)
-                card.ability.extra.stored_joker = nil
-
                 local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
-                copied_joker:set_edition(edition, true)
-                G.jokers:emplace(copied_joker)
-                copied_joker:start_materialize()
-                copied_joker:add_to_deck()
+                if edition.negative or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
+                    local copied_joker = copy_card(card.ability.extra.stored_joker)
+                    card.ability.extra.stored_joker = nil
+                    copied_joker:set_edition(edition, true)
+                    G.jokers:emplace(copied_joker)
+                    copied_joker:start_materialize()
+                    copied_joker:add_to_deck()
 
-                return {
-                    message = localize('gl_litabelle')
-                }
+                    return {
+                        message = localize('gl_litabelle')
+                    }
+                else
+                    return {
+                        message = localize('k_no_room_ex')
+                    }
+                end
             end
         end
     end,
