@@ -1310,10 +1310,10 @@ SMODS.Joker{
     loc_vars = function(self, info_queue, card)
         local m_end = {}
         if card.ability.extra.stored_joker then
-            m_end[1] = localize{ 
+            localize{ 
                 type = 'other', 
                 key = 'gl_litabelle_contains', 
-                nodes = main_end, 
+                nodes = m_end, 
                 vars = {localize{
                     type = 'name_text', 
                     set = card.ability.extra.stored_joker.set,

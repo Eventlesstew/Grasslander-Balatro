@@ -98,6 +98,7 @@ grasslanders.config.grasslanderJokers = (type(grasslanders.config.grasslanderJok
 grasslanders.config.clackerblinds = (type(grasslanders.config.clackerblinds) == 'number' and grasslanders.config.clackerblinds) or 2
 
 assert(SMODS.load_file("items/game_globals.lua"))()
+assert(SMODS.load_file("items/challenges_vanilla.lua"))()
 assert(SMODS.load_file("items/multirank.lua"))()
 
 -- Loads Clacker Blinds
