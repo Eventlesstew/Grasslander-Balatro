@@ -112,3 +112,22 @@ function grasslanders.alert_debuff(blind, add, text)
         end
     end
 end
+
+local game_start_run_ref = Game.start_run
+function Game:start_run(args)
+    self.gl_litabelleArea = CardArea(
+        0,
+        0,
+        self.CARD_W * 4.95,
+        self.CARD_H * 0.95,
+        {
+            card_limit = 1,
+            type = 'title',
+            highlight_limit = 1,
+        }
+    )
+    self.gl_litabelleArea.states.visible = false
+
+    game_start_run_ref(self, args)
+end
+

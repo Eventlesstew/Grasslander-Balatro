@@ -309,21 +309,17 @@ SMODS.Joker{
         if context.repetition and context.cardarea == G.play then -- This is used for repeating cards
             local valid = true
 
-            for _, scored_card in ipairs(context.scoring_hand) do -- Checks if card is the only one in hand with it's enhancement.
-                if scored_card ~= context.other_card then
+            for _, v in ipairs(context.scoring_hand) do -- Checks if card is the only one in hand with it's enhancement.
+                if v ~= context.other_card then
                     if next(SMODS.get_enhancements(context.other_card)) then
-                        --print(SMODS.get_enhancements(context.other_card))
-                        print(SMODS.get_enhancements(context.other_card))
-                        for enhancement, _ in ipairs(SMODS.get_enhancements(context.other_card)) do
-                            print(enhancement)
-                            if SMODS.has_enhancement(scored_card, enhancement) then
-                                valid = false
-                                break
-                            end
+                        -- NOTE: This doesn't work with Quantum Enhancements
+                        if SMODS.has_enhancement(v, next(SMODS.get_enhancements(context.other_card))) then
+                            valid = false
+                            break
                         end
-
-                    elseif not next(SMODS.get_enhancements(scored_card)) then
+                    elseif not next(SMODS.get_enhancements(v)) then
                         valid = false
+                        break
                     end
                 end
 
@@ -740,7 +736,7 @@ SMODS.Joker{
                 end)
             }))
             return {
-                message = localize{type = 'variable', key='gl_chonkreep', vars={card.ability.extra.score}},
+                message = localize{type = 'variable', key='gl_chonkreep', vars={card.ability.extra.score_mod}},
                 delay = 0.2,
             }
         end
@@ -1259,7 +1255,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "litabelle",
-    config = { extra = {stored_joker = nil}},
+    config = { extra = {}},
     pos = { x = 0, y = 5 },
     rarity = 3,
     cost = 8,
@@ -1271,32 +1267,28 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.setting_blind and card.ability.extra.stored_joker == nil then
+            if context.setting_blind and not G.gl_litabelleArea.cards[1] then
                 local other_joker = nil
                 for i = 1, #G.jokers.cards do
                     if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
                 end
 
                 if other_joker then
-                    card.ability.extra.stored_joker = other_joker
-                    SMODS.destroy_cards(other_joker)
+                    other_joker.area:remove_card(other_joker)
+                    G.gl_litabelleArea:emplace(other_joker)
                     return {
                         message = localize('k_eaten_ex')
                     }
                 end
             end
 
-            -- BUG: When reloading a run, the stored joker becomes MANUAL REPLACE instead.
-            if context.end_of_round and context.main_eval and context.game_over == false and card.ability.extra.stored_joker then
+            if context.end_of_round and context.main_eval and context.game_over == false and G.gl_litabelleArea.cards[1] then
                 local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
                 if edition == 'e_negative' or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
-                    local copied_joker = copy_card(card.ability.extra.stored_joker)
-                    copied_joker:set_edition(edition, true)
-                    G.jokers:emplace(copied_joker)
-                    copied_joker:start_materialize()
-                    copied_joker:add_to_deck()
-
-                    card.ability.extra.stored_joker = nil
+                    local litabelleCard = G.gl_litabelleArea.cards[1]
+                    litabelleCard.area:remove_card(litabelleCard)
+                    G.jokers:emplace(litabelleCard)
+                    litabelleCard:set_edition(edition, true)
 
                     return {
                         message = localize('gl_litabelle')
