@@ -188,7 +188,7 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play and context.other_card.edition and pseudorandom_probability(card, 'gl_trizap', 1, card.ability.extra.odds) then
+        if context.individual and context.cardarea == G.play and context.other_card.edition and SMODS.pseudorandom_probability(card, 'gl_trizap', 1, card.ability.extra.odds) then
             local valid_cards = {}
             for _,v in ipairs(G.deck.cards) do
                 if not valid_cards.edition then
@@ -197,7 +197,7 @@ SMODS.Joker{
             end
             local chosen_card = pseudorandom_element(valid_cards, 'gl_trizap_cards')
             if chosen_card then
-                local edition = poll_edition{key = "gl_trizap_edition", guaranteed = true}
+                local edition = SMODS.poll_edition{key = "gl_trizap_edition", guaranteed = true}
                 chosen_card:set_edition(edition)--context.other_card.edition)
             end
         end
@@ -1285,15 +1285,18 @@ SMODS.Joker{
                     }
                 end
             end
+
+            -- BUG: When reloading a run, the stored joker becomes MANUAL REPLACE instead.
             if context.end_of_round and context.main_eval and context.game_over == false and card.ability.extra.stored_joker then
                 local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
                 if edition == 'e_negative' or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
                     local copied_joker = copy_card(card.ability.extra.stored_joker)
-                    card.ability.extra.stored_joker = nil
                     copied_joker:set_edition(edition, true)
                     G.jokers:emplace(copied_joker)
                     copied_joker:start_materialize()
                     copied_joker:add_to_deck()
+
+                    card.ability.extra.stored_joker = nil
 
                     return {
                         message = localize('gl_litabelle')
@@ -1308,21 +1311,23 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
+        --[[
         local m_end = {}
         if card.ability.extra.stored_joker then
+            local joker_name = localize{
+                type = 'name_text', 
+                set = card.ability.extra.stored_joker.set,
+                key = card.ability.extra.stored_joker.key
+            }
             localize{ 
                 type = 'other', 
                 key = 'gl_litabelle_contains', 
                 nodes = m_end, 
-                vars = {localize{
-                    type = 'name_text', 
-                    set = card.ability.extra.stored_joker.set,
-                    key = card.ability.extra.stored_joker.key
-                }} 
+                vars = {joker_name} 
             }
-            info_queue[#info_queue + 1] = card.ability.extra.stored_joker
-        end
-        return { vars = {card.ability.extra.dollars, main_end = m_end[1]}, key = self.key}
+            info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.extra.stored_joker]
+        end]]
+        return { vars = {card.ability.extra.dollars}}
     end
 }
 
