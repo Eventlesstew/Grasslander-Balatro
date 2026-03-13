@@ -1308,7 +1308,21 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.dollars}, key = self.key }
+        local m_end = {}
+        if card.ability.extra.stored_joker then
+            m_end[1] = localize{ 
+                type = 'other', 
+                key = 'gl_litabelle_contains', 
+                nodes = main_end, 
+                vars = {localize{
+                    type = 'name_text', 
+                    set = card.ability.extra.stored_joker.set,
+                    key = card.ability.extra.stored_joker.key
+                }} 
+            }
+            info_queue[#info_queue + 1] = card.ability.extra.stored_joker
+        end
+        return { vars = {card.ability.extra.dollars, main_end = m_end[1]}, key = self.key}
     end
 }
 

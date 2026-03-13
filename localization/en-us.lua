@@ -721,6 +721,7 @@ return {
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',
             gl_litabelle = 'Granted!',
+            gl_litabelle_contains = '{C:inactive}(Contains {C:attention}#1#{C:inactive})',
 
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',
