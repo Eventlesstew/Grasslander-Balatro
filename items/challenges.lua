@@ -17,6 +17,19 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'molty',
+    jokers = {
+        { id = 'j_grasslanders_molty', eternal = true },
+        { id = 'j_grasslanders_volcarox', eternal = true },
+    },
+    rules = {
+        modifiers = {
+            { id = 'hands', value = 2 },
+        }
+    },
+}
+
+SMODS.Challenge {
     key = 'logobreak',
     jokers = {
         { id = 'j_grasslanders_logobreak', eternal = true},
@@ -216,6 +229,19 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'mossibug',
+    jokers = {
+        { id = 'j_grasslanders_scorpibeat', eternal = true },
+        { id = 'j_grasslanders_mossibug', eternal = true },
+    },
+    rules = {
+        custom = {
+            {id = 'gl_blind_double', value = true},
+        }
+    },
+}
+
+SMODS.Challenge {
     key = 'santile',
     jokers = {
         { id = 'j_grasslanders_santile', eternal = true },
@@ -264,6 +290,19 @@ SMODS.Challenge {
         { id = 'j_grasslanders_wisplasm', eternal = true },
         { id = 'j_grasslanders_ziffy', eternal = true },
     }
+}
+
+SMODS.Challenge {
+    key = 'cocotom',
+    jokers = {
+        { id = 'j_grasslanders_cocotom'},
+    },
+    rules = {
+        custom = {
+            {id = 'gl_antecocotom', value = true},
+            {id = 'gl_finalscore', value = true},
+        }
+    },
 }
 
 SMODS.Challenge {
@@ -319,23 +358,23 @@ SMODS.Challenge {
     deck = {
         type = 'Challenge Deck',
         cards = {
-            { s = 'S', r = 'K', e = 'm_glass'  },
-            { s = 'S', r = 'Q', e = 'm_glass'  },
-            { s = 'S', r = 'J', e = 'm_glass'  },
-            { s = 'S', r = 'T', e = 'm_glass'  },
-            { s = 'S', r = '9', e = 'm_glass'  },
-            { s = 'S', r = '8', e = 'm_glass'  },
-            { s = 'S', r = '7', e = 'm_glass'  },
-            { s = 'S', r = '6', e = 'm_glass'  },
-            { s = 'S', r = '5', e = 'm_glass'  },
-            { s = 'S', r = '4', e = 'm_glass'  },
-            { s = 'S', r = '3', e = 'm_glass'  },
-            { s = 'S', r = '2', e = 'm_glass'  },
-            { s = 'S', r = 'A', e = 'm_glass'  },
+            { s = 'S', r = 'K', e = 'm_glass' },
+            { s = 'S', r = 'Q', e = 'm_glass' },
+            { s = 'S', r = 'J', e = 'm_glass' },
+            { s = 'S', r = 'T', },
+            { s = 'S', r = '9', },
+            { s = 'S', r = '8', },
+            { s = 'S', r = '7', },
+            { s = 'S', r = '6', },
+            { s = 'S', r = '5', },
+            { s = 'S', r = '4', },
+            { s = 'S', r = '3', },
+            { s = 'S', r = '2', },
+            { s = 'S', r = 'A', },
 
-            { s = 'H', r = 'K' },
-            { s = 'H', r = 'Q' },
-            { s = 'H', r = 'J' },
+            { s = 'H', r = 'K', e = 'm_glass' },
+            { s = 'H', r = 'Q', e = 'm_glass' },
+            { s = 'H', r = 'J', e = 'm_glass' },
             { s = 'H', r = 'T' },
             { s = 'H', r = '9' },
             { s = 'H', r = '8' },
@@ -350,20 +389,20 @@ SMODS.Challenge {
             { s = 'C', r = 'K', e = 'm_glass'  },
             { s = 'C', r = 'Q', e = 'm_glass'  },
             { s = 'C', r = 'J', e = 'm_glass'  },
-            { s = 'C', r = 'T', e = 'm_glass'  },
-            { s = 'C', r = '9', e = 'm_glass'  },
-            { s = 'C', r = '8', e = 'm_glass'  },
-            { s = 'C', r = '7', e = 'm_glass'  },
-            { s = 'C', r = '6', e = 'm_glass'  },
-            { s = 'C', r = '5', e = 'm_glass'  },
-            { s = 'C', r = '4', e = 'm_glass'  },
-            { s = 'C', r = '3', e = 'm_glass'  },
-            { s = 'C', r = '2', e = 'm_glass'  },
-            { s = 'C', r = 'A', e = 'm_glass'  },
+            { s = 'C', r = 'T', },
+            { s = 'C', r = '9', },
+            { s = 'C', r = '8', },
+            { s = 'C', r = '7', },
+            { s = 'C', r = '6', },
+            { s = 'C', r = '5', },
+            { s = 'C', r = '4', },
+            { s = 'C', r = '3', },
+            { s = 'C', r = '2', },
+            { s = 'C', r = 'A', },
 
-            { s = 'D', r = 'K' },
-            { s = 'D', r = 'Q' },
-            { s = 'D', r = 'J' },
+            { s = 'D', r = 'K', e = 'm_glass' },
+            { s = 'D', r = 'Q', e = 'm_glass' },
+            { s = 'D', r = 'J', e = 'm_glass' },
             { s = 'D', r = 'T' },
             { s = 'D', r = '9' },
             { s = 'D', r = '8' },
@@ -402,4 +441,13 @@ SMODS.Challenge {
     jokers = {
         { id = 'j_grasslanders_vacomar', eternal = true },
     }
+}
+
+SMODS.Challenge {
+    key = 'grasslanders',
+    rules = {
+        custom = {
+            {id = 'gl_grasslandersOnly', value = true},
+        }
+    },
 }

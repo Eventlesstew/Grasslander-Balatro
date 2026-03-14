@@ -338,8 +338,9 @@ return {
                     ]]
                     "When any other {C:attention}Joker{} is sold",
                     "or destroyed, {C:green}#1# in #2#{} chance",
-                    "to create a {C:dark_edition}Negative{} copy",
-                    "with a random {C:attention}sticker",
+                    "to take {C:attention}sell value{} and create",
+                    "a {C:dark_edition}Negative{} copy with",
+                    "a random {C:attention}sticker",
                 },
             },
             j_grasslanders_frogobonk = {
@@ -640,6 +641,13 @@ return {
                     "{C:attention}Blind{} score"
                 },
             },
+            gl_grasslanderJokers = {
+                name = "Grasslander Jokers",
+                text = {
+                    "Click here to see all of",
+                    "the {C:attention}Grasslander Jokers",
+                },
+            },
             gl_litabelle_contains = {
                 name="n",
                 text={
@@ -657,12 +665,15 @@ return {
         challenge_names = {
             c_grasslanders_gloom = "Gloomy Days",
             c_grasslanders_trizap = "Shock Therapy",
+            c_grasslanders_molty = "Flame Zone",
             c_grasslanders_logobreak = "No Flame Zone",
             c_grasslanders_plingit = "Ping It",
             c_grasslanders_junklake = "Bounty Hunt",
             c_grasslanders_hornetrix = "Wasp Nest",
+            c_grasslanders_mossibug = "Lazy Speedrun",
             c_grasslanders_santile = "Sandcastle",
             c_grasslanders_squid = "Squid Game",
+            c_grasslanders_cocotom = "Judgement Day",
             c_grasslanders_axonitta = "Metathesiophobia",
             c_grasslanders_litabelle = "Night Hunt",
             c_grasslanders_harparachnids = "Harparachnids",
@@ -671,6 +682,7 @@ return {
             c_grasslanders_hyphilliacs = "Cursed Love",
             c_grasslanders_sugamimi = "Sugar Rush",
             c_grasslanders_vacomar = "Scrapyard Shenanigans",
+            c_grasslanders_grasslanders = "Grasslanders Only",
 
             c_grasslanders_gloom_kaizo = "Doom & Gloom",
             c_grasslanders_plingitkaizo = "Pling Rave",
@@ -684,6 +696,10 @@ return {
             },
             ch_c_gl_hyphilliacs = {'Cards {C:attention}debuffed{} by {C:attention}Hyphilliacs{} are {C:attention}destroyed{} instead'},
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
+            ch_c_gl_blind_double = {'{C:red}X2{} base Blind size'},
+            ch_c_gl_grasslandersOnly = {'Can only recieve {C:attention}Grasslander Jokers'},--T:gl_grasslanderJokers,button:gl_showGrasslanderJokers
+            ch_c_gl_antecocotom = {'Recieve {C:attention}Cocotom{} when Boss Blind is defeated'},
+            ch_c_gl_finalscore = {'Ante {C:attention}8{} has {C:red}X10{} base Blind size'},
             --ch_c_gl_doubleblind = {'{C:red}X2{} base Blind size'},
             --ch_c_gl_trizap = {'6 random cards have {C:dark_edition}Negative{} edition'},
         },

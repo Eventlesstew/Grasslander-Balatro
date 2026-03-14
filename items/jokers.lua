@@ -176,7 +176,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "trizap",
     atlas = 'grasslanderJoker',
-    config = { extra = {odds = 2}},
+    config = { extra = {odds = 3}},
     pos = { x = 4, y = 0 },
     soul_pos={ x = 5, y = 0 },
     rarity = 3,
@@ -217,9 +217,15 @@ SMODS.Joker{
             local valid_stickers = {}
 
             for _, v in pairs(SMODS.Stickers) do
-                v:apply(copied_joker,v.key)
-                local result = copied_joker.ability[v.key]
-                v:apply(copied_joker, false)
+                local result
+
+                if copied_joker.ability[v.key] then
+                    result = false
+                else
+                    v:apply(copied_joker,v.key)
+                    result = copied_joker.ability[v.key]
+                    v:apply(copied_joker, false)
+                end
 
                 if result then
                     valid_stickers[#valid_stickers+1] = v
@@ -233,6 +239,10 @@ SMODS.Joker{
             
             copied_joker:add_to_deck()
             G.jokers:emplace(copied_joker)
+
+            if context.selling_card then
+                ease_dollars(-context.card.sell_cost, true)
+            end
         end
         
     end,
@@ -938,7 +948,7 @@ SMODS.Joker{
             end
         end
         if not context.blueprint then
-            if context.buying_card and context.card.ability.set ~= 'Voucher' then
+            if context.buying_card and context.card.ability.set ~= 'Voucher' and context.card.ability.set ~= 'Booster' then
                 card.ability.extra.active = false
             end
             if context.starting_shop then
@@ -1359,7 +1369,7 @@ SMODS.Joker{
     loc_vars = function(self, info_queue, card)
         
         local m_end = {}
-        if G.gl_litabelleArea.cards[1] then
+        if G.gl_litabelleArea and G.gl_litabelleArea.cards[1] then
             local stored_card = G.gl_litabelleArea.cards[1]
             local joker_name = localize{
                 type = 'name_text', 

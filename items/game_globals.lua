@@ -60,6 +60,9 @@ function grasslanders.reset_game_globals(run_start)
                 return true
             end
         end
+        if G.GAME.modifiers.gl_blind_double then
+            G.GAME.starting_params.ante_scaling = 2
+        end
         if G.GAME.modifiers.gl_plingitkaizo then
             G.GAME.starting_params.ante_scaling = 5
         end
@@ -73,6 +76,24 @@ end
 function grasslanders.calculate(self, context)
     if context.after then
         gl_reroll_hands(context.scoring_name)
+    end
+
+    if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
+        if G.GAME.modifiers.gl_antecocotom then
+            if #G.jokers.cards <= G.jokers.config.card_limit then
+                SMODS.add_card {
+                    key = 'j_grasslanders_cocotom',
+                    key_append = 'gl_cocotom_challenge' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+                }
+            end
+        end
+        if G.GAME.modifiers.gl_finalscore then
+            if G.GAME.round_resets.ante + 1 == 8 then
+                G.GAME.starting_params.ante_scaling = 10
+            else
+                G.GAME.starting_params.ante_scaling = 1
+            end
+        end
     end
 end
 
@@ -131,3 +152,26 @@ function Game:start_run(args)
     game_start_run_ref(self, args)
 end
 
+local add_to_pool_ref = SMODS.add_to_pool
+SMODS.add_to_pool = function(prototype_obj, args)
+    if grasslanders.config.clackerblinds >= 3 and prototype_obj.key:sub(1, 2) == "bl" and not prototype_obj.original_mod then
+        return false
+    end
+
+    if 
+        G.GAME.modifiers.gl_grasslandersOnly and 
+        prototype_obj.key:sub(1, 2) == "j_" 
+    then
+        if prototype_obj.key:sub(3, 14) ~= "grasslanders" then
+            return false
+        end
+    end
+
+    return add_to_pool_ref(prototype_obj, args)
+end
+
+--[[
+function G.FUNCS.gl_showGrasslanderJokers(e)
+    G.ACTIVE_MOD_UI = SMODS.Mods["grasslanders"]
+    G.FUNCS.your_collection_jokers(e)
+end]]

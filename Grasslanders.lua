@@ -107,17 +107,6 @@ if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/challenges_gloom.lua"))()
 end
 
--- Disables Base Blinds
-if grasslanders.config.clackerblinds >= 3 then
-    local add_to_pool_ref = SMODS.add_to_pool
-    SMODS.add_to_pool = function(prototype_obj, args)
-        if prototype_obj.key:sub(1, 2) == "bl" and not prototype_obj.original_mod then
-            return false
-        end
-        return add_to_pool_ref(prototype_obj, args)
-    end
-end
-
 -- Loads Jokers
 if grasslanders.config.grasslanderJokers == true then
     assert(SMODS.load_file("items/jokers.lua"))()
