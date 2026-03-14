@@ -674,6 +674,9 @@ return {
 
             c_grasslanders_gloom_kaizo = "Doom & Gloom",
             c_grasslanders_plingitkaizo = "Pling Rave",
+            c_grasslanders_single = "Single Shenanigans",
+            c_grasslanders_double = "Double Time",
+            c_grasslanders_triple = "Triple Trouble",
         },
         v_text = {
             ch_c_gl_vegebonion = {
