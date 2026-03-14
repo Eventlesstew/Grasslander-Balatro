@@ -1189,14 +1189,15 @@ SMODS.Joker{
 
             if card_ref.ability.extra.chosen_card == context.other_card then
                 context.other_card.gl_axonitta = nil
-                card_ref:juice_up()
                 --[[
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        print("These events don't have a guaranteed order")
+                        SMODS.calculate_effect({message = localize('gl_axonitta'), instant = true}, card_ref)
+                        delay(0.9375)
                         return true
                     end
                 }))]]
+                SMODS.calculate_effect({message = localize('gl_axonitta'), instant = true}, card_ref)
                 return {
                     modify = {to_area = G.hand}
                 }
