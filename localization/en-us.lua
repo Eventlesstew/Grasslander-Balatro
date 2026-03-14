@@ -640,6 +640,12 @@ return {
                     "{C:attention}Blind{} score"
                 },
             },
+            gl_litabelle_contains = {
+                name="n",
+                text={
+                    '{C:inactive}(Contains {C:attention}#1#{C:inactive})',
+                },
+            }
         },
     },
     misc = {
@@ -717,12 +723,12 @@ return {
 
             grasslanders_drollfunny = "Drool Joker",
 
+            gl_logobreak = '+1 Coupon Tag',
             gl_mossibug = 'Sleep!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',
             gl_litabelle = 'Granted!',
-            gl_litabelle_contains = '{C:inactive}(Contains {C:attention}#1#{C:inactive})',
 
             gl_deepwalker_collection = '[X1 Base]',
             gl_maw_collection = '[25% Requirement]',

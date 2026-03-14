@@ -277,6 +277,9 @@ SMODS.Joker{
                             return true
                         end)
                     }))
+                    return {
+                        message = localize('gl_logobreak')
+                    }
                 end
             end
         elseif context.setting_blind and not context.blueprint then -- Sets up Logobreak
@@ -1308,7 +1311,6 @@ SMODS.Joker{
         local m_end = {}
         if G.gl_litabelleArea.cards[1] then
             local stored_card = G.gl_litabelleArea.cards[1]
-            print(stored_card.config.center)
             local joker_name = localize{
                 type = 'name_text', 
                 set = stored_card.config.center.set,
@@ -1322,7 +1324,7 @@ SMODS.Joker{
             }
             info_queue[#info_queue + 1] = stored_card.config.center
         end
-        return { vars = {card.ability.extra.dollars}, main_end = m_end}
+        return { vars = {card.ability.extra.dollars}, main_end = m_end[1]}
     end
 }
 
