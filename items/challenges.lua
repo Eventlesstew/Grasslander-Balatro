@@ -267,6 +267,22 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
+    key = 'axonitta',
+    jokers = {
+        { id = 'j_grasslanders_axonitta', eternal = true},
+        { id = 'j_grasslanders_axonitta', eternal = true},
+        { id = 'j_grasslanders_axonitta', eternal = true},
+        { id = 'j_grasslanders_axonitta', eternal = true},
+        { id = 'j_grasslanders_axonitta', eternal = true},
+    },
+    rules = {
+        modifiers = {
+            { id = 'joker_slots', value = 10 },
+        }
+    }
+}
+
+SMODS.Challenge {
     key = 'litabelle',
     jokers = {
         { id = 'j_grasslanders_litabelle', pinned = true, eternal = true },

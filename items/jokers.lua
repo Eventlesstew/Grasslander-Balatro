@@ -66,10 +66,10 @@ SMODS.Joker{
 SMODS.Joker{
     key = "scorpibeat",
     atlas = 'grasslanderJoker',
-    config = { extra = {mult = 18} },
+    config = { extra = {mult = 20} },
     pos = { x = 1, y = 0 },
     rarity = 1,
-    cost = 4,
+    cost = 3,
     blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
@@ -1148,11 +1148,11 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "axonitta",
-    config = { extra = {}},
+    config = { extra = {chosen_card = nil}},
     pos = { x = 2, y = 4 },
     rarity = 2,
     cost = 5,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -1160,6 +1160,49 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
+        if context.after then
+            local card_ref
+            if context.blueprint then
+                card_ref = context.blueprint_card
+                if not card_ref.ability.extra then
+                    card_ref.ability.extra = {}
+                end
+            else
+                card_ref = card
+            end
+
+            for _,v in ipairs(G.play.cards) do
+                if not v.gl_axonitta then
+                    v.gl_axonitta = card
+                    card_ref.ability.extra.chosen_card = v
+                    break
+                end
+            end
+        end
+        if context.stay_flipped and context.from_area == G.play and context.other_card.gl_axonitta then
+            local card_ref
+            if context.blueprint then
+                card_ref = context.blueprint_card
+            else
+                card_ref = card
+            end
+
+            if card_ref.ability.extra.chosen_card == context.other_card then
+                context.other_card.gl_axonitta = nil
+                card_ref:juice_up()
+                --[[
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        print("These events don't have a guaranteed order")
+                        return true
+                    end
+                }))]]
+                return {
+                    modify = {to_area = G.hand}
+                }
+            end
+        end
+        --[[
         if context.joker_main and not context.blueprint then
             G.playing_card = (G.playing_card and G.playing_card + 1) or 1
             local copied_card = copy_card(context.full_hand[1], nil, nil, G.playing_card)
@@ -1188,7 +1231,13 @@ SMODS.Joker{
                 end
             }
         end
+        ]]
     end,
+    remove_from_deck = function(self, card, from_debuff) -- Incase Axie gets destroyed after scoring
+        if card.ability.extra.chosen_card then
+            card.ability.extra.chosen_card.gl_axonitta = nil
+        end
+    end
 }
 
 SMODS.Joker{
@@ -1322,7 +1371,10 @@ SMODS.Joker{
                 nodes = m_end, 
                 vars = {joker_name} 
             }
-            info_queue[#info_queue + 1] = stored_card.config.center
+            local center = G.P_CENTERS[stored_card.config.center.key]
+            local other_center = SMODS.shallow_copy(center)
+            other_center.loc_vars = function(self, info_queue, uncard) return center.loc_vars(self, info_queue, stored_card) end
+            info_queue[#info_queue + 1] = other_center
         end
         return { vars = {card.ability.extra.dollars}, main_end = m_end[1]}
     end
