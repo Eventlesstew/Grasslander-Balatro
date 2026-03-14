@@ -329,16 +329,17 @@ return {
             j_grasslanders_trizap = {
                 name = "Trizap",
                 text = {
+                    --[[
                     "If a card with an {C:attention}edition",
                     "is scored, {C:green}#1# in #2#{} chance",
                     "to add a random {C:attention}edition",
                     "to a random card in deck",
                     "{C:inactive}(Including {C:dark_edition}Negative{C:inactive})"
-                    --[[
+                    ]]
                     "When any other {C:attention}Joker{} is sold",
                     "or destroyed, {C:green}#1# in #2#{} chance",
                     "to create a {C:dark_edition}Negative{} copy",
-                    "with a random {C:attention}sticker",]]
+                    "with a random {C:attention}sticker",
                 },
             },
             j_grasslanders_frogobonk = {
@@ -673,8 +674,8 @@ return {
             },
             ch_c_gl_hyphilliacs = {'Cards {C:attention}debuffed{} by {C:attention}Hyphilliacs{} are {C:attention}destroyed{} instead'},
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
-            ch_c_gl_doubleblind = {'{C:red}X2{} base Blind size'},
-            ch_c_gl_trizap = {'6 random cards have {C:dark_edition}Negative{} edition'},
+            --ch_c_gl_doubleblind = {'{C:red}X2{} base Blind size'},
+            --ch_c_gl_trizap = {'6 random cards have {C:dark_edition}Negative{} edition'},
         },
 
         v_dictionary = {

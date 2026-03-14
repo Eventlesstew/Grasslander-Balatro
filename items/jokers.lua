@@ -188,6 +188,7 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
+        --[[
         if context.individual and context.cardarea == G.play and context.other_card.edition and SMODS.pseudorandom_probability(card, 'gl_trizap', 1, card.ability.extra.odds) then
             local valid_cards = {}
             for _,v in ipairs(G.deck.cards) do
@@ -200,8 +201,8 @@ SMODS.Joker{
                 local edition = SMODS.poll_edition{key = "gl_trizap_edition", guaranteed = true}
                 chosen_card:set_edition(edition)--context.other_card.edition)
             end
-        end
-        --[[
+        end]]
+        
         if 
             context.card and 
             (context.joker_type_destroyed or context.selling_card) 
@@ -233,7 +234,7 @@ SMODS.Joker{
             copied_joker:add_to_deck()
             G.jokers:emplace(copied_joker)
         end
-        ]]
+        
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -1303,13 +1304,15 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        --[[
+        
         local m_end = {}
-        if card.ability.extra.stored_joker then
+        if G.gl_litabelleArea.cards[1] then
+            local stored_card = G.gl_litabelleArea.cards[1]
+            print(stored_card.config.center)
             local joker_name = localize{
                 type = 'name_text', 
-                set = card.ability.extra.stored_joker.set,
-                key = card.ability.extra.stored_joker.key
+                set = stored_card.config.center.set,
+                key = stored_card.config.center.key,
             }
             localize{ 
                 type = 'other', 
@@ -1317,9 +1320,9 @@ SMODS.Joker{
                 nodes = m_end, 
                 vars = {joker_name} 
             }
-            info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.extra.stored_joker]
-        end]]
-        return { vars = {card.ability.extra.dollars}}
+            info_queue[#info_queue + 1] = stored_card.config.center
+        end
+        return { vars = {card.ability.extra.dollars}, main_end = m_end}
     end
 }
 
