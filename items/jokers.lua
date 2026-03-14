@@ -181,7 +181,7 @@ SMODS.Joker{
     soul_pos={ x = 5, y = 0 },
     rarity = 3,
     cost = 10,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
@@ -202,49 +202,49 @@ SMODS.Joker{
                 chosen_card:set_edition(edition)--context.other_card.edition)
             end
         end]]
-        
-        if 
-            context.card and 
-            (context.joker_type_destroyed or context.selling_card) 
-            and context.card.ability.set == 'Joker' and -- Triggers if Jokers are sold or destroyed
-            (context.card ~= card) and -- So Trizap doesn't copy itself even though it can do that.
-            not (context.card.edition and context.card.edition.negative) and -- Prevents Negatives from being copied
-            SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) -- Probability
-        then
-            local copied_joker = copy_card(context.card)
-            copied_joker:set_edition({ negative = true })
+        if not context.blueprint then
+            if 
+                context.card and 
+                (context.joker_type_destroyed or context.selling_card) 
+                and context.card.ability.set == 'Joker' and -- Triggers if Jokers are sold or destroyed
+                (context.card ~= card) and -- So Trizap doesn't copy itself even though it can do that.
+                not (context.card.edition and context.card.edition.negative) and -- Prevents Negatives from being copied
+                SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) -- Probability
+            then
+                local copied_joker = copy_card(context.card)
+                copied_joker:set_edition({ negative = true })
 
-            local valid_stickers = {}
+                local valid_stickers = {}
 
-            for _, v in pairs(SMODS.Stickers) do
-                local result
+                for _, v in pairs(SMODS.Stickers) do
+                    local result
 
-                if copied_joker.ability[v.key] then
-                    result = false
-                else
-                    v:apply(copied_joker,v.key)
-                    result = copied_joker.ability[v.key]
-                    v:apply(copied_joker, false)
+                    if copied_joker.ability[v.key] then
+                        result = false
+                    else
+                        v:apply(copied_joker,v.key)
+                        result = copied_joker.ability[v.key]
+                        v:apply(copied_joker, false)
+                    end
+
+                    if result then
+                        valid_stickers[#valid_stickers+1] = v
+                    end
                 end
 
-                if result then
-                    valid_stickers[#valid_stickers+1] = v
+                local chosen_sticker = pseudorandom_element(valid_stickers, 'gl_trizap_stickers')
+                if chosen_sticker then
+                    copied_joker['set_'..chosen_sticker.key](copied_joker, true)
                 end
-            end
+                
+                copied_joker:add_to_deck()
+                G.jokers:emplace(copied_joker)
 
-            local chosen_sticker = pseudorandom_element(valid_stickers, 'gl_trizap_stickers')
-            if chosen_sticker then
-                copied_joker['set_'..chosen_sticker.key](copied_joker, true)
-            end
-            
-            copied_joker:add_to_deck()
-            G.jokers:emplace(copied_joker)
-
-            if context.selling_card then
-                ease_dollars(-context.card.sell_cost, true)
+                if context.selling_card then
+                    ease_dollars(-context.card.sell_cost, true)
+                end
             end
         end
-        
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -410,10 +410,10 @@ SMODS.Joker{
                         gl_volcarox_erupt = true
                     })
                 end
-                card.ability.extra.active = false
             end
         end
-        if context.gl_volcarox_erupt and #G.deck.cards > 0 then
+        if context.gl_volcarox_erupt and #G.deck.cards > 0 and card.ability.extra.active then
+            card.ability.extra.active = false
             return {
                 message = localize('k_erupt_ex'),
                 colour = G.C.RED,
@@ -460,7 +460,7 @@ SMODS.Joker{
 
                             -- Applies the edition to Lumobonk
                             if card.edition then
-                                _card.set_edition(card.edition.key)
+                                _card:set_edition(card.edition)
                             end
 
                             -- Applies the stickers to Lumobonk
@@ -1337,7 +1337,7 @@ SMODS.Joker{
                     if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
                 end
 
-                if other_joker then
+                if other_joker and not SMODS.is_eternal(other_joker, card) then
                     other_joker.area:remove_card(other_joker)
                     G.gl_litabelleArea:emplace(other_joker)
                     return {

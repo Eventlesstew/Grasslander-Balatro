@@ -689,6 +689,8 @@ return {
             c_grasslanders_single = "Single Shenanigans",
             c_grasslanders_double = "Double Time",
             c_grasslanders_triple = "Triple Trouble",
+            c_grasslanders_quad = "Quad Quartet",
+            c_grasslanders_volcaroxkaizo = "The Entire Deck",
         },
         v_text = {
             ch_c_gl_vegebonion = {
