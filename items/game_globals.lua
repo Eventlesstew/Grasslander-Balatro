@@ -44,6 +44,9 @@ function grasslanders.reset_game_globals(run_start)
         if G.GAME.modifiers.gl_doubleblind then
             G.GAME.starting_params.ante_scaling = 2
         end
+        if G.GAME.modifiers.gl_green_stake then
+            G.GAME.modifiers.scaling = (G.GAME.modifiers.scaling or 1) + 1
+        end
         if G.GAME.modifiers.gl_trizap then
             func = function()
                 for i=1, 6 do

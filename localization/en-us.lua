@@ -699,6 +699,7 @@ return {
             ch_c_gl_hyphilliacs = {'Cards {C:attention}debuffed{} by {C:attention}Hyphilliacs{} are {C:attention}destroyed{} instead'},
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
             ch_c_gl_blind_double = {'{C:red}X2{} base Blind size'},
+            ch_c_gl_green_stake = {"Required score scales faster for each {C:attention}Ante"},
             ch_c_gl_grasslandersOnly = {'Can only recieve {C:attention}Grasslander Jokers'},--T:gl_grasslanderJokers,button:gl_showGrasslanderJokers
             ch_c_gl_antecocotom = {'Recieve {C:attention}Cocotom{} when Boss Blind is defeated'},
             ch_c_gl_finalscore = {'Ante {C:attention}8{} has {C:red}X10{} base Blind size'},

@@ -237,6 +237,7 @@ SMODS.Challenge {
     rules = {
         custom = {
             {id = 'gl_blind_double', value = true},
+            {id = 'gl_green_stake'}
         }
     },
 }
