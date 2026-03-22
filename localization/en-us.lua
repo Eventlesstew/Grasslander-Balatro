@@ -1,17 +1,12 @@
 return {
     descriptions = {
         Back = {
-            b_grasslanders_gloom_deck = {
-                name = "Gloom Deck",
+            b_grasslanders_energy = {
+                name = "Energy Deck",
                 text = {
-                    "All Cards are",
-                    "{C:attention}Gloom{} cards"
+                    "All {C:attention}Blinds{} are",
+                    "{C:attention}Boss Blinds",
                 },
-                unlock = {
-                    "Win a run with",
-                    "{C:attention}#1#{}",
-                    "on any difficulty",
-                }
             },
         },
         Enhanced = {

@@ -1,4 +1,9 @@
-# Ruby Stake - big blind bosses
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -1
+
+# Energy Deck - All Blinds are Boss Blinds
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
@@ -10,4 +15,23 @@ if G.GAME.modifiers.gl_boss_rush then
     G.GAME.round_resets.blind_choices.Big = get_new_boss()
 end
 '''
+match_indent = true
+
+# Energy Deck - smaller blinds don't increase ante
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.blind:get_type() == 'Boss' then"
+position = "at"
+payload = "if G.GAME.blind_on_deck == 'Boss' then"
+match_indent = true
+
+# Energy Deck - smaller showdown blinds don't win
+# Win on any ante above win_ante
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.round_resets.ante == G.GAME.win_ante and G.GAME.blind:get_type() == 'Boss' then"
+position = "at"
+payload = "if G.GAME.round_resets.ante >= G.GAME.win_ante and G.GAME.blind_on_deck == 'Boss' then"
 match_indent = true
