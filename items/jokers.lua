@@ -738,7 +738,7 @@ SMODS.Joker{
         if context.individual and context.cardarea == G.play and context.other_card:get_edition() then
             G.GAME.blind.chips = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
-            local amount - G.GAME.blind.chips
+            local amount = G.GAME.blind.chips
             G.E_MANAGER:add_event(Event({
                 func = (function()
                     G.GAME.blind.chip_text = number_format(amount)
