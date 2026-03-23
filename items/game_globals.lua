@@ -83,7 +83,7 @@ function grasslanders.calculate(self, context)
 
     if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
         if G.GAME.modifiers.gl_antecocotom then
-            if #G.jokers.cards <= G.jokers.config.card_limit then
+            if #G.jokers.cards < G.jokers.config.card_limit then
                 SMODS.add_card {
                     key = 'j_grasslanders_cocotom',
                     key_append = 'gl_cocotom_challenge' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.

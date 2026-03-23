@@ -721,7 +721,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "chonkreep",
     atlas = 'grasslanderJoker',
-    config = { extra = {reduction = 0.05, score_mod = 0, score_display = 0}},
+    config = { extra = {reduction = 0.25}},
     pos = { x = 3, y = 2 },
     rarity = 3,
     cost = 8,
@@ -732,25 +732,22 @@ SMODS.Joker{
      
 
     calculate = function(self,card,context)
-        if context.pre_discard then
-            card.ability.extra.score_mod = G.GAME.blind.chips * card.ability.extra.reduction
+        if context.press_play then
             card.ability.extra.score_display = G.GAME.blind.chips
         end
-        if context.discard then
-            G.GAME.blind.chips = G.GAME.blind.chips - card.ability.extra.score_mod
+        if context.individual and context.cardarea == G.play and context.other_card:get_edition() then
+            G.GAME.blind.chips = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
+            local reduction = G.GAME.blind.chips * card.ability.extra.reduction
+            local amount - G.GAME.blind.chips
             G.E_MANAGER:add_event(Event({
                 func = (function()
-                    if context.other_card == context.full_hand[#context.full_hand] then
-                        card.ability.extra.score_display = G.GAME.blind.chips
-                    else
-                        card.ability.extra.score_display = card.ability.extra.score_display - card.ability.extra.score_mod
-                    end
-                    G.GAME.blind.chip_text = number_format(card.ability.extra.score_display)
+                    G.GAME.blind.chip_text = number_format(amount)
                     return true
                 end)
             }))
+
             return {
-                message = localize{type = 'variable', key='gl_chonkreep', vars={card.ability.extra.score_mod}},
+                message = localize{type = 'variable', key='gl_chonkreep', vars={reduction}},
                 delay = 0.2,
             }
         end
@@ -1384,7 +1381,9 @@ SMODS.Joker{
             }
             local center = G.P_CENTERS[stored_card.config.center.key]
             local other_center = SMODS.shallow_copy(center)
-            other_center.loc_vars = function(self, info_queue, uncard) return center.loc_vars(self, info_queue, stored_card) end
+            if other_center.loc_vars then
+                other_center.loc_vars = function(self, info_queue, uncard) return center.loc_vars(self, info_queue, stored_card) end
+            end
             info_queue[#info_queue + 1] = other_center
         end
         return { vars = {card.ability.extra.dollars}, main_end = m_end[1]}

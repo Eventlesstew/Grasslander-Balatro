@@ -1,25 +1,19 @@
 return {
     descriptions = {
         Back = {
-            b_grasslanders_grass = {
-                name = "Grass Deck",
+            b_grasslanders_organic = {
+                name = "Organic Deck",
                 text = {
-                    'Can only obtain',
-                    "{C:attention}Grasslander Jokers{}"
+                    'Start run with',
+                    "{C:attention,T:v_magic_trick}Magic Trick{}",
+                    "and {C:attention,T:v_illusion}Illusion{}"
                 },
             },
-            b_grasslanders_ground = {
-                name = "Ground Deck",
-                text = {
-                    '{C:red}INCOMPLETE',
-                },
-            },
-            b_grasslanders_sea = {
-                name = "Sea Deck",
+            b_grasslanders_fanciful = {
+                name = "Fanciful Deck",
                 text = {
                     '{C:legendary}Legendary Jokers{} may',
-                    'be obtained through',
-                    'normal means'
+                    'appear normally',
                 },
             },
             b_grasslanders_flame = {
@@ -28,13 +22,12 @@ return {
                     '{C:red}INCOMPLETE',
                 },
             },
-            b_grasslanders_energy = {
-                name = "Energy Deck",
+            b_grasslanders_gloom = {
+                name = "Gloom Deck",
                 text = {
                     "All {C:attention}Blinds{} are",
                     "{C:attention}Boss Blinds",
-                    "Start with",
-                    "extra {C:money}$#1#"
+                    "{C:red}"
                 },
             },
         },
@@ -464,9 +457,7 @@ return {
             j_grasslanders_chonkreep = {
                 name = "Chonkreep",
                 text = {
-                    "Reduces {C:attention}Blind{} requirement",
-                    "by {C:red}X#1#{} for each card",
-                    "discarded",
+                    "WIP",
                 },
             },
 
@@ -784,7 +775,7 @@ return {
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',
-            gl_options_elements = 'Element Decks (EXPERIMENTAL)',
+            gl_options_elements = 'Decks (EXPERIMENTAL)',
 
             gl_options_hornetrix = 'Family Friendly Mode',
             gl_options_clackerblindtitle = 'Clacker Blinds',

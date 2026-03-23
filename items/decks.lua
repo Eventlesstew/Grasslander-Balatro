@@ -6,37 +6,21 @@ SMODS.Atlas({
 })
 
 SMODS.Back {
-    key = "grass",
+    key = "organic",
     atlas = "grasslanderDecks",
     pos = { x = 0, y = 0 },
     unlocked = true,
-    apply = function(self, back)
-        G.GAME.modifiers.gl_grasslandersOnly = true
-    end,
+    config = { vouchers = { 'v_magic_trick', 'v_illusion'} },
 }
 
 SMODS.Back {
-    key = "ground",
-    atlas = "grasslanderDecks",
-    pos = { x = 1, y = 0 },
-    unlocked = true,
-}
-
-SMODS.Back {
-    key = "sea",
+    key = "fanciful",
     atlas = "grasslanderDecks",
     pos = { x = 2, y = 0 },
     unlocked = true,
     apply = function(self, back)
         G.GAME.modifiers.gl_legendary_shop = true
     end,
-}
-
-SMODS.Back {
-    key = "flame",
-    atlas = "grasslanderDecks",
-    pos = { x = 3, y = 0 },
-    unlocked = true,
 }
 
 SMODS.Rarity:take_ownership (
@@ -54,15 +38,15 @@ SMODS.Rarity:take_ownership (
 )
 
 SMODS.Back {
-    key = "energy",
+    key = "gloom",
     atlas = "grasslanderDecks",
     pos = { x = 4, y = 0 },
     unlocked = true,
-    config = { dollars = 25 },
+    config = { ante_scaling = 0.5 },
     apply = function(self, back)
         G.GAME.modifiers.gl_boss_rush = true
     end,
     loc_vars = function(self, info_queue, back)
-        return { vars = { self.config.dollars } }
+        return { vars = { self.config.ante_scaling } }
     end,
 }

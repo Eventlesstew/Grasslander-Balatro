@@ -55,26 +55,6 @@ SMODS.Challenge {
 }
 
 SMODS.Challenge {
-    key = 'volcaroxkaizo',
-    jokers = {
-        { id = 'j_grasslanders_volcarox', eternal = true },
-        { id = 'j_grasslanders_volcarox', eternal = true },
-        { id = 'j_grasslanders_volcarox', eternal = true },
-        { id = 'j_grasslanders_volcarox', eternal = true },
-        { id = 'j_grasslanders_volcarox', eternal = true },
-    },
-    rules = {
-        modifiers = {
-            { id = 'discards',    value = 1 },
-        },
-        custom = {
-            {id = 'gl_plingitkaizo', value = true},
-            { id = 'no_shop_jokers' },
-        }
-    },
-}
-
-SMODS.Challenge {
     key = 'plingit',
     jokers = {
         { id = 'j_grasslanders_concrab', eternal = true },
@@ -464,7 +444,6 @@ SMODS.Challenge {
     }
 }
 
---[[
 SMODS.Challenge {
     key = 'grasslanders',
     rules = {
@@ -472,4 +451,4 @@ SMODS.Challenge {
             {id = 'gl_grasslandersOnly', value = true},
         }
     },
-}]]
+}
