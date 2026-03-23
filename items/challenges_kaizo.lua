@@ -107,27 +107,6 @@ if grasslanders.config.grasslanderJokers then
             },
         },
     }
-
-    SMODS.Challenge {
-        key = 'volcaroxkaizo',
-        button_colour = G.C.GOLD,
-        jokers = {
-            { id = 'j_grasslanders_volcarox', eternal = true },
-            { id = 'j_grasslanders_volcarox', eternal = true },
-            { id = 'j_grasslanders_volcarox', eternal = true },
-            { id = 'j_grasslanders_volcarox', eternal = true },
-            { id = 'j_grasslanders_volcarox', eternal = true },
-        },
-        rules = {
-            modifiers = {
-                { id = 'discards',    value = 1 },
-            },
-            custom = {
-                {id = 'gl_plingitkaizo', value = true},
-                { id = 'no_shop_jokers' },
-            }
-        },
-    }
 end
 
 if grasslanders.config.clackerblinds > 1 then

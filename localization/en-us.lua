@@ -1,11 +1,40 @@
 return {
     descriptions = {
         Back = {
+            b_grasslanders_grass = {
+                name = "Grass Deck",
+                text = {
+                    'Can only obtain',
+                    "{C:attention}Grasslander Jokers{}"
+                },
+            },
+            b_grasslanders_ground = {
+                name = "Ground Deck",
+                text = {
+                    '{C:red}INCOMPLETE',
+                },
+            },
+            b_grasslanders_sea = {
+                name = "Sea Deck",
+                text = {
+                    '{C:legendary}Legendary Jokers{} may',
+                    'be obtained through',
+                    'normal means'
+                },
+            },
+            b_grasslanders_flame = {
+                name = "Flame Deck",
+                text = {
+                    '{C:red}INCOMPLETE',
+                },
+            },
             b_grasslanders_energy = {
                 name = "Energy Deck",
                 text = {
                     "All {C:attention}Blinds{} are",
                     "{C:attention}Boss Blinds",
+                    "Start with",
+                    "extra {C:money}$#1#"
                 },
             },
         },
@@ -695,7 +724,7 @@ return {
             ch_c_gl_plingitkaizo = {'{C:red}X5{} base Blind size'},
             ch_c_gl_blind_double = {'{C:red}X2{} base Blind size'},
             ch_c_gl_green_stake = {"Required score scales faster for each {C:attention}Ante"},
-            ch_c_gl_grasslandersOnly = {'Can only recieve {C:attention}Grasslander Jokers'},--T:gl_grasslanderJokers,button:gl_showGrasslanderJokers
+            ch_c_gl_grasslandersOnly = {'Can only obtain {C:attention}Grasslander Jokers{}'},--T:gl_grasslanderJokers,button:gl_showGrasslanderJokers
             ch_c_gl_antecocotom = {'Recieve {C:attention}Cocotom{} when Boss Blind is defeated'},
             ch_c_gl_finalscore = {'Ante {C:attention}8{} has {C:red}X10{} base Blind size'},
             --ch_c_gl_doubleblind = {'{C:red}X2{} base Blind size'},
@@ -755,6 +784,7 @@ return {
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',
+            gl_options_elements = 'Element Decks (EXPERIMENTAL)',
 
             gl_options_hornetrix = 'Family Friendly Mode',
             gl_options_clackerblindtitle = 'Clacker Blinds',

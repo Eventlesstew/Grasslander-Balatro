@@ -33,6 +33,7 @@ grasslanders.config_tab = function()
             {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
                 create_toggle({label = localize('gl_options_hornetrix'), ref_table = grasslanders.config, ref_value = "althornetrix", callback = function() grasslanders:save_config() end}),
                 create_toggle({label = localize('gl_options_grasslanders'), ref_table = grasslanders.config, ref_value = "grasslanderJokers", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_elements'), ref_table = grasslanders.config, ref_value = "elementDecks", callback = function() grasslanders:save_config() end}),
                 --create_toggle({label = localize('gl_options_funny'), ref_table = grasslanders.config, ref_value = "funny", callback = function() grasslanders:save_config() end}),
                 create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
                     current_option = grasslanders.config.clackerblinds,
@@ -111,6 +112,12 @@ end
 if grasslanders.config.grasslanderJokers == true then
     assert(SMODS.load_file("items/jokers.lua"))()
     assert(SMODS.load_file("items/challenges.lua"))()
+end
+
+-- Loads Decks
+if grasslanders.config.elementDecks then
+    assert(SMODS.load_file("items/decks.lua"))()
+
 end
 
 -- Loads Kaizo Challenges

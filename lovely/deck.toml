@@ -4,6 +4,20 @@ dump_lua = true
 priority = -1
 
 # Energy Deck - All Blinds are Boss Blinds
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "self.GAME.round_resets.blind_choices.Boss = get_new_boss()"
+position = "before"
+payload = '''
+if G.GAME.modifiers.gl_boss_rush then
+    self.GAME.round_resets.blind_choices.Small = get_new_boss()
+    self.GAME.round_resets.blind_choices.Big = get_new_boss()
+end
+'''
+match_indent = true
+
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
