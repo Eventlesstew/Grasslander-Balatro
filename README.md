@@ -1,1 +1,11 @@
-A Balatro Mod that adds over 34 Jokers, 37 Boss Blinds and 15 challenges based on the Grasslanders by Slimester
+A Content Mod for Balatro that adds a variety of new content based on the Grasslanders by Slimester
+
+The new content added includes:
+- 34 new Jokers
+- 32 Boss Blinds
+- 5 Showdown Blinds
+- 20 Challenge Decks
+
+CREDITS:
+Eventlesstew: Coding
+Slimester: Art and Music
