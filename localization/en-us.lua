@@ -27,7 +27,7 @@ return {
                 text = {
                     "All {C:attention}Blinds{} are",
                     "{C:attention}Boss Blinds",
-                    "{C:red}"
+                    "{C:red}X#1#{} base Blind size"
                 },
             },
         },
@@ -457,7 +457,10 @@ return {
             j_grasslanders_chonkreep = {
                 name = "Chonkreep",
                 text = {
-                    "WIP",
+                    "Scored cards with an {C:attention}Edition",
+                    "reduce Blind size by {C:red}X#1#{},",
+                    "but have a {C:green}#2# in #3#{} chance to",
+                    "destroy a random {C:attention}Joker"
                 },
             },
 
@@ -466,8 +469,9 @@ return {
                 text = {
                     "Gains {C:chips}+#3#{} Chips when",
                     "{C:attention}Boss Blind{} is defeated",
-                    "Lose {C:chips}-#2#{} Chips after",
-                    "played non-winning hand",
+                    "Lose {C:chips}-#2#{} Chips when",
+                    "{C:attention}Small Blind{} or {C:attention}Big Blind{}",
+                    "is defeated",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
             },
@@ -762,7 +766,7 @@ return {
             grasslanders_drollfunny = "Drool Joker",
 
             gl_logobreak = '+1 Coupon Tag',
-            gl_mossibug = 'Sleep!',
+            gl_mossibug = 'Yawn!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',

@@ -394,40 +394,33 @@ SMODS.Joker{
     pos = { x = 3, y = 1 },
     rarity = 2,
     cost = 6,
-    blueprint_compat=true,
+    blueprint_compat=false,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
     calculate = function(self,card,context)
         if not context.blueprint then 
-            if context.pre_discard then -- Activates Volcarox, ensures that Blueprint is not affected
+            if context.pre_discard then -- Activates Volcarox
                 card.ability.extra.active = true
             end
 
-            if context.hand_drawn and card.ability.extra.active then
-                if G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
-                    SMODS.calculate_context({
-                        gl_volcarox_erupt = true
-                    })
-                end
+            if context.hand_drawn and card.ability.extra.active and G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
+                card.ability.extra.active = false
+                return {
+                    message = localize('k_erupt_ex'),
+                    colour = G.C.RED,
+                    sound = 'grasslanders_erupt',
+                    func = function() -- This is for timing purposes, everything here runs after the message
+                        SMODS.draw_cards(card.ability.extra.draw)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                save_run()
+                                return true
+                            end
+                        }))
+                    end,
+                }
             end
-        end
-        if context.gl_volcarox_erupt and #G.deck.cards > 0 and card.ability.extra.active then
-            card.ability.extra.active = false
-            return {
-                message = localize('k_erupt_ex'),
-                colour = G.C.RED,
-                sound = 'grasslanders_erupt',
-                func = function() -- This is for timing purposes, everything here runs after the message
-                    SMODS.draw_cards(card.ability.extra.draw)
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            save_run()
-                            return true
-                        end
-                    }))
-                end,
-            }
         end
     end,
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
@@ -721,7 +714,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "chonkreep",
     atlas = 'grasslanderJoker',
-    config = { extra = {reduction = 0.25}},
+    config = { extra = {reduction = 0.25, odds = 4}},
     pos = { x = 3, y = 2 },
     rarity = 3,
     cost = 8,
@@ -736,31 +729,51 @@ SMODS.Joker{
             card.ability.extra.score_display = G.GAME.blind.chips
         end
         if context.individual and context.cardarea == G.play and context.other_card:get_edition() then
-            G.GAME.blind.chips = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
-            local amount = G.GAME.blind.chips
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    G.GAME.blind.chip_text = number_format(amount)
-                    return true
-                end)
-            }))
+            if SMODS.pseudorandom_probability(card, 'gl_chonkreep', 1, card.ability.extra.odds) then
+                local destructable_jokers = {}
+                for i = 1, #G.jokers.cards do
+                    if G.jokers.cards[i] ~= card and not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+                        destructable_jokers[#destructable_jokers + 1] =
+                            G.jokers.cards[i]
+                    end
+                end
+                local joker_to_destroy = pseudorandom_element(destructable_jokers, 'vremade_madness')
 
+                if joker_to_destroy then
+                    joker_to_destroy.getting_sliced = true
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            (context.blueprint_card or card):juice_up(0.8, 0.8)
+                            joker_to_destroy:start_dissolve({ G.C.GOLD }, nil, 1.6)
+                            return true
+                        end
+                    }))
+                end
+            end
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.GAME.blind.chips = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    return true
+                end
+            }))
             return {
                 message = localize{type = 'variable', key='gl_chonkreep', vars={reduction}},
-                delay = 0.2,
+                message_card = card,
             }
         end
     end,
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.reduction}, key = self.key }
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "gl_chonkreep") -- Gives the chances for Logobreak. Modified by Oops All Sixes
+        return { vars = {card.ability.extra.reduction,numerator,denominator}}
     end
 }
 
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_penalty = 10, chip_mod = 100}},
+    config = { extra = {chips = 0, chip_penalty = 50, chip_mod = 100}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 6,
@@ -772,29 +785,24 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.CHIPS
-                }
-            end
-
-            if 
-                context.final_scoring_step and 
-                G.GAME.chips + SMODS.calculate_round_score() < G.GAME.blind.chips and 
-                card.ability.extra.chips > 0 
-            then
-                if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
-                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+            if context.end_of_round and context.game_over == false and context.main_eval then
+                if context.beat_boss then
+                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                    return {
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.CHIPS
+                    }
                 else
-                    card.ability.extra.chips = 0
+                    if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                        card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
+                    else
+                        card.ability.extra.chips = 0
+                    end
+                    return {
+                        message = localize('gl_mossibug'),
+                        colour = G.C.CHIPS
+                    }
                 end
-
-                return {
-                    message = localize('gl_mossibug'),
-                    colour = G.C.CHIPS
-                }
             end
         end
         if context.joker_main then
