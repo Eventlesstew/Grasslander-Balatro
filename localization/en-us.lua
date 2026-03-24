@@ -509,8 +509,9 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "First played card returns",
-                    "to {C:attention}hand{} after scoring",
+                    "Returns leftmost played",
+                    "card to {C:attention}hand{} after",
+                    "hand is scored",
                 },
             },
             j_grasslanders_wisplasm = {
