@@ -774,7 +774,7 @@ return {
             gl_litabelle = 'Granted!',
 
             gl_deepwalker_collection = '[X1 Base]',
-            gl_maw_collection = '[25% Requirement]',
+            gl_maw_collection = '[X0.25 Requirement]',
             gl_fungalic = 'Hand contains cards previously played this Ante',
             gl_jawtrap = 'Playing this hand will destroy a random Joker!',
 

@@ -16,7 +16,7 @@ SMODS.Back {
 SMODS.Back {
     key = "fanciful",
     atlas = "grasslanderDecks",
-    pos = { x = 2, y = 0 },
+    pos = { x = 1, y = 0 },
     unlocked = true,
     apply = function(self, back)
         G.GAME.modifiers.gl_legendary_shop = true
@@ -40,7 +40,7 @@ SMODS.Rarity:take_ownership (
 SMODS.Back {
     key = "gloom",
     atlas = "grasslanderDecks",
-    pos = { x = 4, y = 0 },
+    pos = { x = 2, y = 0 },
     unlocked = true,
     config = { ante_scaling = 0.5 },
     apply = function(self, back)

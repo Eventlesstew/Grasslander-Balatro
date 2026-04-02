@@ -389,7 +389,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.modify_hand then
-                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                blind.triggered = true
                 mult = 1
                 update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
             end
@@ -486,6 +486,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.after then
+                blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     trigger = 'immediate',
                     func = function()
@@ -552,6 +553,7 @@ SMODS.Blind {
                 blind.prepped = true
             end
             if blind.prepped and context.hand_drawn and not context.first_hand_drawn then
+                
                 shakeBlind()
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -654,7 +656,7 @@ SMODS.Blind {
                         return true
                     end
                 }))
-                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     trigger = 'immediate',
                     func = (function()
@@ -1021,6 +1023,7 @@ SMODS.Blind {
         if not blind.disabled then
             if context.before then
                 blind.prepped = true
+                blind.triggered = true
             end
             if context.drawing_cards and blind.prepped then
                 blind.prepped = nil
@@ -1047,6 +1050,7 @@ SMODS.Blind {
         if not blind.disabled then
             if context.drawing_cards and (G.GAME.current_round.hands_played ~= 0 or G.GAME.current_round.discards_used ~= 0) then
                 if (context.amount >= 4) then
+                    blind.triggered = true
                     return {
                         cards_to_draw = 4
                     }
@@ -1095,15 +1099,13 @@ SMODS.Sound {
     select_music_track = function() 
         local valid = nil
         if G.GAME.blind then
-            if G.GAME.blind.config.blind.key == 'bl_grasslanders_twinckler' then
-                valid = true
-            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_maw' then
-                valid = true
-            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_persecutor' then
-                valid = true
-            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_radiochomper' then
-                valid = true
-            elseif G.GAME.blind.config.blind.key == 'bl_grasslanders_matriarch' then
+            if 
+                G.GAME.blind.config.blind.key == 'bl_grasslanders_twinckler' or
+                G.GAME.blind.config.blind.key == 'bl_grasslanders_maw' or
+                G.GAME.blind.config.blind.key == 'bl_grasslanders_persecutor' or 
+                G.GAME.blind.config.blind.key == 'bl_grasslanders_radiochomper' or
+                G.GAME.blind.config.blind.key == 'bl_grasslanders_matriarch'
+            then
                 valid = true
             end
         end
@@ -1176,7 +1178,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.after and SMODS.calculate_round_score() < (get_blind_amount(G.GAME.round_resets.ante) * 0.5) then
-                blind.triggered = true -- This won't trigger Matador in this context due to a Vanilla bug (a workaround is setting it in context.debuff_hand)
+                blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         G.GAME.chips = 0
@@ -1354,6 +1356,7 @@ SMODS.Blind {
     calculate = function(self, blind, context)
         if not blind.disabled then
             if context.after then
+                blind.triggered = true
                 local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
                 G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                 _card.playing_card = G.playing_card
@@ -1398,6 +1401,7 @@ SMODS.Blind {
                     }))
                 end
                 if cards > 0 then
+                    blind.triggered = true
                     shakeBlind()
                     delay(0.8)
                 end
@@ -1437,6 +1441,7 @@ SMODS.Blind {
                     end
                 end
                 if faces > 0 then
+                    blind.triggered = true
                     shakeBlind()
                     delay(0.4)
                 end
@@ -1471,6 +1476,7 @@ SMODS.Blind {
                     count = count + 1
                 end
                 if count > 0 then
+                    blind.triggered = true
                     shakeBlind()
                 end
             end
@@ -1530,6 +1536,7 @@ SMODS.Blind {
                 else
                     grasslanders.alert_debuff(self, false)
                     if faces > 0 then
+                        blind.triggered = true
                         shakeBlind()
                         delay(0.4)
                     end
