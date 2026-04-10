@@ -3,7 +3,67 @@ version = "1.0.0"
 dump_lua = true
 priority = -1
 
+# -------------------- 
+# Fanciful Deck
+# -------------------- 
+
+# Randomise if created joker should be a legendary joker or not
+# get_current_pool()
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if _type == 'Joker' then 
+'''
+position = "before"
+match_indent = true
+payload = '''
+if G.GAME.modifiers.gl_legendary_shop ~= nil and type(G.GAME.modifiers.gl_legendary_shop) == "number" and _type == 'Joker' then
+    local rary = _rarity or pseudorandom('rarity'..G.GAME.round_resets.ante..(_append or '')) 
+    if type(rary) == "number" and (_rarity == nil or _rarity == 4 or _rarity == "Legendary") then
+        print(rary)
+        rary = (rary > (1 - G.GAME.modifiers.gl_legendary_shop) and 4) or 1 
+        if rary ~= 1 then
+            _legendary = true
+        end
+    end
+end
+'''
+
+# Fanciful Deck
+# Make legendary jokers in the shop show their description
+# Card:generate_UIBox_ability_table()
+[[patches]]
+[patches.regex]
+target = "card.lua"
+pattern = '''
+(?<indent>[\t ]*)if self\.config\.center\.unlocked == false and not self\.bypass_lock (?<post>.*)
+'''
+position = "at"
+line_prepend = '$indent'
+payload = '''
+if self.config.center.unlocked == false and not self.bypass_lock and not self.bypass_discovery_ui $post
+'''
+
+# Fanciful Deck
+# Unlocks card if legendary joker is obtained in any way
+# (In Vanilla, only unlocks via Soul)
+# Card:add_to_deck()
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "function Card:add_to_deck(*"
+position = "after"
+match_indent = true
+payload = '''
+    if not self.config.center.unlocked and self.config.center.rarity == 4 then
+        unlock_card(self.config.center)
+    end
+'''
+
+# -------------------- 
 # Energy Deck - All Blinds are Boss Blinds
+# -------------------- 
 
 [[patches]]
 [patches.pattern]
@@ -40,7 +100,7 @@ position = "at"
 payload = "if G.GAME.blind_on_deck == 'Boss' then"
 match_indent = true
 
-# Energy Deck - smaller showdown blinds don't win
+# Gloom Deck - smaller showdown blinds don't win
 # Win on any ante above win_ante
 [[patches]]
 [patches.pattern]

@@ -19,23 +19,25 @@ SMODS.Back {
     pos = { x = 1, y = 0 },
     unlocked = true,
     apply = function(self, back)
-        G.GAME.modifiers.gl_legendary_shop = true
+        G.GAME.modifiers.gl_legendary_shop = 0.01
     end,
 }
 
+--[[
 SMODS.Rarity:take_ownership (
-    'Legendary',    
+    "Legendary",    
     {
+        weight = 1,
         get_weight = function(self, weight, object_type)
             if G.GAME.modifiers.gl_legendary_shop then
-                return 0.01
-            else
                 return weight
+            else
+                return 0
             end
         end,
     },
     true
-)
+)]]
 
 SMODS.Back {
     key = "gloom",
