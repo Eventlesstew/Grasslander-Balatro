@@ -683,7 +683,7 @@ return {
             -- that the key 'a_xmult' will use provided values from vars={} in that order to replace #1#, #2# etc... in the localization file
 
         challenge_names = {
-            c_grasslanders_gloom = "Gloomy Days",
+            c_grasslanders_gloom = "Darker, Deeper",
             c_grasslanders_trizap = "Shock Therapy",
             c_grasslanders_molty = "Flame Zone",
             c_grasslanders_logobreak = "No Flame Zone",
