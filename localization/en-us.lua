@@ -185,8 +185,8 @@ return {
             bl_grasslanders_wallkerip = {
                 name = "The Wallkerip",
                 text = {
-                    "Cannot play hands with",
-                    "3 different suits"
+                    "All played cards become Gloom if",
+                    "hand contains 3 different suits"
                 },
             },
             bl_grasslanders_clacteriophage = {
@@ -468,10 +468,9 @@ return {
                 name = "Mossibug",
                 text = {
                     "Gains {C:chips}+#3#{} Chips when",
-                    "{C:attention}Boss Blind{} is defeated",
+                    "{C:attention}Ante{} is changed",
                     "Lose {C:chips}-#2#{} Chips when",
-                    "{C:attention}Small Blind{} or {C:attention}Big Blind{}",
-                    "is defeated",
+                    "{C:attention}Blind{} is selected",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
             },
@@ -777,10 +776,11 @@ return {
             gl_maw_collection = '[X0.25 Requirement]',
             gl_fungalic = 'Hand contains cards previously played this Ante',
             gl_jawtrap = 'Playing this hand will destroy a random Joker!',
+            gl_wallkerip = "Hand contains 3 different suits!",
 
             gl_options_apply = "Apply Changes",
             gl_options_grasslanders = 'Grasslander Jokers',
-            gl_options_elements = 'Decks (EXPERIMENTAL)',
+            gl_options_elements = 'Decks',
 
             gl_options_hornetrix = 'Family Friendly Mode',
             gl_options_clackerblindtitle = 'Clacker Blinds',

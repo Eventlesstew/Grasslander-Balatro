@@ -66,6 +66,39 @@ SMODS.Atlas({
 })
 
 SMODS.Blind {
+    key = 'clacker',
+    atlas = 'clackerblind',
+    unlocked = true,
+          
+    pos = {x = 0, y = 0},
+    dollars = 5,
+    mult = 2,
+    boss = {min = 1},
+    boss_colour = HEX("39405b"),
+    calculate = function(self, blind, context)
+        if not blind.disabled then
+            if context.after then
+                blind.triggered = true
+                local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
+                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                _card.playing_card = G.playing_card
+                table.insert(G.playing_cards, _card)
+
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.hand:emplace(_card)
+                        _card:start_materialize()
+                        G.hand:sort()
+                        SMODS.juice_up_blind()
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+}
+
+SMODS.Blind {
     key = 'biter',
     atlas = 'clackerblind',
     unlocked = true,
@@ -676,41 +709,6 @@ SMODS.Blind {
                     end)
                 }))
                 delay(0.4)
-            end
-        end
-    end,
-}
-
-SMODS.Blind {
-    key = 'wallkerip',
-    atlas = 'clackerblind',
-    unlocked = true,
-          
-    pos = {x = 0, y = 20},
-    dollars = 5,
-    mult = 2,
-    boss = {min = 3},
-    boss_colour = HEX("543770"),
-    calculate = function(self, blind, context)
-        if not blind.disabled then
-            if context.debuff_hand then
-                local valid_suits = {}
-                for k, scored_card in pairs(context.full_hand) do
-
-                    -- This has to be pairs specifically as it is an unindexed table.
-                    for _, scored_suit in pairs(SMODS.Suits) do
-                        if scored_card:is_suit(scored_suit.key) then
-                            valid_suits[scored_suit] = true
-                        end
-                    end
-                end
-                
-                -- Check if the hand is debuffed.
-                local suit_count = 0
-                for _, v in pairs(valid_suits) do
-                    suit_count = suit_count + 1
-                end
-                return {debuff = (suit_count >= 3)}
             end
         end
     end,
@@ -1344,33 +1342,60 @@ SMODS.Blind {
 }
 
 SMODS.Blind {
-    key = 'clacker',
+    key = 'wallkerip',
     atlas = 'clackerblind',
     unlocked = true,
           
-    pos = {x = 0, y = 0},
+    pos = {x = 0, y = 20},
     dollars = 5,
     mult = 2,
-    boss = {min = 1},
-    boss_colour = HEX("39405b"),
+    boss = {min = 3},
+    boss_colour = HEX("543770"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after then
-                blind.triggered = true
-                local _card = SMODS.create_card {set = "Base", enhancement = "m_grasslanders_gloom", area = G.discard}
-                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                _card.playing_card = G.playing_card
-                table.insert(G.playing_cards, _card)
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        G.hand:emplace(_card)
-                        _card:start_materialize()
-                        G.hand:sort()
-                        SMODS.juice_up_blind()
-                        return true
+            if context.debuff_hand then
+                local valid_suits = {}
+                for k, scored_card in pairs(context.full_hand) do
+                    -- This has to be pairs specifically as it is an unindexed table.
+                    for _, scored_suit in pairs(SMODS.Suits) do
+                        if scored_card:is_suit(scored_suit.key) then
+                            valid_suits[scored_suit] = true
+                        end
                     end
-                }))
+                end
+                
+                -- Check if the hand is debuffed.
+                local suit_count = 0
+                for _, v in pairs(valid_suits) do
+                    suit_count = suit_count + 1
+                end
+                local debuff_hand = suit_count >= 3
+
+                if context.check then
+                    if debuff_hand then
+                        grasslanders.alert_debuff(self, true, localize('gl_wallkerip'))
+                    else
+                        grasslanders.alert_debuff(self, false)
+                    end
+                else
+                    grasslanders.alert_debuff(self, false)
+                    if debuff_hand then
+                        for _,v in ipairs(context.full_hand) do
+                            v:set_ability('m_grasslanders_gloom', nil, false)
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    v:juice_up()
+                                    return true
+                                end
+                            }))
+                        end
+                        if #context.full_hand > 0 then
+                            blind.triggered = true
+                            shakeBlind()
+                            delay(0.4)
+                        end
+                    end
+                end
             end
         end
     end,
@@ -1510,7 +1535,7 @@ SMODS.Blind {
                 end
             end
             if (context.debuff_hand and not context.check) or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND) then
-                local check = context.scoring_name and G.STATE == G.STATES.SELECTING_HAND
+                local check = context.check or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND)
 
                 local faces = 0
                 for _, scored_card in ipairs(context.scoring_hand) do

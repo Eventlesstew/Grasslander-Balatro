@@ -539,7 +539,6 @@ SMODS.Joker{
                 card.ability.extra.active = true
                 card.ability.extra.count = 0
             end
-
             if 
                 context.discard and
                 card.ability.extra.active and 
@@ -563,13 +562,8 @@ SMODS.Joker{
                             for _, v in ipairs(target_cards) do
                                 G.E_MANAGER:add_event(Event({
                                     func = function()
-                                        draw_card(v, G.hand)
-                                        G.E_MANAGER:add_event(Event({
-                                            func = function()
-                                                SMODS.destroy_cards(v, nil, true)
-                                                return true
-                                            end
-                                        }))
+                                        v.area:remove_card(v)
+                                        SMODS.destroy_cards(v, nil, true)
                                         return true
                                     end
                                 }))
@@ -780,7 +774,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "mossibug",
     atlas = 'grasslanderJoker',
-    config = { extra = {chips = 0, chip_penalty = 50, chip_mod = 100}},
+    config = { extra = {chips = 0, chip_penalty = 50, chip_mod = 150}},
     pos = { x = 1, y = 3 },
     rarity = 1,
     cost = 6,
@@ -792,24 +786,23 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if not context.blueprint then
-            if context.end_of_round and context.game_over == false and context.main_eval then
-                if context.beat_boss then
-                    card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-                    return {
-                        message = localize('k_upgrade_ex'),
-                        colour = G.C.CHIPS
-                    }
+            if context.modify_ante then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.CHIPS
+                }
+            end
+            if context.setting_blind then
+                if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
+                    card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
                 else
-                    if card.ability.extra.chips - card.ability.extra.chip_penalty > 0 then
-                        card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_penalty
-                    else
-                        card.ability.extra.chips = 0
-                    end
-                    return {
-                        message = localize('gl_mossibug'),
-                        colour = G.C.CHIPS
-                    }
+                    card.ability.extra.chips = 0
                 end
+                return {
+                    message = localize('gl_mossibug'),
+                    colour = G.C.CHIPS
+                }
             end
         end
         if context.joker_main then
