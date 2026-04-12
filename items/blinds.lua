@@ -93,6 +93,12 @@ SMODS.Blind {
                         return true
                     end
                 }))
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        SMODS.calculate_context({ playing_card_added = true, cards = { _card } })
+                        return true
+                    end
+                }))
             end
         end
     end,
@@ -565,8 +571,8 @@ SMODS.Blind {
         end
     end,
     disable = function(self)
-        ease_hands_played(G.GAME.blind.hands_sub)
-        ease_discard(G.GAME.blind.discards_sub)
+        ease_hands_played(1)
+        ease_discard(1)
     end,
 }
 
@@ -590,7 +596,7 @@ SMODS.Blind {
                 shakeBlind()
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        G.GAME.blind.chips = G.GAME.blind.chips + get_blind_amount(G.GAME.round_resets.ante)
+                        G.GAME.blind.chips = G.GAME.blind.chips + (get_blind_amount(G.GAME.round_resets.ante))
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                         return true
                     end
@@ -1175,7 +1181,7 @@ SMODS.Blind {
     boss_colour = HEX("a33829"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after and SMODS.calculate_round_score() < (get_blind_amount(G.GAME.round_resets.ante) * 0.5) then
+            if context.after and SMODS.calculate_round_score() < (G.GAME.blind.chips * 0.25) then
                 blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -1189,7 +1195,7 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {get_blind_amount(G.GAME.round_resets.ante) * 0.5} }
+        return { vars = {G.GAME.blind.chips * 0.25} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_maw_collection')} }
@@ -1316,7 +1322,7 @@ SMODS.Blind {
           
     pos = {x = 0, y = 35},
     dollars = 8,
-    mult = 1,
+    mult = 2,
     boss = {showdown = true},
     boss_colour = HEX("97467b"),
     calculate = function(self, blind, context)

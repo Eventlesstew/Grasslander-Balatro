@@ -8,27 +8,31 @@ return {
                     "{C:attention,T:v_magic_trick}Magic Trick{}",
                     "and {C:attention,T:v_illusion}Illusion{}"
                 },
+                unlock = {
+                    "Have at least {C:attention}80",
+                    "{C:attention}playing cards{} in your {C:attention}deck"
+                }
             },
             b_grasslanders_fanciful = {
                 name = "Fanciful Deck",
                 text = {
-                    '{C:legendary}Legendary Jokers{} may',
-                    'appear normally',
+                    '{C:legendary,E:1}Legendary{} Jokers are no',
+                    'longer exclusive to {C:spectral,T:c_soul}The Soul',
                 },
-            },
-            b_grasslanders_flame = {
-                name = "Flame Deck",
-                text = {
-                    '{C:red}INCOMPLETE',
-                },
+                unlock = {
+                    "{E:1,s:1.3}?????",
+                }
             },
             b_grasslanders_gloom = {
                 name = "Gloom Deck",
                 text = {
-                    "All {C:attention}Blinds{} are",
-                    "{C:attention}Boss Blinds",
+                    "All {C:attention}Blinds{} are {C:attention}Boss Blinds",
                     "{C:red}X#1#{} base Blind size"
                 },
+                unlock = {
+                    "Discover every",
+                    "{C:attention}Boss Blind"
+                }
             },
         },
         Enhanced = {
@@ -413,8 +417,8 @@ return {
             j_grasslanders_logobreak = {
                 name = "Logobreak",
                 text = {
-                    "{C:green}#1# in #2#{} chance to",
-                    "create a {C:attention}Coupon Tag",
+                    --"{C:green}#1# in #2#{} chance to",
+                    "Creates a {C:attention}Coupon Tag",
                     "If final hand of round",
                     "is not on {C:attention}fire{},",
                 },
@@ -592,8 +596,8 @@ return {
                 text = {
                     "Steal {C:money}$#1#{} of {C:attention}sell value{} from",
                     "every other {C:attention}Joker{} and {C:attention}Consumable{}",
-                    "at end of round and add taken",
-                    "sell value to {C:mult}Mult{}",
+                    "at end of round and add {C:attention}double{}",
+                    "of taken sell value to {C:mult}Mult{}",
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
                 },
             },
@@ -772,8 +776,8 @@ return {
             gl_cocotom_free = 'Free!',
             gl_litabelle = 'Granted!',
 
-            gl_deepwalker_collection = '[X1 Base]',
-            gl_maw_collection = '[X0.25 Requirement]',
+            gl_deepwalker_collection = '[1X Base]',
+            gl_maw_collection = '[0.25X Requirement]',
             gl_fungalic = 'Hand contains cards previously played this Ante',
             gl_jawtrap = 'Playing this hand will destroy a random Joker!',
             gl_wallkerip = "Hand contains 3 different suits!",

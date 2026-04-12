@@ -114,6 +114,22 @@ function get_X_same(num, hand, or_more)
     vals[#vals+1] = {}
     for i=#hand, 1, -1 do
         local curr_ranks = get_ids(hand[i])
+
+        local rank = curr_ranks[1]
+        for _, r in ipairs(curr_ranks) do
+            if r > rank then
+                rank = r
+            end
+        end
+        
+        local curr_group = vals[rank]
+        if not curr_group then
+            curr_group = {}
+            vals[rank] = curr_group
+        end
+        curr_group[#curr_group+1] = hand[i]
+
+        --[[
         for _, rank in ipairs(curr_ranks) do
             local curr_group = vals[rank]
             if not curr_group then
@@ -122,6 +138,7 @@ function get_X_same(num, hand, or_more)
             end
             curr_group[#curr_group+1] = hand[i]
         end
+        ]]
     end
     local ret = {}
     for i = #vals, 1, -1 do

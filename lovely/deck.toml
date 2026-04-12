@@ -21,7 +21,6 @@ payload = '''
 if G.GAME.modifiers.gl_legendary_shop ~= nil and type(G.GAME.modifiers.gl_legendary_shop) == "number" and _type == 'Joker' then
     local rary = _rarity or pseudorandom('rarity'..G.GAME.round_resets.ante..(_append or '')) 
     if type(rary) == "number" and (_rarity == nil or _rarity == 4 or _rarity == "Legendary") then
-        print(rary)
         rary = (rary > (1 - G.GAME.modifiers.gl_legendary_shop) and 4) or 1 
         if rary ~= 1 then
             _legendary = true

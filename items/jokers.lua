@@ -205,8 +205,8 @@ SMODS.Joker{
         if not context.blueprint then
             if 
                 context.card and 
-                (context.joker_type_destroyed or context.selling_card) 
-                and context.card.ability.set == 'Joker' and -- Triggers if Jokers are sold or destroyed
+                (context.joker_type_destroyed or context.selling_card) -- Triggers if Jokers are sold or destroyed
+                and context.card.ability.set == 'Joker' and -- Specific card must be a Joker
                 (context.card ~= card) and -- So Trizap doesn't copy itself even though it can do that.
                 not (context.card.edition and context.card.edition.negative) and -- Prevents Negatives from being copied
                 SMODS.pseudorandom_probability(card, "gl_trizap", 1, card.ability.extra.odds) -- Probability
@@ -258,7 +258,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "logobreak",
     atlas = 'grasslanderJoker',
-    config = { extra = {active = false, odds = 2, tag = 'tag_coupon'}},
+    config = { extra = {active = false, tag = 'tag_coupon'}},
     pos = { x = 0, y = 1 },
     rarity = 1,
     cost = 5,
@@ -278,19 +278,17 @@ SMODS.Joker{
                 end
             end
             if context.end_of_round and context.game_over == false and context.main_eval then -- Gives the Coupon Tag if active
-                if SMODS.pseudorandom_probability(card, "gl_logobreak", 1, card.ability.extra.odds) then -- Random chance
-                    G.E_MANAGER:add_event(Event({ -- Code to give the Coupon Tag
-                        func = (function()
-                            add_tag(Tag(card.ability.extra.tag))
-                            play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-                            play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-                            return true
-                        end)
-                    }))
-                    return {
-                        message = localize('gl_logobreak')
-                    }
-                end
+                G.E_MANAGER:add_event(Event({ -- Code to give the Coupon Tag
+                    func = (function()
+                        add_tag(Tag(card.ability.extra.tag))
+                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                        return true
+                    end)
+                }))
+                return {
+                    message = localize('gl_logobreak')
+                }
             end
         elseif context.setting_blind and not context.blueprint then -- Sets up Logobreak
             card.ability.extra.active = true
@@ -298,9 +296,9 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
+        --local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
         info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
-        return { vars = {numerator,denominator}, key = self.key }
+        return { vars = {}, key = self.key }
     end
 }
 
@@ -390,22 +388,25 @@ SMODS.Sound ({
 SMODS.Joker{
     key = "volcarox",
     atlas = 'grasslanderJoker',  
-    config = { extra = {draw = 10, active = false, d_remaining = 0} },
+    config = { extra = {draw = 10, active = true, d_remaining = 0} },
     pos = { x = 3, y = 1 },
     rarity = 2,
     cost = 6,
-    blueprint_compat=false,
+    blueprint_compat=true,
     eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
     calculate = function(self,card,context)
-        if not context.blueprint then 
-            if context.pre_discard then -- Activates Volcarox
-                card.ability.extra.active = true
-            end
-
+        --if not context.blueprint then 
             if context.hand_drawn and card.ability.extra.active and G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
-                card.ability.extra.active = false
+                if not context.blueprint then 
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            card.ability.extra.active = false
+                            return true
+                        end
+                    }))
+                end
                 return {
                     message = localize('k_erupt_ex'),
                     colour = G.C.RED,
@@ -421,7 +422,7 @@ SMODS.Joker{
                     end,
                 }
             end
-        end
+        --end
     end,
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
         return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
@@ -724,7 +725,7 @@ SMODS.Joker{
         end
         if context.individual and context.cardarea == G.play and context.other_card:get_edition() then
             local joker_to_destroy = nil
-            if SMODS.pseudorandom_probability(card, 'gl_chonkreep', 1, card.ability.extra.odds) then
+            if not context.blueprint and SMODS.pseudorandom_probability(card, 'gl_chonkreep', 1, card.ability.extra.odds) then
                 local destructable_jokers = {}
                 for i = 1, #G.jokers.cards do
                     if G.jokers.cards[i] ~= card and not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
@@ -1652,7 +1653,7 @@ SMODS.Joker:take_ownership(
 
 SMODS.Joker{
     key = "vegebonion",
-    config = { extra = {sell_value = 1, mult = 0, mult_mod = 1}},
+    config = { extra = {sell_value = 1, mult = 0, mult_mod = 2}},
     pos = { x = 0, y = 7 },
     rarity = 3,
     cost = 7,
