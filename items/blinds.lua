@@ -574,6 +574,12 @@ SMODS.Blind {
         ease_hands_played(1)
         ease_discard(1)
     end,
+    defeat = function(self)
+        if not blind.disabled then
+            ease_hands_played(1)
+            ease_discard(1)
+        end
+    end,
 }
 
 SMODS.Blind {
