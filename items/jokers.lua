@@ -397,32 +397,34 @@ SMODS.Joker{
     perishable_compat=true,
     unlocked = true,
     calculate = function(self,card,context)
-        --if not context.blueprint then 
-            if context.hand_drawn and card.ability.extra.active and G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
-                if not context.blueprint then 
+        if not context.blueprint and (context.setting_blind or context.pre_discard) then
+            card.ability.extra.active = true
+        end
+        if context.hand_drawn and card.ability.extra.active and G.GAME.current_round.discards_left <= card.ability.extra.d_remaining then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    SMODS.calculate_context({gl_volcarox = true})
+                    return true
+                end
+            }))
+            return {
+                message = localize('k_erupt_ex'),
+                colour = G.C.RED,
+                sound = 'grasslanders_erupt',
+                func = function() -- This is for timing purposes, everything here runs after the message
+                    SMODS.draw_cards(card.ability.extra.draw)
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            card.ability.extra.active = false
+                            save_run()
                             return true
                         end
                     }))
-                end
-                return {
-                    message = localize('k_erupt_ex'),
-                    colour = G.C.RED,
-                    sound = 'grasslanders_erupt',
-                    func = function() -- This is for timing purposes, everything here runs after the message
-                        SMODS.draw_cards(card.ability.extra.draw)
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                save_run()
-                                return true
-                            end
-                        }))
-                    end,
-                }
-            end
-        --end
+                end,
+            }
+        end
+        if context.gl_volcarox and card.ability.extra.active then
+            card.ability.extra.active = false
+        end
     end,
     loc_vars = function(self, info_queue, card)          --defines variables to use in the UI. you can use #1# for example to show the chips variable
         return { vars = {card.ability.extra.draw, card.ability.extra.d_remaining}, key = self.key }
