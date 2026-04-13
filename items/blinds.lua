@@ -19,6 +19,10 @@ function shakeBlind(self)
     }))
 end
 
+function getBlindScore(self)
+    return get_blind_amount(G.GAME.round_resets.ante) * self.mult * G.GAME.starting_params.ante_scaling
+end
+
 SMODS.Atlas({
     key = "gloom",
     path = "gloom.png",
@@ -589,7 +593,7 @@ SMODS.Blind {
           
     pos = {x = 0, y = 16},
     dollars = 5,
-    mult = 2,
+    mult = 5,
     boss = {min = 2},
     boss_colour = HEX("39545b"),
     calculate = function(self, blind, context)
@@ -602,7 +606,7 @@ SMODS.Blind {
                 shakeBlind()
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        G.GAME.blind.chips = G.GAME.blind.chips + (get_blind_amount(G.GAME.round_resets.ante))
+                        G.GAME.blind.chips = G.GAME.blind.chips + (getBlindScore(blind) * 0.5)
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                         return true
                     end
@@ -612,13 +616,13 @@ SMODS.Blind {
         end
     end,
     disable = function(self)
-        G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante) * G.GAME.blind.mult
+        G.GAME.blind.chips = getBlindScore(self)
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         blind.prepped = nil
     end,
 
     loc_vars = function(self)
-        return { vars = {get_blind_amount(G.GAME.round_resets.ante)} }
+        return { vars = {getBlindScore(self) * 0.5} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_deepwalker_collection')} }
@@ -1187,7 +1191,7 @@ SMODS.Blind {
     boss_colour = HEX("a33829"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after and SMODS.calculate_round_score() < (G.GAME.blind.chips * 0.25) then
+            if context.after and SMODS.calculate_round_score() < (getBlindScore(blind) * 0.25) then
                 blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -1201,7 +1205,7 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {G.GAME.blind.chips * 0.25} }
+        return { vars = {getBlindScore(self) * 0.25} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_maw_collection')} }

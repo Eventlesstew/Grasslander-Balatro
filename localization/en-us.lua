@@ -776,7 +776,7 @@ return {
             gl_cocotom_free = 'Free!',
             gl_litabelle = 'Granted!',
 
-            gl_deepwalker_collection = '[1X Base]',
+            gl_deepwalker_collection = '[0.5X Requirement]',
             gl_maw_collection = '[0.25X Requirement]',
             gl_fungalic = 'Hand contains cards previously played this Ante',
             gl_jawtrap = 'Playing this hand will destroy a random Joker!',
