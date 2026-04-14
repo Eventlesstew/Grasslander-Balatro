@@ -4,6 +4,7 @@ The new content added includes:
 - 34 new Jokers
 - 32 Boss Blinds
 - 5 Showdown Blinds
+- 3 Decks
 - 20 Challenge Decks
 
 CREDITS:
