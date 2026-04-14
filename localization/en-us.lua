@@ -495,9 +495,9 @@ return {
             },j_grasslanders_fortromtoise = {
                 name = "Fortromtoise",
                 text = {
-                    "Gains {X:mult,C:white}X#2#{} Mult for each",
-                    "card {C:attention}discarded{}, resets",
-                    "when scored",
+                    "Gains {X:mult,C:white}X#2#{} Mult for",
+                    "each card {C:attention}discarded{}",
+                    "Resets when scored",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
@@ -512,9 +512,8 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "Returns leftmost played",
-                    "card to {C:attention}hand{} after",
-                    "hand is scored",
+                    "Returns leftmost played card",
+                    "to {C:attention}hand{} after scoring",
                 },
             },
             j_grasslanders_wisplasm = {
@@ -583,10 +582,11 @@ return {
             j_grasslanders_edward = {
                 name = "Edward",
                 text = {
-                    "Disables Joker{} to the right",
-                    "during a round and gains {C:chips}+#2#{}",
-                    "Chips for each debuffed",
-                    "{C:attention}Joker{} or {C:attention}card{} each hand",
+                    "Debuffs {C:attention}Joker{} to the",
+                    "right during a round",
+                    "On played hand, gains {C:chips}+#2#{} Chips",
+                    "for each debuffed Joker, card",
+                    "played and card held in hand",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
@@ -594,10 +594,11 @@ return {
             j_grasslanders_vegebonion = {
                 name = "Vegebonion",
                 text = {
-                    "Steal {C:money}$#1#{} of {C:attention}sell value{} from",
-                    "every other {C:attention}Joker{} and {C:attention}Consumable{}",
-                    "at end of round and add {C:attention}double{}",
-                    "of taken sell value to {C:mult}Mult{}",
+                    "Take {C:money}$#1#{} of {C:attention}sell value{}",
+                    "from every {C:attention}Joker{} and",
+                    "{C:attention}Consumable{} at end of",
+                    "round and add {C:attention}double{} of",
+                    "taken sell value to {C:mult}Mult{}",
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
                 },
             },
@@ -612,10 +613,11 @@ return {
             j_grasslanders_hyphilliacs = {
                 name = "Hyphilliacs",
                 text = {
-                    "Played {C:attention}Kings{} and {C:attention}Queens{} are",
-                    "considered the same rank",
-                    "{C:attention}Kings{} are debuffed if played",
-                    "without any {C:attention}Queens{} and vice versa",
+                    "{C:attention}Kings{} and {C:attention}Queens{} count",
+                    "as the same rank",
+                    "Played {C:attention}Kings{} are debuffed",
+                    "if no {C:attention}Queens{} are played",
+                    "and vice versa",
                 },
             },
 
@@ -783,18 +785,23 @@ return {
             gl_wallkerip = "Hand contains 3 different suits!",
 
             gl_options_apply = "Apply Changes",
-            gl_options_grasslanders = 'Grasslander Jokers',
-            gl_options_elements = 'Decks',
-
             gl_options_hornetrix = 'Family Friendly Mode',
-            gl_options_clackerblindtitle = 'Clacker Blinds',
-            gl_options_clackerblind0 = 'Disabled',
-            gl_options_clackerblind1 = 'Enabled',
-            gl_options_clackerblind2 = 'Replace Base',
-            gl_options_funny = 'The funny option',
-            
+            gl_options_vanillaChallenges = 'Fix Vanilla Challenges',
 
-            gl_options_performanceTitle = 'Advanced',
+            gl_options_contentTitle = 'Content',
+            gl_options_grasslanders = 'Grasslander Jokers',
+            gl_options_clackerblindtitle = 'Clacker Blinds',
+            gl_options_challenges = 'Challenges',
+            gl_options_elements = 'Decks',
+            gl_options_off = 'Off',
+            gl_options_on = 'On',
+            gl_options_clackerReplace = 'Replace Base',
+            gl_options_kaizochallenges = 'Crazy Challenges',
+            gl_options_kaizochallenges_info = {
+                'Some of these challenges',
+                'are only for the insane.'
+            },
+
             gl_options_posttrigger = 'Enable Post Trigger',
             gl_options_posttrigger_info = {
                 "Used by Rockagnaw, but this",
@@ -808,19 +815,6 @@ return {
                 "may cause compatibility issues",
                 "If disabled, uses an alternate",
                 "function to maximise compatibility"
-            },
-
-            gl_options_experimentalTitle = 'Experimental',
-            gl_options_altjunklake = 'Alternate Junklake',
-            gl_options_altjunklake_info = {
-                'Full rework of Junklake, making',
-                'him less RNG dependent',
-                'Proposed by Eventlesstew',
-            },
-            gl_options_kaizochallenges = 'Crazy Challenges',
-            gl_options_kaizochallenges_info = {
-                'Some of these challenges',
-                'are only for the insane.'
             },
         }
     }

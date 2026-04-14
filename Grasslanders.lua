@@ -13,6 +13,17 @@ G.FUNCS.restart_game_smods = function(e)
 	SMODS.restart_game()
 end
 
+G.FUNCS.joker_config = function(option_node)
+    grasslanders.config.grasslanderJokers = option_node.cycle_config.current_option
+    grasslanders:save_config()
+end
+
+
+G.FUNCS.deck_config = function(option_node)
+    grasslanders.config.elementDecks = option_node.cycle_config.current_option
+    grasslanders:save_config()
+end
+
 G.FUNCS.clacker_blind_config = function(option_node)
     grasslanders.config.clackerblinds = option_node.cycle_config.current_option
     grasslanders:save_config()
@@ -32,31 +43,18 @@ grasslanders.config_tab = function()
 		nodes =  {
             {n = G.UIT.C, config = { align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
                 create_toggle({label = localize('gl_options_hornetrix'), ref_table = grasslanders.config, ref_value = "althornetrix", callback = function() grasslanders:save_config() end}),
-                create_toggle({label = localize('gl_options_grasslanders'), ref_table = grasslanders.config, ref_value = "grasslanderJokers", callback = function() grasslanders:save_config() end}),
-                create_toggle({label = localize('gl_options_elements'), ref_table = grasslanders.config, ref_value = "elementDecks", callback = function() grasslanders:save_config() end}),
-                --create_toggle({label = localize('gl_options_funny'), ref_table = grasslanders.config, ref_value = "funny", callback = function() grasslanders:save_config() end}),
-                create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
-                    current_option = grasslanders.config.clackerblinds,
-                    label = localize('gl_options_clackerblindtitle'),
-                    options = {
-                        localize('gl_options_clackerblind0'),
-                        localize('gl_options_clackerblind1'),
-                        localize('gl_options_clackerblind2'),
-                    },
-                }),
-                create_toggle({label = localize('gl_options_kaizochallenges'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
+                create_toggle({label = localize('gl_options_vanillaChallenges'), ref_table = grasslanders.config, ref_value = "vanillaChallenges", callback = function() grasslanders:save_config() end}),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
 		}
 	}
 end
 
---[[
 grasslanders.extra_tabs = function()
 	return {
 
-    -- Advanced Tab
-    {label = localize('gl_options_performanceTitle'), tab_definition_function = function()
+    -- Content Tab
+    {label = localize('gl_options_contentTitle'), tab_definition_function = function()
     return {
         n=G.UIT.ROOT, 
         config = {
@@ -68,60 +66,88 @@ grasslanders.extra_tabs = function()
         }, 
         nodes = {
             {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                create_toggle({label = localize('gl_options_kaizochallenges'), info = localize('gl_options_kaizochallenges_info'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
-                UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
-            }},
-        }
-    }end},
-
-    -- Experimental Tab
-    --[[{label = localize('gl_options_experimentalTitle'), tab_definition_function = function()
-    return {
-        n=G.UIT.ROOT, 
-        config = {
-            emboss = 0.05,
-            r = 0.1,
-            align = "tl",
-            padding = 0.2,
-            colour = G.C.BLACK
-        }, 
-        nodes = {
-            {n = G.UIT.C, config = {align = "cl", minw = G.ROOM.T.w*0, padding = 0.04 }, nodes = {
-                create_toggle({label = localize('gl_options_kaizochallenges'), info = localize('gl_options_kaizochallenges_info'), ref_table = grasslanders.config, ref_value = "kaizochallenges", callback = function() grasslanders:save_config() end}),
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "grasslanderJokers", opt_callback = 'joker_config', w = 4,
+                    current_option = grasslanders.config.clackerblinds,
+                    label = localize('gl_options_grasslanders'),
+                    options = {
+                        localize('gl_options_off'),
+                        localize('gl_options_on'),
+                    },
+                }),
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "elementDecks", opt_callback = 'deck_config', w = 4,
+                    current_option = grasslanders.config.clackerblinds,
+                    label = localize('gl_options_elements'),
+                    options = {
+                        localize('gl_options_off'),
+                        localize('gl_options_on'),
+                    },
+                }),
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
+                    current_option = grasslanders.config.clackerblinds,
+                    label = localize('gl_options_clackerblindtitle'),
+                    options = {
+                        localize('gl_options_off'),
+                        localize('gl_options_on'),
+                        localize('gl_options_clackerReplace'),
+                    },
+                }),
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
+                    current_option = grasslanders.config.clackerblinds,
+                    label = localize('gl_options_challenges'),
+                    options = {
+                        localize('gl_options_off'),
+                        localize('gl_options_on'),
+                        localize('gl_options_kaizochallenges'),
+                    },
+                }),
                 UIBox_button({label = {localize('gl_options_apply')}, minw = 3.5, button = 'restart_game_smods'}),
             }},
         }
     }end},
 }
-end]]
+end
 
-grasslanders.config.grasslanderJokers = (type(grasslanders.config.grasslanderJokers) == 'nil') or grasslanders.config.grasslanderJokers
-grasslanders.config.clackerblinds = (type(grasslanders.config.clackerblinds) == 'number' and grasslanders.config.clackerblinds) or 2
+for _,v in pairs({
+    'grasslanderJokers',
+    'clackerblinds',
+    'elementDecks',
+    'kaizochallenges'
+}) do
+    grasslanders.config[v] = (type(grasslanders.config[v]) == 'number' and grasslanders.config[v]) or 2 
+end
 
 assert(SMODS.load_file("items/game_globals.lua"))()
-assert(SMODS.load_file("items/challenges_vanilla.lua"))()
 assert(SMODS.load_file("items/multirank.lua"))()
+if grasslanders.config.vanillaChallenges then
+    assert(SMODS.load_file("items/challenges_vanilla.lua"))()
+end
 
 -- Loads Clacker Blinds
 if grasslanders.config.clackerblinds > 1 then
     assert(SMODS.load_file("items/blinds.lua"))()
-    assert(SMODS.load_file("items/challenges_gloom.lua"))()
+
+    if grasslanders.config.kaizochallenges > 1 then
+        assert(SMODS.load_file("items/challenges_gloom.lua"))()
+    end
 end
 
 -- Loads Jokers
-if grasslanders.config.grasslanderJokers == true then
+if grasslanders.config.grasslanderJokers > 1 then
     assert(SMODS.load_file("items/jokers.lua"))()
-    assert(SMODS.load_file("items/challenges.lua"))()
+
+    if grasslanders.config.kaizochallenges > 1 then
+        assert(SMODS.load_file("items/challenges.lua"))()
+    end
 end
 
 -- Loads Decks
-if grasslanders.config.elementDecks then
+if grasslanders.config.elementDecks > 1 then
     assert(SMODS.load_file("items/decks.lua"))()
 
 end
 
 -- Loads Kaizo Challenges
-if grasslanders.config.kaizochallenges then
+if grasslanders.config.kaizochallenges > 2 then
     assert(SMODS.load_file("items/challenges_kaizo.lua"))()
 end
 
