@@ -1566,7 +1566,7 @@ SMODS.Joker{
                 for _,v in ipairs(G.hand.cards) do
                     table.insert(cards, v)
                 end
-                for _,v in ipairs(context.scoring_hand) do
+                for _,v in ipairs(context.full_hand) do
                     table.insert(cards, v)
                 end
 
