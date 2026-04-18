@@ -535,10 +535,6 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if not context.blueprint then
             if context.end_of_round and context.main_eval then
-                card.ability.extra.active = false
-                card.ability.extra.count = 0
-            end
-            if context.setting_blind then
                 card.ability.extra.active = true
                 card.ability.extra.count = 0
             end
@@ -835,7 +831,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.after then
-            if SMODS.calculate_round_score() >= card.ability.extra.requirement then
+            if SMODS.calculate_round_score() >= card.ability.extra.requirement and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                 card.ability.extra.requirement = SMODS.calculate_round_score()
                 G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                 G.E_MANAGER:add_event(Event({
