@@ -473,7 +473,7 @@ return {
                 text = {
                     "Gains {C:chips}+#3#{} Chips when",
                     "{C:attention}Ante{} is changed",
-                    "Lose {C:chips}-#2#{} Chips when",
+                    "Loses {C:chips}-#2#{} Chips when",
                     "{C:attention}Blind{} is selected",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
@@ -512,8 +512,9 @@ return {
             j_grasslanders_axonitta = {
                 name = "Axonitta",
                 text = {
-                    "Returns leftmost played card",
-                    "to {C:attention}hand{} after scoring",
+                    "Returns leftmost",
+                    "played card to",
+                    "{C:attention}hand{} after scoring",
                 },
             },
             j_grasslanders_wisplasm = {
@@ -534,9 +535,9 @@ return {
             j_grasslanders_tickini = {
                 name = "Tickini",
                 text = {
-                    "Grants a {C:tarot}Tarot{} card if",
-                    "played {C:attention}hand{} scores higher",
-                    "than the {C:attention}best hand{}",
+                    "If played hand scores greater",
+                    "than the highest scoring hand,",
+                    "grants a {C:tarot}Tarot{} card",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive})"
                 },
             },
@@ -573,9 +574,9 @@ return {
             j_grasslanders_emmie = {
                 name = "Emmie",
                 text = {
-                    "Allows first played {C:attention}Straight{}",
-                    "to be made with gaps",
-                    "of {C:attention}2 ranks",
+                    "Allows first played",
+                    "{C:attention}Straight{} to be made",
+                    "with gaps of {C:attention}2 ranks",
                     "{C:inactive}(ex: {C:attention}10 7 6 4 2{C:inactive})",
                 },
             },

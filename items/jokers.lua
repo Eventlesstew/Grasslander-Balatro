@@ -831,25 +831,33 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.after then
-            if SMODS.calculate_round_score() >= card.ability.extra.requirement and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+            if SMODS.calculate_round_score() >= card.ability.extra.requirement then
                 card.ability.extra.requirement = SMODS.calculate_round_score()
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'before',
-                    delay = 0.0,
-                    func = (function()
-                        SMODS.add_card {
-                            set = 'Tarot',
-                            key_append = 'gl_tickini' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
-                        }
-                        G.GAME.consumeable_buffer = 0
-                        return true
-                    end)
-                }))
-                return {
-                    message = localize('k_plus_tarot'),
-                    colour = G.C.PURPLE,
-                }
+
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.0,
+                        func = (function()
+                            SMODS.add_card {
+                                set = 'Tarot',
+                                key_append = 'gl_tickini' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+                            }
+                            G.GAME.consumeable_buffer = 0
+                            return true
+                        end)
+                    }))
+                    return {
+                        message = localize('k_plus_tarot'),
+                        colour = G.C.PURPLE,
+                    }
+                else
+                    return {
+                        message = localize('k_no_room_ex'),
+                        colour = G.C.PURPLE,
+                    }
+                end
             end
         end
     end,
@@ -1068,10 +1076,11 @@ SMODS.Joker{
     atlas = 'grasslanderJoker',
 
     calculate = function(self,card,context)
+        --[[
         if context.buying_self then
             local eval = function(card) return card.ability.extra.rounds > 0 end
             juice_card_until(card,eval,true)
-        end
+        end]]
         if not context.blueprint and card.ability.extra.rounds > 0 then
             if context.remove_playing_cards then 
                 if #context.removed > 0 then

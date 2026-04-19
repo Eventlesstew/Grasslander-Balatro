@@ -20,7 +20,8 @@ function shakeBlind(self)
 end
 
 function getBlindScore(self)
-    return get_blind_amount(G.GAME.round_resets.ante) * self.mult * G.GAME.starting_params.ante_scaling
+    local ret = get_blind_amount(G.GAME.round_resets.ante) * G.GAME.starting_params.ante_scaling
+    return ret
 end
 
 SMODS.Atlas({
@@ -606,7 +607,8 @@ SMODS.Blind {
                 shakeBlind()
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        G.GAME.blind.chips = G.GAME.blind.chips + (getBlindScore(blind) * 0.5)
+                        G.GAME.blind.mult = G.GAME.blind.mult + 1
+                        G.GAME.blind.chips = G.GAME.blind.chips + getBlindScore(blind)
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                         return true
                     end
@@ -616,13 +618,14 @@ SMODS.Blind {
         end
     end,
     disable = function(self)
-        G.GAME.blind.chips = getBlindScore(self)
+        G.GAME.blind.chips = (G.GAME.blind.chips / G.GAME.blind.mult) * 2
+        G.GAME.blind.mult = 2
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         blind.prepped = nil
     end,
 
     loc_vars = function(self)
-        return { vars = {getBlindScore(self) * 0.5} }
+        return { vars = {getBlindScore(self)} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_deepwalker_collection')} }
