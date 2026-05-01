@@ -594,7 +594,7 @@ SMODS.Blind {
           
     pos = {x = 0, y = 16},
     dollars = 5,
-    mult = 5,
+    mult = 2,
     boss = {min = 2},
     boss_colour = HEX("39545b"),
     calculate = function(self, blind, context)
