@@ -658,6 +658,27 @@ return {
                 }
             },
         },
+        --[[alt_texture = {
+            alt_tex_grasslanders_logoleaf = {
+                j_grasslanders_logobreak = {
+                    name = "Logoleaf",
+                },
+            }
+        },]]
+        texture_packs = {
+            texpack_grasslanders_logoleaf = {
+                name = 'Logoleaf',
+                text = {
+                    'Replaces {C:attention}Logobreak',
+                    'with {C:attention}Logoleaf'
+                },
+                localization = {
+                    j_grasslanders_logobreak = {
+                        name = "Logoleaf",
+                    },
+                }
+            }
+        },
         Other = {
             g_onfire = {
                 name = "Hand On Fire",

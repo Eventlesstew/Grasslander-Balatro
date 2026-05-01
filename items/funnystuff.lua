@@ -1,3 +1,4 @@
+--[[
 if grasslanders.config.clackerblinds > 1 then
     SMODS.Atlas({
         key = "gloom_deck",
@@ -28,13 +29,12 @@ if grasslanders.config.clackerblinds > 1 then
     }
 end
 
---[[
 SMODS.Joker:take_ownership('droll', {
         loc_txt = {
             ["name"] = "Drool Joker",
         },
     }
-)]]
+)
 
 SMODS.Joker{
     key = "ddquad",
@@ -54,4 +54,21 @@ SMODS.Joker{
     in_pool = function(self, args)
         return false
     end,
-}
+}]]
+
+if (SMODS.Mods["malverk"] or {}).can_load then
+    AltTexture{
+        key = 'logoleaf',
+        set = 'Joker',
+        path = 'logoleaf.png',
+        keys = {'j_grasslanders_logobreak'},
+        original_sheet = true
+    }
+	TexturePack({ -- HD Texture Pack
+		key = "logoleaf",
+		textures = {
+			"alt_tex_grasslanders_logoleaf",
+		},
+		localization = true
+	})
+end
