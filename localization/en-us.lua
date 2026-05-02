@@ -658,40 +658,6 @@ return {
                 }
             },
         },
-        --[[alt_texture = {
-            alt_tex_grasslanders_logoleaf = {
-                j_grasslanders_logobreak = {
-                    name = "Logoleaf",
-                },
-            }
-        },]]
-        texture_packs = {
-            texpack_grasslanders_logoleaf = {
-                name = 'Logoleaf',
-                text = {
-                    'Replaces {C:attention}Logobreak',
-                    'with {C:attention}Logoleaf'
-                },
-                localization = {
-                    j_grasslanders_logobreak = {
-                        name = "Logoleaf",
-                    },
-                }
-            },
-            --[[
-            texpack_grasslanders_funny = {
-                name = 'Dark Depths Quad',
-                text = {
-                    'Brings in the',
-                    '{C:attention}Dark Depths Quad'
-                },
-                localization = {
-                    j_droll = {
-                        name = "Drool Joker",
-                    },
-                }
-            }]]
-        },
         Other = {
             g_onfire = {
                 name = "Hand On Fire",

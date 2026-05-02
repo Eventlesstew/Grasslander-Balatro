@@ -150,8 +150,6 @@ end
 if grasslanders.config.kaizochallenges > 2 then
     assert(SMODS.load_file("items/challenges_kaizo.lua"))()
 end
-
-assert(SMODS.load_file("items/funnystuff.lua"))()
 --[[
 if grasslanders.config.funny == true then
     assert(SMODS.load_file("items/funnystuff.lua"))()

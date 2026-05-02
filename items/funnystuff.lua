@@ -55,25 +55,3 @@ SMODS.Joker{
         return false
     end,
 }]]
-
-if (SMODS.Mods["malverk"] or {}).can_load then
-    AltTexture{
-        key = 'logoleaf',
-        set = 'Joker',
-        path = 'logoleaf.png',
-        keys = {'j_grasslanders_logobreak'},
-        original_sheet = true
-    }
-	TexturePack({
-		key = "logoleaf",
-		textures = {
-			"alt_tex_grasslanders_logoleaf",
-		},
-		localization = true
-	})
-    --[[
-    TexturePack({
-		key = "funny",
-		localization = true
-	})]]
-end
