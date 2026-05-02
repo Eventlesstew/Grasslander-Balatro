@@ -64,11 +64,16 @@ if (SMODS.Mods["malverk"] or {}).can_load then
         keys = {'j_grasslanders_logobreak'},
         original_sheet = true
     }
-	TexturePack({ -- HD Texture Pack
+	TexturePack({
 		key = "logoleaf",
 		textures = {
 			"alt_tex_grasslanders_logoleaf",
 		},
 		localization = true
 	})
+    --[[
+    TexturePack({
+		key = "funny",
+		localization = true
+	})]]
 end

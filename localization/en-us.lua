@@ -677,7 +677,20 @@ return {
                         name = "Logoleaf",
                     },
                 }
-            }
+            },
+            --[[
+            texpack_grasslanders_funny = {
+                name = 'Dark Depths Quad',
+                text = {
+                    'Brings in the',
+                    '{C:attention}Dark Depths Quad'
+                },
+                localization = {
+                    j_droll = {
+                        name = "Drool Joker",
+                    },
+                }
+            }]]
         },
         Other = {
             g_onfire = {
