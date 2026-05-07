@@ -271,9 +271,9 @@ return {
             bl_grasslanders_fungalic = {
                 name = "The Fungalic",
                 text = {
-                    "Cards played previously this",
-                    "ante become Gloom cards",
-                    "if played"
+                    "All cards become Gloom cards",
+                    "if scoring hand contains",
+                    "face and non-face cards"
                 },
             },
             bl_grasslanders_twinckler = {

@@ -907,11 +907,10 @@ SMODS.Blind {
     boss_colour = HEX("70242e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if (context.debuff_hand and not context.check) or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND) then
-                local check = context.scoring_name and G.STATE == G.STATES.SELECTING_HAND
+            if context.debuff_hand then
 
                 local will_destroy = false
-
+                
                 if blind.hand_list then
                     local doesNotHaveHand = true
                     for _,v in ipairs(blind.hand_list) do
@@ -922,11 +921,11 @@ SMODS.Blind {
                     end
                     if doesNotHaveHand then
                         will_destroy = true
-                        if not check then
+                        if not context.check then
                             blind.hand_list[#blind.hand_list + 1] = context.scoring_name
                         end
                     end
-                elseif not check then
+                elseif not context.check then
                     blind.hand_list = {context.scoring_name}
                 end
                 
@@ -940,14 +939,13 @@ SMODS.Blind {
                     end
                 end
 
-                if check then
+                if context.check then
                     if will_destroy and #destructable_jokers > 0 then
                         grasslanders.alert_debuff(self, true, localize('gl_jawtrap'))
                     else
                         grasslanders.alert_debuff(self, false)
                     end
                 else
-                    grasslanders.alert_debuff(self, false)
                     local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
 
                     if joker_to_destroy then
@@ -1546,58 +1544,33 @@ SMODS.Blind {
     boss_colour = HEX("66999a"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.setting_blind then
-                for _, v in ipairs(G.playing_cards) do
-                    if v.ability.played_this_ante then
-                        v.gl_fungalic_effect = true
-                    end
-                end
-            end
-            if (context.debuff_hand and not context.check) or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND) then
-                local check = context.check or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND)
+            if (context.debuff_hand and not context.check) then
 
-                local faces = 0
+                local has_faces = false
+                local has_ranks = false
                 for _, scored_card in ipairs(context.scoring_hand) do
-                    if scored_card.gl_fungalic_effect then
-                        faces = faces + 1
-                        if not check then
-                            scored_card:set_ability('m_grasslanders_gloom', nil, false)
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    scored_card:juice_up()
-                                    return true
-                                end
-                            }))
-                        end
+                    if scored_card:is_face() then
+                        has_faces = true
+                    else
+                        has_ranks = true
                     end
                 end
-                if check then
-                    if faces > 0 then
-                        grasslanders.alert_debuff(self, true, localize('gl_fungalic'))
-                    else
-                        grasslanders.alert_debuff(self, false)
+                
+                if has_faces and has_ranks then
+                    for _, scored_card in ipairs(context.full_hand) do
+                        scored_card:set_ability('m_grasslanders_gloom', nil, false)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                scored_card:juice_up()
+                                return true
+                            end
+                        }))
                     end
-                else
-                    grasslanders.alert_debuff(self, false)
-                    if faces > 0 then
-                        blind.triggered = true
-                        shakeBlind()
-                        delay(0.4)
-                    end
+                    blind.triggered = true
+                    shakeBlind()
+                    delay(0.4)
                 end
             end
-        end
-    end,
-
-    disable = function(self)
-        for _, playing_card in ipairs(G.playing_cards) do
-            playing_card.gl_fungalic_effect = nil
-        end
-    end,
-
-    defeat = function(self)
-        for _, playing_card in ipairs(G.playing_cards) do
-            playing_card.gl_fungalic_effect = nil
         end
     end,
 }

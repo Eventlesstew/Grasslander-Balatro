@@ -29,6 +29,11 @@ G.FUNCS.clacker_blind_config = function(option_node)
     grasslanders:save_config()
 end
 
+G.FUNCS.challenge_config = function(option_node)
+    grasslanders.config.kaizochallenges = option_node.cycle_config.current_option
+    grasslanders:save_config()
+end
+
 -- Config Tab
 grasslanders.config_tab = function()
 	return {
@@ -91,8 +96,8 @@ grasslanders.extra_tabs = function()
                         localize('gl_options_clackerReplace'),
                     },
                 }),
-                create_option_cycle({ref_table = grasslanders.config, ref_value = "clackerblinds", opt_callback = 'clacker_blind_config', w = 4,
-                    current_option = grasslanders.config.clackerblinds,
+                create_option_cycle({ref_table = grasslanders.config, ref_value = "kaizochallenges", opt_callback = 'challenge_config', w = 4,
+                    current_option = grasslanders.config.kaizochallenges,
                     label = localize('gl_options_challenges'),
                     options = {
                         localize('gl_options_off'),

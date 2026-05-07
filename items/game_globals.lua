@@ -98,6 +98,10 @@ function grasslanders.calculate(self, context)
             end
         end
     end
+
+    if context.press_play or context.pre_discard or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND and #context.full_hand == 0) then
+        grasslanders.alert_debuff(G.GAME.blind, false)
+    end
 end
 
 function grasslanders.alert_debuff(blind, add, text)
