@@ -910,23 +910,20 @@ SMODS.Blind {
             if context.debuff_hand then
 
                 local will_destroy = false
-                
-                if blind.hand_list then
-                    local doesNotHaveHand = true
-                    for _,v in ipairs(blind.hand_list) do
-                        if context.scoring_name == v then
-                            doesNotHaveHand = false
+
+                if G.GAME.hands[context.scoring_name] then
+                    local active = false
+                    for _,v in pairs(G.GAME.hands) do
+                        print(v.played_this_round)
+                        if v.played_this_round > 1 then
+                            active = true
                             break
                         end
                     end
-                    if doesNotHaveHand then
+
+                    if active and G.GAME.hands[context.scoring_name].played_this_round <= 1 then
                         will_destroy = true
-                        if not context.check then
-                            blind.hand_list[#blind.hand_list + 1] = context.scoring_name
-                        end
                     end
-                elseif not context.check then
-                    blind.hand_list = {context.scoring_name}
                 end
                 
                 local destructable_jokers = {}
@@ -941,9 +938,9 @@ SMODS.Blind {
 
                 if context.check then
                     if will_destroy and #destructable_jokers > 0 then
-                        grasslanders.alert_debuff(self, true, localize('gl_jawtrap'))
+                        grasslanders.alert_debuff(localize('gl_jawtrap_warning'), localize('gl_jawtrap'))
                     else
-                        grasslanders.alert_debuff(self, false)
+                        grasslanders.alert_debuff()
                     end
                 else
                     local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_jawtrap')
@@ -1390,12 +1387,11 @@ SMODS.Blind {
 
                 if context.check then
                     if debuff_hand then
-                        grasslanders.alert_debuff(self, true, localize('gl_wallkerip'))
+                        grasslanders.alert_debuff(localize('gl_wallkerip_warning'), localize('gl_wallkerip'))
                     else
-                        grasslanders.alert_debuff(self, false)
+                        grasslanders.alert_debuff()
                     end
                 else
-                    grasslanders.alert_debuff(self, false)
                     if debuff_hand then
                         for _,v in ipairs(context.full_hand) do
                             v:set_ability('m_grasslanders_gloom', nil, false)

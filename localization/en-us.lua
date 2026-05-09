@@ -204,7 +204,7 @@ return {
                 name = "The Screecher",
                 text = {
                     "Playing a #1#",
-                    "decreases it's level by 3",
+                    "decreases its level by 3",
                 },
             },
             bl_grasslanders_leaper = {
@@ -235,9 +235,9 @@ return {
             bl_grasslanders_jawtrap = {
                 name = "The Jawtrap",
                 text = {
-                    "Destroy a random Joker",
-                    "if more than one hand",
-                    "type is played",
+                    "Destroys a random",
+                    "Joker if more than 1",
+                    "hand type is played",
                 },
             },
             bl_grasslanders_silentflash = {
@@ -781,9 +781,12 @@ return {
 
             gl_deepwalker_collection = '[0.5X Requirement]',
             gl_maw_collection = '[0.25X Requirement]',
+            gl_blind_warning = 'Warning!',
             gl_fungalic = 'Hand contains cards previously played this Ante',
-            gl_jawtrap = 'Playing this hand will destroy a random Joker!',
-            gl_wallkerip = "Hand contains 3 different suits!",
+            gl_jawtrap_warning = 'Hand will destroy a random Joker',
+            gl_jawtrap = 'Play only 1 hand type this round',
+            gl_wallkerip_warning = 'Played cards will become Gloom',
+            gl_wallkerip = "Hand contains 3 different suits",
 
             gl_options_apply = "Apply Changes",
             gl_options_hornetrix = 'Family Friendly Mode',

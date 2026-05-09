@@ -98,13 +98,23 @@ function grasslanders.calculate(self, context)
             end
         end
     end
-
-    if context.press_play or context.pre_discard or (context.scoring_name and G.STATE == G.STATES.SELECTING_HAND and #context.full_hand == 0) then
-        grasslanders.alert_debuff(G.GAME.blind, false)
+    
+    if 
+        context.end_of_round or 
+        context.press_play or 
+        context.pre_discard or 
+        (context.scoring_name == "NULL" and G.STATE == G.STATES.SELECTING_HAND) 
+    then
+        grasslanders.alert_debuff(false)
     end
 end
 
-function grasslanders.alert_debuff(blind, add, text)
+function grasslanders.alert_debuff(title, text)
+    local add = false
+    if title and text then
+        add = true
+    end
+    blind = G.GAME.blind.config.blind
     if add and not blind.boss_warning_text then
         blind.get_loc_debuff_text = function ()
             return text
@@ -113,11 +123,11 @@ function grasslanders.alert_debuff(blind, add, text)
         definition = 
             {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR, padding = 0.2}, nodes={
             {n=G.UIT.R, config = {align = 'cm', maxw = 1}, nodes={
-                {n=G.UIT.O, config={object = DynaText({scale = 0.7, string = text, maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
+                {n=G.UIT.O, config={object = DynaText({scale = 0.7, string = title, maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
             }},
-            --[[{n=G.UIT.R, config = {align = 'cm', maxw = 1}, nodes={
+            {n=G.UIT.R, config = {align = 'cm', maxw = 1}, nodes={
                 {n=G.UIT.O, config={func = "update_blind_debuff_text", object = DynaText({scale = 0.6, string = text, maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
-            }}]]
+            }}
         }},
         config = {
             align = 'cm',
