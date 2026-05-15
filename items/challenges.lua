@@ -325,7 +325,7 @@ SMODS.Challenge {
 SMODS.Challenge {
     key = 'litabelle',
     jokers = {
-        { id = 'j_grasslanders_litabelle', pinned = true, eternal = true },
+        { id = 'j_grasslanders_litabelle', eternal = true },
     }
 }
 

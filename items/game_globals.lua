@@ -39,6 +39,21 @@ local function reset_grasslanders_junklake_card()
     end
 end
 
+local function reset_grasslanders_litabelle_card()
+    G.GAME.current_round.grasslanders_litabelle_card = { rank = 'Queen' }
+    local valid_mail_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_rank(playing_card) then
+            valid_mail_cards[#valid_mail_cards + 1] = playing_card
+        end
+    end
+    local mail_card = pseudorandom_element(valid_mail_cards, 'grasslanders_litabelle_card' .. G.GAME.round_resets.ante)
+    if mail_card then
+        G.GAME.current_round.grasslanders_litabelle_card.rank = mail_card.base.value
+        G.GAME.current_round.grasslanders_litabelle_card.id = mail_card.base.id
+    end
+end
+
 function grasslanders.reset_game_globals(run_start)
     if run_start then
         if G.GAME.modifiers.gl_doubleblind then
@@ -71,6 +86,7 @@ function grasslanders.reset_game_globals(run_start)
         end
 
         gl_reroll_hands('High Card') -- Plingit defaults to High Card at the start of the run
+        reset_grasslanders_litabelle_card()
     end
 
     reset_grasslanders_junklake_card()
@@ -79,6 +95,7 @@ end
 function grasslanders.calculate(self, context)
     if context.after then
         gl_reroll_hands(context.scoring_name)
+        reset_grasslanders_litabelle_card()
     end
 
     if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
@@ -149,24 +166,6 @@ function grasslanders.alert_debuff(title, text)
             blind.boss_warning_text = nil
         end
     end
-end
-
-local game_start_run_ref = Game.start_run
-function Game:start_run(args)
-    self.gl_litabelleArea = CardArea(
-        0,
-        0,
-        self.CARD_W * 4.95,
-        self.CARD_H * 0.95,
-        {
-            card_limit = 1,
-            type = 'title',
-            highlight_limit = 1,
-        }
-    )
-    self.gl_litabelleArea.states.visible = false
-
-    game_start_run_ref(self, args)
 end
 
 local add_to_pool_ref = SMODS.add_to_pool

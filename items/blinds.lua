@@ -907,38 +907,25 @@ SMODS.Blind {
     boss_colour = HEX("70242e"),
     calculate = function(self, blind, context)
         if not blind.disabled then
+            if context.setting_blind then
+                blind.only_hand = false
+            end
+
             if context.debuff_hand then
-
-                local will_destroy = false
-
-                if G.GAME.hands[context.scoring_name] then
-                    local active = false
-                    for _,v in pairs(G.GAME.hands) do
-                        print(v.played_this_round)
-                        if v.played_this_round > 1 then
-                            active = true
-                            break
-                        end
-                    end
-
-                    if active and G.GAME.hands[context.scoring_name].played_this_round <= 1 then
-                        will_destroy = true
-                    end
-                end
+                local will_destroy = blind.effect.only_hand and blind.effect.only_hand ~= context.scoring_name
                 
                 local destructable_jokers = {}
                 if will_destroy then
                     for i = 1, #G.jokers.cards do
                         if not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
-                            destructable_jokers[#destructable_jokers + 1] =
-                            G.jokers.cards[i]
+                            destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
                         end
                     end
                 end
 
                 if context.check then
                     if will_destroy and #destructable_jokers > 0 then
-                        grasslanders.alert_debuff(localize('gl_jawtrap_warning'), localize('gl_jawtrap'))
+                        grasslanders.alert_debuff(localize('gl_jawtrap_warning'), localize{type = 'variable',key = 'gl_jawtrap_warning',vars = {blind.effect.only_hand}})
                     else
                         grasslanders.alert_debuff()
                     end
@@ -1387,7 +1374,7 @@ SMODS.Blind {
 
                 if context.check then
                     if debuff_hand then
-                        grasslanders.alert_debuff(localize('gl_wallkerip_warning'), localize('gl_wallkerip'))
+                        grasslanders.alert_debuff(localize('gl_gloom_warning'), localize{type = 'variable',key = 'gl_wallkerip_warning',vars = {3}})
                     else
                         grasslanders.alert_debuff()
                     end
@@ -1501,21 +1488,30 @@ SMODS.Blind {
     boss_colour = HEX("697359"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.debuff_hand and not context.check and context.scoring_name ~= G.GAME.current_round.most_played_poker_hand then
-                local count = 0
-                for _,v in ipairs(context.full_hand) do
-                    v:set_ability('m_grasslanders_gloom', nil, false)
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                    count = count + 1
-                end
-                if count > 0 then
-                    blind.triggered = true
-                    shakeBlind()
+            if context.debuff_hand then
+                local debuff_hand = context.scoring_name ~= G.GAME.current_round.most_played_poker_hand
+                if context.check then
+                    if debuff_hand then
+                        grasslanders.alert_debuff(localize('gl_gloom_warning'), localize{type = 'variable',key = 'gl_stigz_warning',vars = {G.GAME.current_round.most_played_poker_hand}})
+                    else
+                        grasslanders.alert_debuff()
+                    end
+                elseif debuff_hand then
+                    local count = 0
+                    for _,v in ipairs(context.full_hand) do
+                        v:set_ability('m_grasslanders_gloom', nil, false)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                v:juice_up()
+                                return true
+                            end
+                        }))
+                        count = count + 1
+                    end
+                    if count > 0 then
+                        blind.triggered = true
+                        shakeBlind()
+                    end
                 end
             end
         end
@@ -1540,8 +1536,7 @@ SMODS.Blind {
     boss_colour = HEX("66999a"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if (context.debuff_hand and not context.check) then
-
+            if context.debuff_hand then
                 local has_faces = false
                 local has_ranks = false
                 for _, scored_card in ipairs(context.scoring_hand) do
@@ -1551,8 +1546,16 @@ SMODS.Blind {
                         has_ranks = true
                     end
                 end
-                
-                if has_faces and has_ranks then
+
+                local debuff_hand = has_faces and has_ranks
+
+                if context.check then
+                    if debuff_hand then
+                        grasslanders.alert_debuff(localize('gl_gloom_warning'), localize{type = 'variable',key = 'gl_fungalic_warning'})
+                    else
+                        grasslanders.alert_debuff()
+                    end
+                elseif debuff_hand then
                     for _, scored_card in ipairs(context.full_hand) do
                         scored_card:set_ability('m_grasslanders_gloom', nil, false)
                         G.E_MANAGER:add_event(Event({
@@ -1583,20 +1586,29 @@ SMODS.Blind {
     boss_colour = HEX("ab4f58"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.debuff_hand and not context.check and #context.scoring_hand <= 1 then
-                local count = 0
-                for _,v in ipairs(context.full_hand) do
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:set_ability('m_grasslanders_gloom', nil, false)
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                    count = count + 1
-                end
-                if count > 0 then
-                    shakeBlind()
+            if context.debuff_hand then
+                local debuff_hand = #context.scoring_hand <= 1
+                if context.check then
+                    if debuff_hand then
+                        grasslanders.alert_debuff(localize('gl_gloom_warning'), localize{type = 'variable',key = 'gl_clacteriophage_warning',vars = {1}})
+                    else
+                        grasslanders.alert_debuff()
+                    end
+                elseif debuff_hand then
+                    local count = 0
+                    for _,v in ipairs(context.full_hand) do
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                v:set_ability('m_grasslanders_gloom', nil, false)
+                                v:juice_up()
+                                return true
+                            end
+                        }))
+                        count = count + 1
+                    end
+                    if count > 0 then
+                        shakeBlind()
+                    end
                 end
             end
         end

@@ -335,6 +335,7 @@ return {
                 text = {
                     "{C:attention}+#1#{} Hand size per hand,",
                     "played this round",
+                    "{C:attention}#3#{} Hand size",
                     "{C:inactive}(Currently {C:attention}+#2#{C:inactive} Hand Size)"
                 },
             },
@@ -546,7 +547,7 @@ return {
                 text = {
                     "When inactive, gains {X:mult,C:white}X#2#{} Mult",
                     "when a {C:attention}playing card {}is destroyed",
-                    "Activates after {C:attention}#3#{} hands",
+                    "#3#{C:attention}#4#{}#5#",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
@@ -554,10 +555,12 @@ return {
             j_grasslanders_litabelle = {
                 name = "Litabelle",
                 text = {
-                    "When {C:attention}Blind{} is selected, destroy",
-                    "and store {C:attention}Joker{} to the right",
-                    "At end of round, return stored",
-                    "{C:attention}Joker{} with a random {C:dark_edition}Edition{}",
+                    "Gains {X:mult,C:white}X#2#{} Mult if played",
+                    "hand contains a scoring {C:attention}#3#{}",
+                    "otherwise destroys a",
+                    "random {C:attention}Joker{}",
+                    "Rank changes every hand",
+                    "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 },
             },
             
@@ -737,6 +740,12 @@ return {
             gl_cocotom_countdown = '#1# left',
             gl_chonkreep = '-#1# Requirement',
             gl_junklake = '#1# Caught!',
+            gl_wallkerip_warning = "Hand contains #1# different suits",
+            gl_jawtrap_warning = 'Play only 1 hand type this round [#1#]',
+            gl_stigz_warning = "Poker hand is a #1#",
+            gl_fungalic_warning = "Poker hand contains face and non-face cards",
+            gl_crawler_warning = "#1# cards are being played",
+            gl_clacteriophage_warning = "Only #1# card will score",
         },
         dictionary = {
             a_chips="+#1#",
@@ -769,7 +778,7 @@ return {
             k_sleep_ex="Sleep!",
             k_awake_ex="Awake!",
             --anjellyze_none = "None",
-
+            gl_active_ex = 'Active!',
             grasslanders_drollfunny = "Drool Joker",
 
             gl_logobreak = '+1 Coupon Tag',
@@ -777,6 +786,8 @@ return {
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
             gl_cocotom_free = 'Free!',
+            gl_cocotom_inactive_pre = 'Activates after ',
+            gl_cocotom_inactive_post = ' rounds',
             gl_litabelle = 'Granted!',
 
             gl_deepwalker_collection = '[0.5X Requirement]',
@@ -784,9 +795,8 @@ return {
             gl_blind_warning = 'Warning!',
             gl_fungalic = 'Hand contains cards previously played this Ante',
             gl_jawtrap_warning = 'Hand will destroy a random Joker',
-            gl_jawtrap = 'Play only 1 hand type this round',
-            gl_wallkerip_warning = 'Played cards will become Gloom',
-            gl_wallkerip = "Hand contains 3 different suits",
+            gl_crawler_warning = 'Hand size will be reduced',
+            gl_gloom_warning = 'Played cards will become Gloom',
 
             gl_options_apply = "Apply Changes",
             gl_options_hornetrix = 'Family Friendly Mode',

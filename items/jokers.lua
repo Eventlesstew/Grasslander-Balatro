@@ -17,7 +17,7 @@ SMODS.Joker{
     pos = { x = 0, y = 0 }, -- Since the texture used is a spritesheet, this specifies which texture is used.
     soul_pos=nil, -- This value is only relevant for things with an overlay such as Legendaries and the Soul. nil means it is invisible.
 
-    config = {extra = {h_size = 0, h_mod = 1}}, -- Extra variables stored by the Joker for use in calculate functions
+    config = {extra = {h_size = 0, h_mod = 1, h_size_penalty = -1}}, -- Extra variables stored by the Joker for use in calculate functions
     rarity = 1, --Joker rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5, -- How much the Joker costs
     blueprint_compat=false, -- This only affects the "compatible" message in Blueprint or Brainstorm. You need to use context.blueprint to specify which stuff Blueprint can or can't do.
@@ -52,14 +52,16 @@ SMODS.Joker{
 
     add_to_deck = function(self, card, from_debuff) -- If Blowy was debuffed, this allows her to change the hand size back
         G.hand:change_size(card.ability.extra.h_size)
+        G.hand:change_size(card.ability.extra.h_size_penalty)
     end,
 
     remove_from_deck = function(self, card, from_debuff) -- Resets hand size when removed
         G.hand:change_size(-card.ability.extra.h_size)
+        G.hand:change_size(-card.ability.extra.h_size_penalty)
     end,
 
     loc_vars = function(self, info_queue, card) --defines variables to use in the UI. you can use #1# for example to show the chips variable
-        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size}, key = self.key }
+        return { vars = {card.ability.extra.h_mod, card.ability.extra.h_size, card.ability.extra.h_size_penalty}, key = self.key }
     end
 }
 
@@ -483,41 +485,6 @@ SMODS.Joker{
     end
 }
 
---[[
-    SMODS.Joker{
-        key = "altjunklake",
-        atlas = 'grasslanderJoker',
-        config = { extra = {dollars = 10}},
-        pos = { x = 1, y = 1 },
-        rarity = 2,
-        cost = 5,
-        blueprint_compat=false,
-        eternal_compat=true,
-        perishable_compat=true,
-        unlocked = true,
-         
-        effect=nil,
-        soul_pos=nil,
-
-        calculate = function(self, card, context)
-            if context.discard and not context.blueprint then
-                if 
-                    context.other_card:get_id() == G.GAME.current_round.grasslanders_junklake_card.id and
-                    context.other_card:is_suit(G.GAME.current_round.grasslanders_junklake_card.suit) 
-                then   
-                    SMODS.destroy_cards(context.other_card)
-                    return {
-                        dollars = card.ability.extra.dollars
-                    }
-                end
-            end
-        end,
-        loc_vars = function(self, info_queue, card)
-            local idol_card = G.GAME.current_round.grasslanders_junklake_card or { rank = 'Ace', suit = 'Spades' }
-            return { vars = { card.ability.extra.dollars, localize(idol_card.rank, 'ranks'), localize(idol_card.suit, 'suits_plural'), colours = { G.C.SUITS[idol_card.suit] } } }
-        end,
-    }
-    ]]
 SMODS.Joker{
     key = "junklake",
     atlas = 'grasslanderJoker',
@@ -1093,6 +1060,8 @@ SMODS.Joker{
             if context.after then
                 card.ability.extra.rounds = card.ability.extra.rounds - 1
                 if card.ability.extra.rounds <= 0 then
+                    local eval = function(card) return true end
+                    juice_card_until(card,eval,true)
                     return {
                         message = localize('gl_cocotom_free'),
                         colour = G.C.MULT
@@ -1116,7 +1085,17 @@ SMODS.Joker{
     end,
 
     loc_vars = function(self, info_queue, card)
-        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, card.ability.extra.rounds}, key = self.key }
+        local message1, message2
+        if card.ability.extra.rounds <= 0 then
+            message1 = localize('gl_active_ex')
+            message2 = ""
+            message3 = ""
+        else
+            message1 = localize('gl_cocotom_inactive_pre')
+            message2 = card.ability.extra.rounds
+            message3 = localize('gl_cocotom_inactive_post')
+        end
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, message1, message2, message3}, key = self.key }
     end
 }
 
@@ -1332,7 +1311,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "litabelle",
-    config = { extra = {}},
+    config = { extra = {x_mult = 1, x_mult_mod = 0.2}},
     pos = { x = 0, y = 5 },
     rarity = 3,
     cost = 8,
@@ -1343,67 +1322,50 @@ SMODS.Joker{
      
     atlas = 'grasslanderJoker',
     calculate = function(self,card,context)
-        if not context.blueprint then
-            if context.setting_blind and not G.gl_litabelleArea.cards[1] then
-                local other_joker = nil
-                for i = 1, #G.jokers.cards do
-                    if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+        if (not context.blueprint) and context.before then
+            local valid_hand = false
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if scored_card:get_id() == G.GAME.current_round.grasslanders_litabelle_card.id then
+                    valid_hand = true
+                    break
                 end
+            end
+            
+            if valid_hand then
+                card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_mod
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT
+                }
+            else
+                local destructable_jokers = {}
+                for _, v in ipairs(G.jokers.cards) do
+                    if v ~= card and not SMODS.is_eternal(v, card) and not v.getting_sliced then
+                        destructable_jokers[#destructable_jokers + 1] = v
+                    end
+                end
+                local joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_litabelle')
 
-                if other_joker and not SMODS.is_eternal(other_joker, card) then
-                    other_joker.area:remove_card(other_joker)
-                    G.gl_litabelleArea:emplace(other_joker)
+                if joker_to_destroy then
+                    joker_to_destroy.getting_sliced = true
+                    SMODS.destroy_cards(joker_to_destroy)
                     return {
-                        message = localize('k_eaten_ex')
+                        message = localize('k_eaten_ex'),
+                        colour = G.C.MULT
                     }
                 end
             end
-
-            if context.end_of_round and context.main_eval and context.game_over == false and G.gl_litabelleArea.cards[1] then
-                local edition = SMODS.poll_edition{ key = "gl_litabelle", guaranteed = true}
-                if edition == 'e_negative' or #G.jokers.cards + G.GAME.joker_buffer <= G.jokers.config.card_limit then
-                    local litabelleCard = G.gl_litabelleArea.cards[1]
-                    litabelleCard.area:remove_card(litabelleCard)
-                    G.jokers:emplace(litabelleCard)
-                    litabelleCard:set_edition(edition, true)
-
-                    return {
-                        message = localize('gl_litabelle')
-                    }
-                else
-                    return {
-                        message = localize('k_no_room_ex')
-                    }
-                end
-            end
+        end
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.x_mult
+            }
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        
-        local m_end = {}
-        if G.gl_litabelleArea and G.gl_litabelleArea.cards[1] then
-            local stored_card = G.gl_litabelleArea.cards[1]
-            local joker_name = localize{
-                type = 'name_text', 
-                set = stored_card.config.center.set,
-                key = stored_card.config.center.key,
-            }
-            localize{ 
-                type = 'other', 
-                key = 'gl_litabelle_contains', 
-                nodes = m_end, 
-                vars = {joker_name} 
-            }
-            local center = G.P_CENTERS[stored_card.config.center.key]
-            local other_center = SMODS.shallow_copy(center)
-            if other_center.loc_vars then
-                other_center.loc_vars = function(self, info_queue, uncard) return center.loc_vars(self, info_queue, stored_card) end
-            end
-            info_queue[#info_queue + 1] = other_center
-        end
-        return { vars = {card.ability.extra.dollars}, main_end = m_end[1]}
-    end
+        return { vars = {card.ability.extra.x_mult, card.ability.extra.x_mult_mod, localize((G.GAME.current_round.grasslanders_litabelle_card or {}).rank or 'Queen', 'ranks') } }
+    end,
 }
 
 SMODS.Joker{
