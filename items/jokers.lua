@@ -18,7 +18,7 @@ SMODS.Joker{
     soul_pos=nil, -- This value is only relevant for things with an overlay such as Legendaries and the Soul. nil means it is invisible.
 
     config = {extra = {h_size = 0, h_mod = 1, h_size_penalty = -1}}, -- Extra variables stored by the Joker for use in calculate functions
-    rarity = 1, --Joker rarity 1=common, 2=uncommen, 3=rare, 4=legendary
+    rarity = 2, --Joker rarity 1=common, 2=uncommen, 3=rare, 4=legendary
     cost = 5, -- How much the Joker costs
     blueprint_compat=false, -- This only affects the "compatible" message in Blueprint or Brainstorm. You need to use context.blueprint to specify which stuff Blueprint can or can't do.
     eternal_compat=true, -- Specifies if the Joker can have Eternal
