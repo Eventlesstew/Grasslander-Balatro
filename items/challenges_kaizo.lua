@@ -71,6 +71,25 @@ if grasslanders.config.grasslanderJokers then
     }
 
     SMODS.Challenge {
+        key = 'blowykaizo',
+        button_colour = G.C.GOLD,
+        jokers = {
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+            { id = 'j_grasslanders_blowy', eternal = true },
+        },
+        rules = {
+            modifiers = {
+                { id = 'joker_slots', value = 12},
+            },
+        },
+    }
+
+    SMODS.Challenge {
         key = 'plingitkaizo',
         button_colour = G.C.GOLD,
         jokers = {
