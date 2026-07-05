@@ -46,6 +46,11 @@ local get_ids = function(card, extra_only)
             table.insert(ids, 13)
         end
     end
+    if next(SMODS.find_card('j_grasslanders_santile')) then
+        if SMODS.has_enhancement(card, 'm_stone') then
+            table.insert(ids, G.GAME.current_round.grasslanders_santile_card.id)
+        end
+    end
 
     return ids
 end

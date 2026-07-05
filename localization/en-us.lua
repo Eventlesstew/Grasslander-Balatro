@@ -482,10 +482,10 @@ return {
             j_grasslanders_santile = {
                 name = "Santile",
                 text = {
-                    "Played {C:attention}Stone{} cards give",
-                    "{C:chips}+#3#{} chips when scored",
-                    "but have a {C:green}#1# in #2#{} chance",
-                    "to be destroyed",
+                    "{C:attention}Stone{} cards",
+                    "count as {C:attention}#1#s{}",
+                    "Rank changes at",
+                    "end of round"
                 },
             },
             j_grasslanders_penny = {
@@ -493,7 +493,8 @@ return {
                 text = {
                     "{X:mult,C:white}INCOMPLETE",
                 },
-            },j_grasslanders_fortromtoise = {
+            },
+            j_grasslanders_fortromtoise = {
                 name = "Fortromtoise",
                 text = {
                     "Gains {X:mult,C:white}X#2#{} Mult for",
@@ -588,10 +589,9 @@ return {
                 text = {
                     "Debuffs {C:attention}Joker{} to the",
                     "right during a round",
-                    "On played hand, gains {C:chips}+#2#{} Chips",
-                    "for each debuffed Joker, card",
+                    "On played hand, gives {C:money}$#1#{} for",
+                    "each debuffed Joker, card",
                     "played and card held in hand",
-                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
                 },
             },
 

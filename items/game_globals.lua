@@ -39,6 +39,23 @@ local function reset_grasslanders_junklake_card()
     end
 end
 
+local function reset_grasslanders_santile_card()
+    G.GAME.current_round.grasslanders_santile_card = { rank = 'Ace', suit = 'Spades' }
+    local valid_idol_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+            valid_idol_cards[#valid_idol_cards + 1] = playing_card
+        end
+    end
+
+    local idol_card = pseudorandom_element(valid_idol_cards, 'gl_santile' .. G.GAME.round_resets.ante)
+    if idol_card then
+        G.GAME.current_round.grasslanders_santile_card.rank = idol_card.base.value
+        G.GAME.current_round.grasslanders_santile_card.suit = idol_card.base.suit
+        G.GAME.current_round.grasslanders_santile_card.id = idol_card.base.id
+    end
+end
+
 local function reset_grasslanders_litabelle_card()
     G.GAME.current_round.grasslanders_litabelle_card = { rank = 'Queen' }
     local valid_mail_cards = {}
@@ -90,6 +107,7 @@ function grasslanders.reset_game_globals(run_start)
     end
 
     reset_grasslanders_junklake_card()
+    reset_grasslanders_santile_card()
 end
 
 function grasslanders.calculate(self, context)

@@ -840,7 +840,7 @@ SMODS.Sound ({
 
 SMODS.Joker{
     key = "santile",
-    config = { extra = {odds = 4, chips = 150}},
+    config = { extra = {}},
     pos = { x = 2, y = 3 },
     rarity = 2,
     cost = 6,
@@ -862,6 +862,7 @@ SMODS.Joker{
 
         return false
     end,
+    --[[
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play then
             if SMODS.has_enhancement(context.other_card, 'm_stone') then
@@ -889,6 +890,10 @@ SMODS.Joker{
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'grasslanders_santile')
         return { vars = {numerator, denominator, card.ability.extra.chips}, key = self.key }
+    end]]
+    loc_vars = function(self, info_queue, card)
+        local idol_card = G.GAME.current_round.grasslanders_santile_card or { id = 1, rank = 'Ace', suit = 'Spades' }
+        return { vars = {localize(idol_card.rank, 'ranks')} }
     end
 }
 
@@ -1466,7 +1471,7 @@ end
 
 SMODS.Joker{
     key = "edward",
-    config = { extra = {chips = 0, chip_mod = 5, chosen_joker = 0, active = false}},
+    config = { extra = {dollars = 1, chosen_joker = 0, active = false}},
     pos = { x = 1, y = 5 },
     rarity = 3,
     cost = 8,
@@ -1523,56 +1528,46 @@ SMODS.Joker{
                     end
                 end
             end
-
-            
-            if context.before then
-                local cards = {}
-                for _,v in ipairs(G.jokers.cards) do
-                    table.insert(cards, v)
-                end
-                for _,v in ipairs(G.hand.cards) do
-                    table.insert(cards, v)
-                end
-                for _,v in ipairs(context.full_hand) do
-                    table.insert(cards, v)
-                end
-
-                local debuffed_cards = {}
-                for _,v in ipairs(cards) do
-                    if v.debuff then
-                        debuffed_cards[#debuffed_cards + 1] = v
-                    end
-                end
-                if #debuffed_cards > 0 then
-                    card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod * #debuffed_cards)
-
-                    local effect = {}
-                    for _,v in ipairs(debuffed_cards) do
-                        effect[#effect + 1] = {
-                            func = function()
-                                G.E_MANAGER:add_event(Event({
-                                    func = function()
-                                        v:juice_up()
-                                        return true
-                                    end
-                                }))
-                            end,
-                        }
-                        effect[#effect + 1] = {
-                            message = localize('k_upgrade_ex'),
-                            colour = G.C.CHIPS,
-                            message_card = card,
-                        }
-                    end
-                    return SMODS.merge_effects(effect)
-                end
-            end
         end
 
         if context.joker_main then
-            return {
-                chips = card.ability.extra.chips
-            }
+            local cards = {}
+            for _,v in ipairs(G.jokers.cards) do
+                table.insert(cards, v)
+            end
+            for _,v in ipairs(G.hand.cards) do
+                table.insert(cards, v)
+            end
+            for _,v in ipairs(context.full_hand) do
+                table.insert(cards, v)
+            end
+
+            local debuffed_cards = {}
+            for _,v in ipairs(cards) do
+                if v.debuff then
+                    debuffed_cards[#debuffed_cards + 1] = v
+                end
+            end
+            if #debuffed_cards > 0 then
+                local effect = {}
+                for _,v in ipairs(debuffed_cards) do
+                    effect[#effect + 1] = {
+                        func = function()
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    v:juice_up()
+                                    return true
+                                end
+                            }))
+                        end,
+                    }
+                    effect[#effect + 1] = {
+                        message_card = card,
+                        dollars = card.ability.extra.dollars
+                    }
+                end
+                return SMODS.merge_effects(effect)
+            end
         end
     end,
 
@@ -1600,7 +1595,7 @@ SMODS.Joker{
                 }
             }
         end
-        return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod}, main_end = compat_message }
+        return { vars = {card.ability.extra.dollars}, main_end = compat_message }
     end
 }
 
