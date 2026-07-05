@@ -66,7 +66,6 @@ if grasslanders.config.grasslanderJokers then
             { id = 'j_grasslanders_erny', eternal = true },
             { id = 'j_grasslanders_emmie', eternal = true },
             { id = 'j_grasslanders_edward', eternal = true },
-            { id = 'j_droll'},
         }
     }
 
@@ -111,7 +110,7 @@ if grasslanders.config.grasslanderJokers then
         },
         rules = {
             modifiers = {
-                { id = 'hands',       value = 1 },
+                { id = 'hands',       value = 2 },
                 { id = 'discards',    value = 0 },
                 { id = 'joker_slots', value = 15},
             },

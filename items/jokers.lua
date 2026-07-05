@@ -559,7 +559,7 @@ SMODS.Joker{
     rarity = 1,
     cost = 5,
     blueprint_compat=false,
-    eternal_compat=false,
+    eternal_compat=true,
     perishable_compat=true,
     unlocked = true,
      
@@ -649,25 +649,36 @@ SMODS.Joker{
     calculate = function(self,card,context)
         -- Gives Chips and Mult
         if context.joker_main then
-            local effects = {
-                {
-                    chips = G.GAME.hands[G.GAME.current_round.plingit_hand].chips, 
-                },
-                {
-                    mult = G.GAME.hands[G.GAME.current_round.plingit_hand].mult, 
-                },
-            }
-            return SMODS.merge_effects(effects)
+            if G.GAME.current_round.plingit_hand ~= "Inactive" then
+                local effects = {
+                    {
+                        chips = G.GAME.hands[G.GAME.current_round.plingit_hand].chips, 
+                    },
+                    {
+                        mult = G.GAME.hands[G.GAME.current_round.plingit_hand].mult, 
+                    },
+                }
+                return SMODS.merge_effects(effects)
+            end
         end
     end,
 
     loc_vars = function(self, info_queue, card)
-        local hand = G.GAME.current_round.plingit_hand or 'High Card' -- Allows Plingit to be viewable in collection
-        return { vars = {
-            localize(hand, 'poker_hands'),
-            G.GAME.hands[hand].chips,
-            G.GAME.hands[hand].mult
-        }, key = self.key }
+        local hand = G.GAME.current_round.plingit_hand or 'Inactive' -- Allows Plingit to be viewable in collection
+        local hand_message = localize("gl_plingit")
+        local main_end = {}
+
+        if hand ~= "Inactive" then
+            hand_message = localize(hand, 'poker_hands')
+            localize{type = 'other', key='gl_plingit', nodes=main_end, vars={G.GAME.hands[hand].chips, G.GAME.hands[hand].mult}}
+        end
+
+        return { 
+            vars = {
+                hand_message
+            }, 
+            main_end = main_end[1]
+        }
     end
 }
 

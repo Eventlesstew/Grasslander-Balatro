@@ -63,7 +63,7 @@ SMODS.Challenge {
     },
     rules = {
         modifiers = {
-            { id = 'hands', value = 1 },
+            { id = 'hands', value = 2 },
         }
     },
     restrictions = {
@@ -351,6 +351,8 @@ SMODS.Challenge {
     key = 'litabelle',
     jokers = {
         { id = 'j_grasslanders_litabelle', eternal = true },
+        { id = 'j_grasslanders_chonkreep', eternal = true },
+        { id = 'j_grasslanders_hornetrix', eternal = true },
     }
 }
 

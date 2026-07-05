@@ -401,9 +401,9 @@ return {
                 name = "Plingit",
                 text = {
                     "Grants Chips and Mult of",
-                    "previous {C:attention}poker hand{} played",
+                    "previous {C:attention}poker hand{}",
+                    "played this round",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive})",
-                    "{C:inactive}({C:chips}+#2# {C:inactive}Chips and {C:mult}+#3# {C:inactive}Mult)"
                 },
             },
             j_grasslanders_anjellyze = {
@@ -682,7 +682,13 @@ return {
                 text={
                     '{C:inactive}(Contains {C:attention}#1#{C:inactive})',
                 },
-            }
+            },
+            gl_plingit={
+                name="n",
+                text={
+                    "{C:inactive}({C:chips}+#1# {C:inactive}Chips and {C:mult}+#2# {C:inactive}Mult)",
+                },
+            },
         },
     },
     misc = {
@@ -704,7 +710,7 @@ return {
             c_grasslanders_squid = "Squid Game",
             c_grasslanders_cocotom = "Judgement Day",
             c_grasslanders_axonitta = "Metathesiophobia",
-            c_grasslanders_litabelle = "Night Hunt",
+            c_grasslanders_litabelle = "Belly of the Beast",
             c_grasslanders_harparachnids = "Harparachnids",
             c_grasslanders_vegebonion = "Everything Decays",
             c_grasslanders_deespirr = "Chilling Fate",
@@ -715,7 +721,7 @@ return {
 
             c_grasslanders_gloom_kaizo = "Doom & Gloom",
             c_grasslanders_plingitkaizo = "Pling Rave",
-            c_grasslanders_blowykaizo = "Flower Garden",
+            c_grasslanders_blowykaizo = "The 7 Blowy souls",
             c_grasslanders_single = "Single Shenanigans",
             c_grasslanders_double = "Double Time",
             c_grasslanders_triple = "Triple Trouble",
@@ -783,6 +789,7 @@ return {
             grasslanders_drollfunny = "Drool Joker",
 
             gl_logobreak = '+1 Coupon Tag',
+            gl_plingit = "Inactive",
             gl_mossibug = 'Yawn!',
             gl_axonitta = 'Returned!',
             gl_wisplasm = 'Rerolled!',
@@ -800,7 +807,7 @@ return {
             gl_gloom_warning = 'Played cards will become Gloom',
 
             gl_options_apply = "Apply Changes",
-            gl_options_hornetrix = 'Family Friendly Mode',
+            gl_options_hornetrix = 'No Rude Gestures',
             gl_options_vanillaChallenges = 'Fix Vanilla Challenges',
 
             gl_options_contentTitle = 'Content',
