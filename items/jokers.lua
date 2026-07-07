@@ -700,6 +700,7 @@ SMODS.Joker{
             card.ability.extra.score_display = G.GAME.blind.chips
         end
         if context.individual and context.cardarea == G.play and context.other_card:get_edition() then
+            --[[
             local joker_to_destroy = nil
             if not context.blueprint and SMODS.pseudorandom_probability(card, 'gl_chonkreep', 1, card.ability.extra.odds) then
                 local destructable_jokers = {}
@@ -710,36 +711,34 @@ SMODS.Joker{
                     end
                 end
                 joker_to_destroy = pseudorandom_element(destructable_jokers, 'gl_chonkreep_destroy')
-            end
-
+            end]]
+            
             local reduction = G.GAME.blind.chips * card.ability.extra.reduction
-            return SMODS.merge_effects({
-                {
-                    func = function()
-                        if joker_to_destroy then
-                            joker_to_destroy.getting_sliced = true
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    (context.blueprint_card or card):juice_up(0.8, 0.8)
-                                    joker_to_destroy:start_dissolve({ G.C.GOLD }, nil, 1.6)
-                                    return true
-                                end
-                            }))
-                        end
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                G.GAME.blind.chips = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
-                                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                                return true
+            local new_chip_value = G.GAME.blind.chips * (1 - card.ability.extra.reduction)
+            G.GAME.blind.chips = new_chip_value
+
+            local card_to_destroy = nil
+            if not context.blueprint then
+                if SMODS.pseudorandom_probability(card, 'gl_chonkreep', 1, card.ability.extra.odds) then
+                    card_to_destroy = context.other_card
+                    card_to_destroy.getting_sliced = true
+                end
+            end
+            
+            return {
+                message = localize{type = 'variable', key='gl_chonkreep', vars={reduction}},
+                func = function() -- This is for timing purposes, everything here runs after the message
+                    G.GAME.blind.chip_text = number_format(new_chip_value)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            if card_to_destroy then
+                                SMODS.destroy_cards(card_to_destroy, nil, true)
                             end
-                        }))
-                    end
-                },
-                {
-                    message = localize{type = 'variable', key='gl_chonkreep', vars={reduction}},
-                    message_card = card,
-                },
-            })
+                            return true
+                        end
+                    }))
+                end
+            }
         end
     end,
     loc_vars = function(self, info_queue, card)

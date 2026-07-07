@@ -69,6 +69,8 @@ SMODS.Challenge {
     restrictions = {
         banned_other = {
             {id = 'bl_grasslanders_matriarch', type = 'blind'},
+            {id = 'bl_grasslanders_leaper', type = 'blind'},
+            {id = 'bl_grasslanders_strider', type = 'blind'},
         },
     },
 }

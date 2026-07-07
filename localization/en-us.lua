@@ -465,7 +465,7 @@ return {
                     "Scored cards with an {C:attention}Edition",
                     "reduce Blind size by {C:red}X#1#{},",
                     "but have a {C:green}#2# in #3#{} chance to",
-                    "destroy a random {C:attention}Joker"
+                    "be destroyed"
                 },
             },
 

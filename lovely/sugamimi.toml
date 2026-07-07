@@ -1,0 +1,20 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -1
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = 'for _, v in ipairs(info_queue) do'
+position = "before"
+payload = '''
+if next(SMODS.find_card('j_grasslanders_sugamimi')) and card and card.ability and ({Red=1,Blue=1,Gold=1,Purple=1})[card:get_seal()] then
+    for k, v in ipairs({'Red', 'Blue', 'Gold', 'Purple'}) do
+        if v ~= card:get_seal() then
+            table.insert(info_queue, G.P_SEALS[v])
+        end
+    end
+end
+'''
+match_indent = true
