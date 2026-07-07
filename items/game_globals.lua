@@ -21,18 +21,29 @@ local function gl_reroll_hands()
 end
 
 local function reset_grasslanders_junklake_card()
-    G.GAME.current_round.grasslanders_junklake_card = { rank = 'Ace', suit = 'Spades' }
+    G.GAME.current_round.grasslanders_junklake_card = { rank = 'Ace', id=14}
+
+    -- Counting all ranks
+    local rank_count = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_rank(playing_card) then
+            local id = playing_card:get_id()
+            rank_count[id] = (rank_count[id] or 0) + 1
+        end
+    end
+
+    -- Checking the validity of all cards
     local valid_idol_cards = {}
     for _, playing_card in ipairs(G.playing_cards) do
-        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+        if not SMODS.has_no_rank(playing_card) and (rank_count[playing_card:get_id()] or 0) >= 3 then
             valid_idol_cards[#valid_idol_cards + 1] = playing_card
         end
     end
 
+    -- Picking a random card out of the valid cards.
     local idol_card = pseudorandom_element(valid_idol_cards, 'gl_junklake' .. G.GAME.round_resets.ante)
     if idol_card then
         G.GAME.current_round.grasslanders_junklake_card.rank = idol_card.base.value
-        G.GAME.current_round.grasslanders_junklake_card.suit = idol_card.base.suit
         G.GAME.current_round.grasslanders_junklake_card.id = idol_card.base.id
     end
 end

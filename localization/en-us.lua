@@ -434,9 +434,9 @@ return {
             j_grasslanders_junklake = {
                 name = "Junklake",
                 text = {
-                    "If 3 or more {C:attention}#2#{} cards",
-                    "are discarded, destroy",
-                    "them and give {C:money}$#1#{}",
+                    "If 3 or more {C:attention}#2#s{}",
+                    "are discarded, give {C:money}$#1#{}",
+                    "and destroy all {C:attention}#2#s{}",
                     "{C:inactive}(Currently {C:attention}#3#/#4#{C:inactive})"
                 },
             },
