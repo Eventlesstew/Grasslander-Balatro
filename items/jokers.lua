@@ -299,6 +299,7 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
         --local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "logobreak") -- Gives the chances for Logobreak. Modified by Oops All Sixes
+        info_queue[#info_queue + 1] = { key = 'tag_coupon', set = 'Tag' }
         info_queue[#info_queue + 1] = {set = "Other", key = "g_onfire" }
         return { vars = {}, key = self.key }
     end
