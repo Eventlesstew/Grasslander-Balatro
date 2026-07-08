@@ -1179,15 +1179,8 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.after then
-            local card_ref
-            if context.blueprint then
-                card_ref = context.blueprint_card
-                if not card_ref.ability.extra then
-                    card_ref.ability.extra = {}
-                end
-            else
-                card_ref = card
-            end
+            -- Todo - Check if this actually works.
+            local card_ref = (context.blueprint_card or card)
 
             for _,v in ipairs(G.play.cards) do
                 if not v.gl_axonitta then
@@ -1198,12 +1191,7 @@ SMODS.Joker{
             end
         end
         if context.stay_flipped and context.from_area == G.play and context.other_card.gl_axonitta then
-            local card_ref
-            if context.blueprint then
-                card_ref = context.blueprint_card
-            else
-                card_ref = card
-            end
+            local card_ref = (context.blueprint_card or card)
 
             if card_ref.ability.extra.chosen_card == context.other_card then
                 context.other_card.gl_axonitta = nil
@@ -1488,7 +1476,7 @@ SMODS.Joker{
     cost = 8,
     blueprint_compat=true,
     eternal_compat=true,
-    perishable_compat=false, -- TODO: Test if Edward works when Perishable and with Perishable
+    perishable_compat=true,
     unlocked = true,
      
     atlas = 'grasslanderJoker',
@@ -1573,7 +1561,7 @@ SMODS.Joker{
                         end,
                     }
                     effect[#effect + 1] = {
-                        message_card = card,
+                        message_card = (context.blueprint_card or card),
                         dollars = card.ability.extra.dollars
                     }
                 end
