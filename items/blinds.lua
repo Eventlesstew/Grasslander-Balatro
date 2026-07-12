@@ -1176,7 +1176,7 @@ SMODS.Blind {
     boss_colour = HEX("a33829"),
     calculate = function(self, blind, context)
         if not blind.disabled then
-            if context.after and SMODS.calculate_round_score() < (getBlindScore(blind) * 0.25) then
+            if context.after and SMODS.calculate_round_score() < (getBlindScore(blind) * blind.mult * 0.25) then
                 blind.triggered = true
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -1190,7 +1190,7 @@ SMODS.Blind {
         end
     end,
     loc_vars = function(self)
-        return { vars = {getBlindScore(self) * 0.25} }
+        return { vars = {getBlindScore(self) * self.mult * 0.25} }
     end,
     collection_loc_vars = function(self)
         return { vars = {localize('gl_maw_collection')} }

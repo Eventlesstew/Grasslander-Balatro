@@ -723,7 +723,7 @@ return {
             c_grasslanders_plingitkaizo = "Pling Rave",
             c_grasslanders_blowykaizo = "The 7 Blowy souls",
             c_grasslanders_single = "Single Shenanigans",
-            c_grasslanders_double = "Double Time",
+            c_grasslanders_double = "Double Down",
             c_grasslanders_triple = "Triple Trouble",
             c_grasslanders_quad = "Quad Quartet",
             c_grasslanders_volcaroxkaizo = "The Entire Deck",

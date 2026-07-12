@@ -930,7 +930,7 @@ SMODS.Joker{
             if card.ability.extra.active then
                 local refund
                 if context.cost < card.ability.extra.dollars then
-                    refund = context.card
+                    refund = context.cost
                 else
                     refund = card.ability.extra.dollars
                 end
@@ -1424,7 +1424,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "emmie",
-    config = { extra = {active = false}},
+    config = { extra = {active = true}},
     pos = { x = 2, y = 5 },
     rarity = 2,
     cost = 7,
@@ -1439,12 +1439,20 @@ SMODS.Joker{
 
     -- Emmie's function is done through a Hook, this specifies whether she is active or not
     calculate = function(self,card,context)
-        if context.first_hand_drawn then
+
+        -- Resets Emmie
+        if context.end_of_round and context.main_eval then
             card.ability.extra.active = true
-            local eval = function() return card.ability.extra.active end
+        end
+
+        -- Causes Emmie to shake until straight played or round ended
+        if context.first_hand_drawn then
+            local eval = function() return card.ability.extra.active or (context.end_of_round and context.main_eval) end
             juice_card_until(card, eval, true)
         end
-        if (context.before and next(context.poker_hands['Straight'])) or (context.end_of_round and context.main_eval) then
+
+        -- Makes Emmie stop her effect after straight played
+        if (context.before and next(context.poker_hands['Straight'])) then
             card.ability.extra.active = false
         end
     end,
